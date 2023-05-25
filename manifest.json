@@ -1,0 +1,254 @@
+{
+  "Actions": [
+    {
+      "Icon": "assets/actions/update",
+      "Name": "Update Location",
+      "States": [
+        {
+          "Image": "assets/keys/update",
+          "Title": "Update",
+          "TitleAlignment": "top",
+          "FontSize": "8",
+          "ShowTitle": false
+        }
+      ],
+      "SupportedInMultiActions": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Tooltip": "Sends showlocation",
+      "PropertyInspectorPath": "property_inspector/update_pi.html",
+      "UUID": "com.doabigcheese.scnav.updatecurrentlocation"
+    },
+    {
+      "Icon": "assets/actions/save",
+      "Name": "Save Location",
+      "States": [
+        {
+          "Image": "assets/keys/save",
+          "Title": "Save",
+          "TitleAlignment": "top",
+          "FontSize": "7",
+          "ShowTitle": false
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Tooltip": "Save current location to saved_pois.txt",
+      "PropertyInspectorPath": "property_inspector/save_pi.html",
+      "UUID": "com.doabigcheese.scnav.save"
+    },
+    {
+      "Icon": "assets/actions/start",
+      "Name": "Generate Clipboard Coordinates",
+      "States": [
+        {
+          "Image": "assets/keys/start",
+          "Title": "Clipboard",
+          "TitleAlignment": "top",
+          "FontSize": "8",
+          "ShowTitle": true
+        }
+      ],
+      "SupportedInMultiActions": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Tooltip": "Generates Randomish Coordinates",
+      "PropertyInspectorPath": "property_inspector/start_pi.html",
+      "UUID": "com.doabigcheese.scnav.startnavi"
+    },
+    {
+      "Icon": "assets/actions/start",
+      "Name": "Calibrate",
+      "States": [
+        {
+          "Image": "assets/keys/start",
+          "Title": "Calibrate",
+          "TitleAlignment": "top",
+          "FontSize": "8",
+          "ShowTitle": true
+        },
+        {
+          "Image": "assets/keys/start_active",
+          "Title": "Calibrate",
+          "TitleAlignment": "top",
+          "FontSize": "8",
+          "ShowTitle": true
+        }
+      ],
+      "SupportedInMultiActions": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Tooltip": "Creates Calibration Data in LOG",
+      "PropertyInspectorPath": "property_inspector/calibrate_pi.html",
+      "UUID": "com.doabigcheese.scnav.calibrate"
+    },
+    {
+      "Icon": "assets/actions/bearing",
+      "Name": "Bearing Output",
+      "States": [
+        {
+          "Image": "assets/keys/bearing",
+          "Title": "---°\n--- km",
+          "TitleAlignment": "middle",
+          "FontSize": "11",
+          "ShowTitle": true
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Compass Bearing to Target",
+      "PropertyInspectorPath": "property_inspector/bearing_pi.html",
+      "UUID": "com.doabigcheese.scnav.bearing"
+    },
+    {
+      "Icon": "assets/actions/bearing",
+      "Name": "Nearest QT Output",
+      "States": [
+        {
+          "Image": "assets/keys/bearing",
+          "Title": "nearest\nOutpost\n(-- km)",
+          "TitleAlignment": "middle",
+          "FontSize": "10",
+          "ShowTitle": true
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Next QT Marker to Target",
+      "PropertyInspectorPath": "property_inspector/nearest_pi.html",
+      "UUID": "com.doabigcheese.scnav.nearest"
+    },
+    {
+      "Icon": "assets/actions/bearing",
+      "Name": "Daytime at target",
+      "States": [
+        {
+          "Image": "assets/keys/bearing",
+          "Title": "Afternoon\nnext:\nsunset at\n9.14 pm",
+          "TitleAlignment": "middle",
+          "FontSize": "9",
+          "ShowTitle": true
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Daytime at Target",
+      "PropertyInspectorPath": "property_inspector/daytime_pi.html",
+      "UUID": "com.doabigcheese.scnav.daytime"
+    },
+    {
+      "Icon": "assets/actions/bearing",
+      "Name": "Sourrounding POI",
+      "States": [
+        {
+          "Image": "assets/keys/bearing",
+          "Title": "AROUND\n---",
+          "TitleAlignment": "middle",
+          "FontSize": "9",
+          "ShowTitle": true
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Sourrounding POI",
+      "PropertyInspectorPath": "property_inspector/around_pi.html",
+      "UUID": "com.doabigcheese.scnav.around"
+    },
+    {
+      "Icon": "assets/actions/bearing",
+      "Name": "Current Coordinates",
+      "States": [
+        {
+          "Image": "assets/keys/bearing",
+          "Title": "COORDS\n---",
+          "TitleAlignment": "middle",
+          "FontSize": "9",
+          "ShowTitle": true
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Current Coordinates",
+      "PropertyInspectorPath": "property_inspector/xyz_pi.html",
+      "UUID": "com.doabigcheese.scnav.coords"
+    },
+    {
+      "Icon": "assets/actions/poi",
+      "Name": "Predefined POI",
+      "States": [
+        {
+          "Image": "assets/keys/poi",
+          "Title": "POI",
+          "TitleAlignment": "middle",
+          "FontSize": "8",
+          "ShowTitle": true
+        },
+        {
+          "Image": "assets/keys/poi_active",
+          "Title": "POI",
+          "TitleAlignment": "middle",
+          "FontSize": "8",
+          "ShowTitle": true
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Start Navigation to predefined POI",
+      "Controllers": [
+        "Keypad"
+      ],
+      "PropertyInspectorPath": "property_inspector/predefinedpoi_pi.html",
+      "UUID": "com.doabigcheese.scnav.poi"
+    },
+    {
+      "Icon": "assets/actions/custompoi",
+      "Name": "Custom POI",
+      "States": [
+        {
+          "Image": "assets/keys/custompoi",
+          "Title": "CustomPOI",
+          "TitleAlignment": "middle",
+          "FontSize": "8",
+          "ShowTitle": true
+        },
+        {
+          "Image": "assets/keys/custompoi_active",
+          "Title": "CustomPOI",
+          "TitleAlignment": "middle",
+          "FontSize": "8",
+          "ShowTitle": true
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Start Navigation to custom POI",
+      "Controllers": [
+        "Keypad"
+      ],
+      "PropertyInspectorPath": "property_inspector/custompoi_pi.html",
+      "UUID": "com.doabigcheese.scnav.custompoi"
+    }
+  ],
+  "SDKVersion": 2,
+  "Author": "doabigcheese",
+  "CodePathMac": "run.sh",
+  "CodePathWin": "run.bat",
+  "Description": "A Stream Deck plugin to navigate in Star Citizen.",
+  "Name": "SCnav",
+  "Icon": "assets/plugin_icon",
+  "URL": "https://github.com/doabigcheese/streamdeck-scnav",
+  "Version": "0.0.1",
+  "Category": "SCNav",
+  "CategoryIcon": "assets/category_icon",
+  "OS": [
+    {
+      "Platform": "mac",
+      "MinimumVersion": "10.11"
+    },
+    {
+      "Platform": "windows",
+      "MinimumVersion": "10"
+    }
+  ],
+  "Software": {
+    "MinimumVersion": "6"
+  }
+}

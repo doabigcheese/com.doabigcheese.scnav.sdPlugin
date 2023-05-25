@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8"/>
+    <title>CustomPOI</title>
+    <link rel="stylesheet" href="sdk/css/sdpi.css">
+</head>
+
+<body>
+<div class="sdpi-wrapper">
+    
+    <div class="sdpi-item">
+        <p>Enter Planet/Moon and x / y / z</p>
+     
+    </div>
+    <div class="sdpi-item">
+        <div class="sdpi-item-label">Planet/Moon</div>
+        <input class="sdpi-item-value" id="container" value="" placeholder="Crusader" onchange="onchange_container()">     
+        <label for="container"></label>
+    </div>
+
+    <div class="sdpi-item">
+        <div class="sdpi-item-label">X</div>
+        <input class="sdpi-item-value" id="x" value="" placeholder="" onchange="onchange_x()">     
+        <label for="x"></label>
+    </div>
+    <div class="sdpi-item">
+        <div class="sdpi-item-label">Y</div>
+        <input class="sdpi-item-value" id="y" value="" placeholder="" onchange="onchange_y()">     
+        <label for="y"></label>
+    </div>
+    <div class="sdpi-item">
+        <div class="sdpi-item-label">Z</div>
+        <input class="sdpi-item-value" id="z" value="" placeholder="" onchange="onchange_z()">     
+        <label for="z"></label>
+    </div>
+    
+</div>
+
+<script src="sdk/js/constants.js"></script>
+<script src="sdk/js/events.js"></script>
+<script src="sdk/js/api.js"></script>
+<script src="sdk/js/property-inspector.js"></script>
+<script src="sdk/js/dynamic-styles.js"></script>
+<script>
+    console.log('Property Inspector loaded', $PI);
+
+    const container_el = document.getElementById("container")
+    const x_el = document.getElementById("x")
+    const y_el = document.getElementById("y")
+    const z_el = document.getElementById("z")
+
+    let settings
+
+    $PI.onConnected(jsn => {
+        console.log('Property Inspector connected', jsn);
+        console.log(jsn.actionInfo.payload.settings);
+
+        settings = jsn.actionInfo.payload.settings
+
+        if (settings?.container) {
+            container_el.value = settings.container
+        } else {
+            container_el.value = "Daymar"
+            settings["container"] = container_el.value
+        }
+        if (settings?.x) {
+            x_el.value = settings.x
+        } else {
+            x_el.value = ""
+            settings["x"] = x_el.value
+        }
+        if (settings?.y) {
+            y_el.value = settings.y
+        } else {
+            y_el.value = ""
+            settings["y"] = y_el.value
+        }
+        if (settings?.z) {
+            z_el.value = settings.z
+        } else {
+            z_el.value = ""
+            settings["z"] = z_el.value
+        }
+
+        
+        $PI.setSettings(settings);
+    });
+
+    const onchange_container = () => {
+        console.log(container_el.value);
+        console.log(container_el.validity.valid)
+        if (container_el.validity.valid && container_el.value) {
+            settings["container"] = container_el.value
+            $PI.setSettings(settings);
+        } else {
+            container_el.value = settings.container
+        }
+    }
+    const onchange_x = () => {
+        console.log(x_el.value);
+        console.log(x_el.validity.valid)
+        if (x_el.validity.valid && x_el.value) {
+            settings["x"] = x_el.value
+            $PI.setSettings(settings);
+        } else {
+            x_el.value = settings.x
+        }
+    }
+    const onchange_y = () => {
+        console.log(y_el.value);
+        console.log(y_el.validity.valid)
+        if (y_el.validity.valid && y_el.value) {
+            settings["y"] = y_el.value
+            $PI.setSettings(settings);
+        } else {
+            y_el.value = settings.y
+        }
+    }
+    const onchange_z = () => {
+        console.log(z_el.value);
+        console.log(z_el.validity.valid)
+        if (z_el.validity.valid && z_el.value) {
+            settings["z"] = z_el.value
+            $PI.setSettings(settings);
+        } else {
+            z_el.value = settings.z
+        }
+    }
+
+</script>
+</body>
+</html>

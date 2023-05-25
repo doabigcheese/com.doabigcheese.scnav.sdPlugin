@@ -1,0 +1,4 @@
+Magda,-82.538,327.272,50.267,Magda_181km_next_to_HDMS_Perlman_
+Magda,-78.436,328.279,50.267,Magda_182km_next_to_HDMS_Perlman_
+Magda,17.472,337.067,50.267,Magda_166km_next_to_OM-3_
+Magda,82.039,327.397,50.267,Magda_193km_next_to_OM-3_2023-05-25_10_59_57_646197
