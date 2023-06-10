@@ -29,6 +29,8 @@
         </select>
     </div>
     
+   
+    
 </div>
 
 <script src="sdk/js/constants.js"></script>
@@ -69,7 +71,16 @@
 
         
         $PI.setSettings(settings);
+
+        let actionUUID = $PI.actionInfo.action;
+        console.log('actionUUID:', actionUUID);
+        // register a callback for the 'sendToPropertyInspector' event
+        
+        
     });
+
+
+    
 
     const onchange_container = () => {
         console.log(container_el.value);

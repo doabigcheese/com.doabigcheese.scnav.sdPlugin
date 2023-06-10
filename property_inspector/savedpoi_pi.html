@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8"/>
+    <title>Saved POI</title>
+    <link rel="stylesheet" href="sdk/css/sdpi.css">
+
+    
+</head>
+
+<body>
+<div class="sdpi-wrapper">
+    
+
+    <div class="sdpi-item">
+        <div class="sdpi-item-label">Saved POI</div>
+        <select class="sdpi-item-value select setvalueSelect" id="savedPoiList" onchange="onchange_poi()"></select>
+        
+            
+        </select>
+    </div>
+    <hr>
+    <div class="sdpi-item">
+        <div class="sdpi-item-label">Planet/Moon</div>
+        <input class="sdpi-item-value" id="container" value="" placeholder="Crusader" onchange="onchange_container()" disabled>     
+        <label for="container"></label>
+    </div>
+
+    <div class="sdpi-item">
+        <div class="sdpi-item-label">X</div>
+        <input class="sdpi-item-value" id="x" value="" placeholder="" onchange="onchange_x()" disabled>     
+        <label for="x"></label>
+    </div>
+    <div class="sdpi-item">
+        <div class="sdpi-item-label">Y</div>
+        <input class="sdpi-item-value" id="y" value="" placeholder="" onchange="onchange_y()" disabled>     
+        <label for="y"></label>
+    </div>
+    <div class="sdpi-item">
+        <div class="sdpi-item-label">Z</div>
+        <input class="sdpi-item-value" id="z" value="" placeholder="" onchange="onchange_z()" disabled>     
+        <label for="z"></label>
+    </div>
+    
+    
+</div>
+
+<script src="sdk/js/constants.js"></script>
+<script src="sdk/js/events.js"></script>
+<script src="sdk/js/api.js"></script>
+<script src="sdk/js/property-inspector.js"></script>
+<script src="sdk/js/dynamic-styles.js"></script>
+
+<script>
+    console.log('Property Inspector loaded', $PI);
+
+    
+    const poi_el = document.getElementById("savedPoiList")
+    const container_el = document.getElementById("container")
+    const x_el = document.getElementById("x")
+    const y_el = document.getElementById("y")
+    const z_el = document.getElementById("z")
+
+    let settings
+
+    $PI.onConnected(jsn => {
+        console.log('Property Inspector connected', jsn);
+        console.log(jsn.actionInfo.payload.settings);
+
+        settings = jsn.actionInfo.payload.settings
+
+        
+        if (settings?.poi) {
+            poi_el.appendChild(
+                new Option(settings.poi, settings.poi)
+            );
+            poi_el.value = settings.poi
+        } else {
+            poi_el.value = "--"
+            settings["poi"] = poi_el.value
+        }
+        if (settings?.container) {
+            container_el.value = settings.container
+        } else {
+            container_el.value = "--"
+            settings["container"] = container_el.value
+        }
+        if (settings?.x) {
+            x_el.value = settings.x
+        } else {
+            x_el.value = ""
+            settings["x"] = x_el.value
+        }
+        if (settings?.y) {
+            y_el.value = settings.y
+        } else {
+            y_el.value = ""
+            settings["y"] = y_el.value
+        }
+        if (settings?.z) {
+            z_el.value = settings.z
+        } else {
+            z_el.value = ""
+            settings["z"] = z_el.value
+        }
+
+        
+        $PI.setSettings(settings);
+
+        let actionUUID = $PI.actionInfo.action;
+        console.log('actionUUID:', actionUUID);
+        // register a callback for the 'sendToPropertyInspector' event
+        
+        $PI.onSendToPropertyInspector(actionUUID, jsn => {
+            console.log('onSendToPropertyInspector', jsn);
+            var saved_pois_dropdown = document.getElementById("savedPoiList");
+            console.log(jsn.payload);
+            console.log(jsn.payload.typeof);
+            let data = jsn.payload.replaceAll("'","\"");
+            console.log(data);
+            console.log(data.typeof);
+            let jsondata = JSON.parse(data);
+            for (var key in jsondata) {
+                if (jsondata.hasOwnProperty(key)) {
+                    let newPOI = jsondata[key].Name;
+                    let newContainer = jsondata[key].Container;
+                    let newX = jsondata[key].X;
+                    let newY = jsondata[key].Y;
+                    let newZ = jsondata[key].Z;
+                    console.log(newPOI);
+                    saved_pois_dropdown.appendChild(
+                        new Option(newPOI,newContainer + "," + newX + "," + newY + "," + newZ)
+                        ); 
+                }       
+            }
+            
+            
+
+        });
+    });
+
+
+
+    const onchange_poi = () => {
+        console.log("onchange_poi...");
+        console.log(poi_el.value);
+        console.log(poi_el.validity.valid);
+        if (poi_el.validity.valid && poi_el.value) {
+            settings["poi"] = poi_el.value;
+            $PI.setSettings(settings);
+        } else {
+            poi_el.value = settings.poi;
+        }
+        console.log(poi_el.value);
+        let mySelectedSavedPOI = poi_el.value.split(",");
+        container_el.value = mySelectedSavedPOI[0];
+        x_el.value = mySelectedSavedPOI[1];
+        y_el.value = mySelectedSavedPOI[2];
+        z_el.value = mySelectedSavedPOI[3];
+        onchange_container();
+        onchange_x();
+        onchange_y();
+        onchange_z();
+    }
+    const onchange_container = () => {
+        console.log(container_el.value);
+        console.log(container_el.validity.valid)
+        if (container_el.validity.valid && container_el.value) {
+            settings["container"] = container_el.value
+            $PI.setSettings(settings);
+        } else {
+            container_el.value = settings.container
+        }
+    }
+    const onchange_x = () => {
+        console.log(x_el.value);
+        console.log(x_el.validity.valid)
+        if (x_el.validity.valid && x_el.value) {
+            settings["x"] = x_el.value
+            $PI.setSettings(settings);
+        } else {
+            x_el.value = settings.x
+        }
+    }
+    const onchange_y = () => {
+        console.log(y_el.value);
+        console.log(y_el.validity.valid)
+        if (y_el.validity.valid && y_el.value) {
+            settings["y"] = y_el.value
+            $PI.setSettings(settings);
+        } else {
+            y_el.value = settings.y
+        }
+    }
+    const onchange_z = () => {
+        console.log(z_el.value);
+        console.log(z_el.validity.valid)
+        if (z_el.validity.valid && z_el.value) {
+            settings["z"] = z_el.value
+            $PI.setSettings(settings);
+        } else {
+            z_el.value = settings.z
+        }
+    }
+
+</script>
+
+
+</body>
+</html>

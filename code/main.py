@@ -1,3 +1,15 @@
+#todo
+# - compare calibration calculation with Tool Jericho to find error
+# - get navi data from starmap.tk rest api (eg setting in predefined_poi button)
+#       OC: https://starmap.tk/api/v1/oc/
+#       POI:https://starmap.tk/api/v1/pois/
+#       query e.g. 
+#           https://starmap.tk/api/v1/oc/index.php?system=Stanton
+#           https://starmap.tk/api/v1/pois/index.php?planet=Daymar
+# - saved_poi.txt data selectable in stream deck software
+#
+# *** debug: http://localhost:23654/
+#########################################################################
 import random
 import requests
 import ahk
@@ -40,7 +52,9 @@ daytime_button_context = ""
 around_button_context = ""
 coords_button_context = ""
 save_button_context = ""
-
+startnavitoknownpoi_button_context = ""
+startnavitosavedpoi_button_context = ""
+pi_context = ""
 
 def linebreak_title(newtitle):
     i = 9
@@ -64,7 +78,7 @@ def linebreak_title(newtitle):
     return tmp_1 + tmp_2 + tmp_3
 
 def updatecoordinates():
-    logger.debug(f"Update entered.")
+    #logger.debug(f"Update entered.")
     ahk.send_input('{Enter}')
     time.sleep(0.5)
     ahk.send_input("/showlocation")
@@ -74,7 +88,7 @@ def updatecoordinates():
 def save_poi():
     global save_triggered,watch_clipboard_active,mother
     
-    logger.debug(f"Save entered.")
+    #logger.debug(f"Save entered.")
     if watch_clipboard_active == True:
         save_triggered = True
         #updatecoordinates()
@@ -365,7 +379,7 @@ def get_sunset_sunrise_predictions(X : float, Y : float, Z : float, Latitude : f
         return [state_of_the_day, next_event, next_event_time]
     
     except Exception as e:
-        logger.debug(f"Error in sunrise/sunset calculations: \n{e}\nValues were:\n-X : {X}\n-Y : {Y}\n-Z : {Z}\n-Latitude : {Latitude}\n-Longitude : {Longitude}\n-Height : {Height}\n-Container : {Container['Name']}\n-Star : {Star['Name']}")
+        #logger.debug(f"Error in sunrise/sunset calculations: \n{e}\nValues were:\n-X : {X}\n-Y : {Y}\n-Z : {Z}\n-Latitude : {Latitude}\n-Longitude : {Longitude}\n-Height : {Height}\n-Container : {Container['Name']}\n-Star : {Star['Name']}")
         #sys.stdout.flush()
         return ["Unknown", "Unknown", 0]
 
@@ -468,7 +482,7 @@ def watch_clipboard():
         #If clipboard content has changed
         else :
             Old_clipboard = new_clipboard
-            logger.debug(new_clipboard)
+            #logger.debug(new_clipboard)
             New_time = time.time() + time_offset
 
             #If it contains some coordinates
@@ -807,28 +821,28 @@ def watch_clipboard():
                                     })
                 
                 mother.ws.send(message_bearing)
-                logger.debug("send bearing: " + message_bearing)
+                #logger.debug("send bearing: " + message_bearing)
                 mother.ws.send(message_nearest)
-                logger.debug("send nearest: " + message_nearest)
+                #logger.debug("send nearest: " + message_nearest)
                 mother.ws.send(message_daytime)
-                logger.debug("send daytime: " + message_daytime)
+                #logger.debug("send daytime: " + message_daytime)
                 mother.ws.send(message_around)
-                logger.debug("send around: " + message_around)
+                #logger.debug("send around: " + message_around)
                 mother.ws.send(message_coords)
-                logger.debug("send coords: " + message_coords)
+                #logger.debug("send coords: " + message_coords)
 
                 #logger.debug("send data: " + message)
                 
                 if calibrate_active:
                     logger.debug("Calculating calibration...")
-                    logger.debug("OM Radius: " + str(Database["Containers"][Actual_Container['Name']]["OM Radius"]))
+                    logger.debug("OM Radius, später *2 *pi: " + str(Database["Containers"][Actual_Container['Name']]["OM Radius"]))
                     #Logic taken from Jericho Tool (c) Graupunkt
-                    Circumference360Degrees = pi * 2 * float(Database["Containers"][Actual_Container['Name']]["OM Radius"])
+                    Circumference360Degrees = pi * 2 * float(Database["Containers"][Actual_Container['Name']]["OM Radius"]) * 1000
                     logger.debug("Circumference360Degrees: "+str(Circumference360Degrees))
                     #Very high or low values are presented by ps as scientific results, therefore we force the nubmer (decimal) and limit it to 7 digits after comma
                     #Multiplied by 1000 to convert km into m and invert it to correct the deviation
                     RotationSpeedAdjustment = round((New_player_local_rotated_coordinates['X'] * 1000 * 360 / Circumference360Degrees),7) * -1
-                    logger.debug("RotationsSpeedAdjustment: "+str(RotationSpeedAdjustment))
+                    logger.debug("New player local rotatet x: "+ str(New_player_local_rotated_coordinates['X']) + " RotationsSpeedAdjustment: "+str(RotationSpeedAdjustment))
                     #GET Adjustment for Rotationspeed 
                     FinalRotationAdjustment = Database["Containers"][Target["Container"]]["Rotation Adjust"] + RotationSpeedAdjustment #-replace(",",".")
                     logger.debug("FinalRotationAdjustment: "+str(FinalRotationAdjustment))
@@ -841,12 +855,12 @@ def watch_clipboard():
                             
                 if save_triggered == True:
                     save_triggered = False
-                    logger.debug("Saving Location to file...")
+                    #logger.debug("Saving Location to file...")
                     timestamp=datetime.datetime.utcnow()
                     poi_name=str(Actual_Container['Name']) + "_" + str(int(Player_to_POIs_Distances_Sorted[0]['Distance'])) + "km_next_to_" + str(Player_to_POIs_Distances_Sorted[0]['Name']) + "_" + str(timestamp)
-                    logger.debug(poi_name)
+                    #logger.debug(poi_name)
                     save_data = Actual_Container['Name'] + "," + str(round(New_player_local_rotated_coordinates['X'], 3)) + "," + str(round(New_player_local_rotated_coordinates['Y'], 3)) + "," + str(round(New_player_local_rotated_coordinates['Z'], 3)) + "," + poi_name.replace(" ","_").replace(":","_").replace(".","_")
-                    logger.debug(save_data)
+                    #logger.debug(save_data)
                     with open("saved_pois.txt", "a") as sfile:
                             sfile.write(save_data)
                             sfile.write("\n")
@@ -877,7 +891,7 @@ def get_script_path():
             return os.path.dirname(os.path.realpath(sys.argv[0]))
 
 def preload_poi_data():
-    global Database,Container_list,Space_POI_list,Planetary_POI_list,preloaded
+    global Database,Container_list,Space_POI_list,Planetary_POI_list,preloaded,mother,pi_context,startnavitosavedpoi_button_context
     try:
         with open(get_script_path() + '\Database.json') as f:
             Database = json.load(f)
@@ -893,12 +907,14 @@ def preload_poi_data():
             for poi in Database["Containers"][container_name]["POI"]:
                 Planetary_POI_list[container_name].append(poi)
         preloaded = True
-        logger.debug(f"Preloaded TRUE")
+        #logger.debug(f"Preloaded TRUE")
     except:
         logger.debug(f"Database.json not found.")
+        
 
 
 
+preload_poi_data()
 
 def reset_buttons():
     global mother
@@ -944,12 +960,15 @@ def reset_buttons():
 
 class StartNavi(Action):
     UUID = "com.doabigcheese.scnav.startnavi"
-    global watch_clipboard_active,preloaded
+    global watch_clipboard_active,preloaded,mother,message_pois
 
 
     def on_key_up(self, obj: events_received_objs.KeyUp):
         # For Debuggin, generate kind of random Coordinates
         pyperclip.copy("Coordinates: x:12792704755.989153 y:-74801598.619366 z:50267." + str(random.randint(0,50)))
+        mother=self
+        logger.debug("Sending: " + str(message_pois))
+        mother.ws.send(message_pois)
 
 class Calibrate(Action):
     UUID = "com.doabigcheese.scnav.calibrate"
@@ -982,7 +1001,7 @@ class Bearing(Action):
     UUID = "com.doabigcheese.scnav.bearing"
     
     def on_will_appear(self, obj:events_received_objs.WillAppear):
-        logger.debug(f"willapear_debug: " + str(obj.context))
+        #logger.debug(f"willapear_debug: " + str(obj.context))
         global bearing_button_context
         bearing_button_context = obj.context
     
@@ -994,7 +1013,7 @@ class Bearing(Action):
 class Nearest(Action):
     UUID = "com.doabigcheese.scnav.nearest"
     def on_will_appear(self, obj:events_received_objs.WillAppear):
-        logger.debug(f"willapear_debug: " + str(obj.context))
+        #logger.debug(f"willapear_debug: " + str(obj.context))
         global nearest_button_context
         nearest_button_context = obj.context
     
@@ -1014,7 +1033,7 @@ class Nearest(Action):
 class Daytime(Action):
     UUID = "com.doabigcheese.scnav.daytime"
     def on_will_appear(self, obj:events_received_objs.WillAppear):
-        logger.debug(f"willapear_debug: " + str(obj.context))
+        #logger.debug(f"willapear_debug: " + str(obj.context))
         global daytime_button_context
         daytime_button_context = obj.context
     
@@ -1025,7 +1044,7 @@ class Daytime(Action):
 class Coords(Action):
     UUID = "com.doabigcheese.scnav.coords"
     def on_will_appear(self, obj:events_received_objs.WillAppear):
-        logger.debug(f"willapear_debug: " + str(obj.context))
+        #logger.debug(f"willapear_debug: " + str(obj.context))
         global coords_button_context
         coords_button_context = obj.context
     
@@ -1036,7 +1055,7 @@ class Coords(Action):
 class Around(Action):
     UUID = "com.doabigcheese.scnav.around"
     def on_will_appear(self, obj:events_received_objs.WillAppear):
-        logger.debug(f"willapear_debug: " + str(obj.context))
+        #logger.debug(f"willapear_debug: " + str(obj.context))
         global around_button_context
         around_button_context = obj.context
     
@@ -1051,32 +1070,138 @@ class UpdateCurrentLocation(Action):
 
     def on_key_up(self, obj: events_received_objs.KeyUp):
         
-        logger.debug(f"Update pressed.")
+        #logger.debug(f"Update pressed.")
         updatecoordinates()
             
 class SaveLocation(Action):
     UUID = "com.doabigcheese.scnav.save"
     def on_will_appear(self, obj:events_received_objs.WillAppear):
-        logger.debug(f"willapear_debug: " + str(obj.context))
+        #logger.debug(f"willapear_debug: " + str(obj.context))
         global save_button_context
         save_button_context = obj.context
 
     def on_key_up(self, obj: events_received_objs.KeyUp):
         global mother
         mother=self
-        logger.debug(f"Save pressed.")
+        #logger.debug(f"Save pressed.")
         save_poi()        
 
+class StartNaviToSavedPOI(Action):
+    UUID = "com.doabigcheese.scnav.savedpoi"
+    def on_will_appear(self, obj:events_received_objs.WillAppear):
+        logger.debug(f"SAVEDPOI willapear_debug: " + str(obj.context))
+        
+        global message_pois,Database,Container_list,Space_POI_list,Planetary_POI_list,preloaded,mother,pi_context,startnavitosavedpoi_button_context
+        startnavitosavedpoi_button_context = obj.context
+        mother=self
+        if preloaded == False:
+            preload_poi_data()
+        try:
+            with open('saved_pois.txt') as g:
+                custom = 1
+                saved_payload = []
+                logger.debug(f"saved_pois loading entered....")
+                for line in g:
+                    inhalt = line.split(",")
+                    tmp_container=inhalt[0]
+                    tmp_x=float(inhalt[1])
+                    tmp_y=float(inhalt[2])
+                    tmp_z=float(inhalt[3])
+                    try:
+                        pre_name=inhalt[4]
+                        mapping = dict.fromkeys(range(32)) #remove unwanted control characters
+                        tmp_name = pre_name.translate(mapping)
+                    except:
+                        tmp_name = "Custom_" + str(custom)
+                    
+                    #{'Name': 'Security Post Prashad', 'Container': 'Daymar', 'X': -223.514, 'Y': 65.899, 'Z': 181.092, 'qw': 0.0, 'qx': 0.0, 'qy': 0.0, 'qz': 0.0, 'QTMarker': 'TRUE'}
+                    tmp_poi={'Name': tmp_name, 'Container': tmp_container, 'X': tmp_x, 'Y': tmp_y, 'Z': tmp_z, 'qw': 0.0, 'qx': 0.0, 'qy': 0.0, 'qz': 0.0, 'QTMarker': 'FALSE'}
+                    #Database["Containers"][tmp_container]["POI"][tmp_name]=tmp_poi
+                    #Planetary_POI_list[tmp_container].append(tmp_name)
+                    saved_payload.append(tmp_poi)
+                    logger.debug("Added from saved_POIs: " + tmp_name)
+                    
+                    custom = custom + 1  
+        except:
+            logger.debug("No saved_pois.txt found or some error happened.")            
+        
+        
+        logger.debug("json: " + str(saved_payload))
+        try:
+            message_pois = json.dumps({"event": "sendToPropertyInspector",
+                        "context": startnavitosavedpoi_button_context,
+                        "payload":  str(saved_payload)
+                        
+                    })
+            logger.debug("message_pois: "+ str(message_pois))
+            mother.ws.send(message_pois)
+                    
+                    
+        except Exception as e:
+            logger.debug("sendToPropertyInspector error happened: " + str(e) )
+            
+    def on_key_up(self, obj: events_received_objs.KeyUp):
+        global Destination,Database,preloaded,NaviThread,watch_clipboard_active,stop_navithread,mother
+        if preloaded == False:
+            preload_poi_data()
+        container = obj.payload.settings.get("container")
+        x = obj.payload.settings.get("x")
+        y = obj.payload.settings.get("y")
+        z = obj.payload.settings.get("z")
+        
+
+        #logger.debug(f"start:" + str(container) + " - " + str(x) + " - " + str(y) + " - " + str(z) + ".")
+        Destination = {
+                'Name': 'Custom POI', 
+                'Container': container,
+                'X': x, 
+                'Y': y, 
+                'Z': z, 
+                "QTMarker": "FALSE"
+            }
+        if watch_clipboard_active == False:
+            mother=self
+            NaviThread.start()
+            self.set_state(obj.context, 1)
+
+        else:
+            stop_navithread = True
+            NaviThread.join()
+            stop_navithread = False
+            NaviThread=threading.Thread(target=watch_clipboard) #Prepare a new thread
+            logger.debug(f"...stopped")
+            reset_buttons()
+            watch_clipboard_active = False
+            #NaviThread.start()
+            self.set_state(obj.context, 0)
+            #logger.debug(f"...and restarted")
+        
+
+            
 class StartNaviToKnownPOI(Action):
     UUID = "com.doabigcheese.scnav.poi"
+    def on_will_appear(self, obj:events_received_objs.WillAppear):
+        
+        global startnavitoknownpoi_button_context,preloaded,mother
+        startnavitoknownpoi_button_context = obj.context
+        mother=self
+        if preloaded == False:
+            preload_poi_data()
+
     
+    def onPropertyInspectorDidAppear(self,obj:events_received_objs.PropertyInspectorDidAppear):
+        global pi_context,preloaded
+        pi_context = obj.context
+        if preloaded == False:
+            preload_poi_data()
+            
     def on_key_up(self, obj: events_received_objs.KeyUp):
         global Destination,Database,preloaded,NaviThread,watch_clipboard_active,stop_navithread,mother
         if preloaded == False:
             preload_poi_data()
         container = obj.payload.settings.get("container")
         poi = obj.payload.settings.get("poi")
-        logger.debug(f"start:" + str(container) + " - " + str(poi))
+        #logger.debug(f"start:" + str(container) + " - " + str(poi))
         
         Destination = Database["Containers"][container]["POI"][poi]
         
@@ -1109,7 +1234,7 @@ class StartNaviToCustomPOI(Action):
         z = obj.payload.settings.get("z")
         
 
-        logger.debug(f"start:" + str(container) + " - " + str(x) + " - " + str(y) + " - " + str(z) + ".")
+        #logger.debug(f"start:" + str(container) + " - " + str(x) + " - " + str(y) + " - " + str(z) + ".")
         Destination = {
                 'Name': 'Custom POI', 
                 'Container': container,
@@ -1142,6 +1267,7 @@ if __name__ == '__main__':
     StreamDeck(
         actions=[
             UpdateCurrentLocation(),
+            StartNaviToSavedPOI(),
             SaveLocation(),
             StartNavi(),
             Bearing(),
@@ -1152,6 +1278,7 @@ if __name__ == '__main__':
             Around(),
             Coords(),
             Calibrate(),
+            
         ],
         log_file=settings.LOG_FILE_PATH,
         log_level=settings.LOG_LEVEL,

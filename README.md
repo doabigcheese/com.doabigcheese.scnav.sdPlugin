@@ -4,7 +4,7 @@ An standalone plugin for planetary navigation in StarCitizen
 # For Installation
 Precondition: python >= 3.8 installed, windows only \
 Copy the folder com.doabigcheese.scnav.sdPlugin to your Streamdeck Plugin Directory \
-e.g. should end up here: C:\Users\YOURWINDOWSNAME\AppData\Roaming\Elgato\StreamDeck\Plugins\com.doabigcheese.scnav.sdPlugin\
+e.g. should end up here: %appdata%\Elgato\StreamDeck\Plugins\
 
 restart the Stream Deck Software \
 "Update Location" Button will send /showlocation to the Chat (Chat have to be visible)

@@ -200,6 +200,33 @@
       "UUID": "com.doabigcheese.scnav.poi"
     },
     {
+      "Icon": "assets/actions/savedpoi",
+      "Name": "Saved POI",
+      "States": [
+        {
+          "Image": "assets/keys/savedpoi",
+          "Title": "Saved POI",
+          "TitleAlignment": "middle",
+          "FontSize": "8",
+          "ShowTitle": true
+        },
+        {
+          "Image": "assets/keys/savedpoi_active",
+          "Title": "Saved POI",
+          "TitleAlignment": "middle",
+          "FontSize": "8",
+          "ShowTitle": true
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Start Navigation to saved POI",
+      "Controllers": [
+        "Keypad"
+      ],
+      "PropertyInspectorPath": "property_inspector/savedpoi_pi.html",
+      "UUID": "com.doabigcheese.scnav.savedpoi"
+    },
+    {
       "Icon": "assets/actions/custompoi",
       "Name": "Custom POI",
       "States": [
