@@ -77,20 +77,25 @@
                 new Option(settings.container, settings.cotainer)
             );
             container_el.value = settings.container
+            onchange_container();
 
         } else {
             console.log('container not found, defaulting');
             container_el.value = "Daymar"
             settings["container"] = container_el.value
+            onchange_container();
         }
         if (settings?.poi) {
             poi_el.appendChild(
                 new Option(settings.poi, settings.poi)
             );
             poi_el.value = settings.poi
+            onchange_poi();
+
         } else {
             poi_el.value = "TPF"
             settings["poi"] = poi_el.value
+            onchange_poi();
         }
         if (settings?.x) {
             x_el.value = settings.x
@@ -10333,6 +10338,7 @@
                 );
             });
         }, false);
+        
 
         
         
