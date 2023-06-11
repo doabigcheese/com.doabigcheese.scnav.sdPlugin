@@ -28,8 +28,21 @@
             
         </select>
     </div>
-    
-   
+    <div class="sdpi-item">
+        <div class="sdpi-item-label">X</div>
+        <input class="sdpi-item-value" id="x" value="" placeholder="" onchange="onchange_x()" disabled>     
+        <label for="x"></label>
+    </div>
+    <div class="sdpi-item">
+        <div class="sdpi-item-label">Y</div>
+        <input class="sdpi-item-value" id="y" value="" placeholder="" onchange="onchange_y()" disabled>     
+        <label for="y"></label>
+    </div>
+    <div class="sdpi-item">
+        <div class="sdpi-item-label">Z</div>
+        <input class="sdpi-item-value" id="z" value="" placeholder="" onchange="onchange_z()" disabled>     
+        <label for="z"></label>
+    </div>
     
 </div>
 
@@ -44,6 +57,9 @@
 
     const container_el = document.getElementById("planetary_container_select")
     const poi_el = document.getElementById("planetary_target_select")
+    const x_el = document.getElementById("x")
+    const y_el = document.getElementById("y")
+    const z_el = document.getElementById("z")
 
     let settings
 
@@ -52,10 +68,18 @@
         console.log(jsn.actionInfo.payload.settings);
 
         settings = jsn.actionInfo.payload.settings
+        console.log('loading settings: ',settings);
 
         if (settings?.container) {
+            console.log('container found, setting to: ',settings.container);
+            
+            container_el.appendChild(
+                new Option(settings.container, settings.cotainer)
+            );
             container_el.value = settings.container
+
         } else {
+            console.log('container not found, defaulting');
             container_el.value = "Daymar"
             settings["container"] = container_el.value
         }
@@ -67,6 +91,24 @@
         } else {
             poi_el.value = "TPF"
             settings["poi"] = poi_el.value
+        }
+        if (settings?.x) {
+            x_el.value = settings.x
+        } else {
+            x_el.value = ""
+            settings["x"] = x_el.value
+        }
+        if (settings?.y) {
+            y_el.value = settings.y
+        } else {
+            y_el.value = ""
+            settings["y"] = y_el.value
+        }
+        if (settings?.z) {
+            z_el.value = settings.z
+        } else {
+            z_el.value = ""
+            settings["z"] = z_el.value
         }
 
         
@@ -86,8 +128,11 @@
         console.log(container_el.value);
         console.log(container_el.validity.valid)
         if (container_el.validity.valid && container_el.value) {
+            //console.log('1');
             settings["container"] = container_el.value
+            //console.log('2');
             $PI.setSettings(settings);
+            console.log('settings: ' ,settings);
         } else {
             container_el.value = settings.container
         }
@@ -100,6 +145,55 @@
             $PI.setSettings(settings);
         } else {
             poi_el.value = settings.poi
+        }
+        console.log('collecting xyz');
+        fetch('https://starmap.tk/api/v1/pois')
+            .then((res) => {return res.json();})
+            .then((out) => { 
+                for (var key in out) {
+                    if (out.hasOwnProperty(key)) {
+                        if (out[key].PoiName == poi_el.value) {
+                            x_el.value = out[key].XCoord;
+                            y_el.value = out[key].YCoord;
+                            z_el.value = out[key].ZCoord;
+                            onchange_x();
+                            onchange_y();
+                            onchange_z();
+                        }
+                    }
+                }
+            }
+            );
+            
+    }
+    const onchange_x = () => {
+        console.log(x_el.value);
+        console.log(x_el.validity.valid)
+        if (x_el.validity.valid && x_el.value) {
+            settings["x"] = x_el.value
+            $PI.setSettings(settings);
+        } else {
+            x_el.value = settings.x
+        }
+    }
+    const onchange_y = () => {
+        console.log(y_el.value);
+        console.log(y_el.validity.valid)
+        if (y_el.validity.valid && y_el.value) {
+            settings["y"] = y_el.value
+            $PI.setSettings(settings);
+        } else {
+            y_el.value = settings.y
+        }
+    }
+    const onchange_z = () => {
+        console.log(z_el.value);
+        console.log(z_el.validity.valid)
+        if (z_el.validity.valid && z_el.value) {
+            settings["z"] = z_el.value
+            $PI.setSettings(settings);
+        } else {
+            z_el.value = settings.z
         }
     }
 
@@ -10136,37 +10230,114 @@
         },
         "Space_POI": {}
     };
-    
-    
-    var Container_list = Object.keys(Database["Containers"]);
-    
-    console.log(Container_list);
-    
-    var planetary_container_select = document.getElementById("planetary_container_select");
-    Container_list.forEach(function (Container_list) {
+    datasource = "starmap"; // local or starmap
+
+    if (datasource == "local") {
+        console.log("datasource local");
+        var Container_list = Object.keys(Database["Containers"]);
+        
         console.log(Container_list);
-        planetary_container_select.appendChild(
-            new Option(Container_list, Container_list)
-        );
-    });
+        
+        var planetary_container_select = document.getElementById("planetary_container_select");
+        Container_list.forEach(function (Container_list) {
+            console.log(Container_list);
+            planetary_container_select.appendChild(
+                new Option(Container_list, Container_list)
+            );
+        });
 
-    Planetary_POI_list = {};
-    Container_list.forEach(function (container_name) {
-    Planetary_POI_list[container_name] = Object.keys(Database["Containers"][container_name]["POI"]);
-    });
+        Planetary_POI_list = {};
+        Container_list.forEach(function (container_name) {
+        Planetary_POI_list[container_name] = Object.keys(Database["Containers"][container_name]["POI"]);
+        });
 
-    var planetary_target_select = document.getElementById("planetary_target_select");
+        var planetary_target_select = document.getElementById("planetary_target_select");
 
-    planetary_container_select.addEventListener('change', function () {
-    console.log(planetary_container_select.value + ' has been selected as planetary container');
+        planetary_container_select.addEventListener('change', function () {
+        console.log(planetary_container_select.value + ' has been selected as planetary container');
 
-    planetary_target_select.options.length = 0;
-    Planetary_POI_list[planetary_container_select.value].forEach(function (Planetary_POI) {
-        planetary_target_select.appendChild(
-            new Option(Planetary_POI, Planetary_POI)
-        );
-    });
-    }, false);
+        planetary_target_select.options.length = 0;
+        Planetary_POI_list[planetary_container_select.value].forEach(function (Planetary_POI) {
+            planetary_target_select.appendChild(
+                new Option(Planetary_POI, Planetary_POI)
+            );
+        });
+        }, false);
+    }
+    if (datasource == "starmap") {
+        console.log("datasource starmap.tk");
+        var Container_list = [];
+        var planetary_container_select = document.getElementById("planetary_container_select");
+        fetch('https://starmap.tk/api/v1/oc')
+            .then((res) => {return res.json();})
+            .then((out) => {
+                console.log("oc out: ", out)
+                for (var key in out) {
+                    if (out.hasOwnProperty(key)) {
+                        if (out[key].System == "Stanton" && out[key].Type == "Planet") {
+                            console.log(out[key].Planet);
+                            Container_list.push(out[key].Planet);
+                            planetary_container_select.appendChild(
+                                new Option(out[key].Planet, out[key].Planet)
+                            );
+                        }
+                    }
+                }
+                
+                
+            })
+            .catch(err => { throw err });
+        
+        // TODO: send Database to plugin
+           
+        Planetary_POI_list = {};
+        var planetary_target_select = document.getElementById("planetary_target_select");
+
+        fetch('https://starmap.tk/api/v1/pois')
+            .then((res) => {return res.json();})
+            .then((out) => {
+                console.log("pois out: ", out)
+                for (var key in out) {
+                    if (out.hasOwnProperty(key)) {
+                        const name = out[key].PoiName;
+                        const oc = out[key].Planet;
+                        
+                        if (oc in Planetary_POI_list) {
+                            Planetary_POI_list[oc].push(name);
+                        }
+                        else {
+                            if(Container_list.includes(oc)) {
+                                Planetary_POI_list[oc] = [name];
+                            }
+                        }
+                        planetary_target_select.appendChild(
+                                new Option(out[key].PoiName, out[key].PoiName)
+                        );
+                        
+                    }
+                }
+                
+                
+            })
+            .catch(err => { throw err });
+
+        console.log('poi array: ', Planetary_POI_list);
+
+        planetary_container_select.addEventListener('change', function () {
+            console.log(planetary_container_select.value + ' has been selected as planetary container');
+
+            planetary_target_select.options.length = 0;
+            Planetary_POI_list[planetary_container_select.value].forEach(function (Planetary_POI) {
+                planetary_target_select.appendChild(
+                    new Option(Planetary_POI, Planetary_POI)
+                );
+            });
+        }, false);
+
+        
+        
+        
+    }
 
 
 </script>

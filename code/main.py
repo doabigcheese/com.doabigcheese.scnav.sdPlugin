@@ -6,7 +6,7 @@
 #       query e.g. 
 #           https://starmap.tk/api/v1/oc/index.php?system=Stanton
 #           https://starmap.tk/api/v1/pois/index.php?planet=Daymar
-# - saved_poi.txt data selectable in stream deck software
+# 
 #
 # *** debug: http://localhost:23654/
 #########################################################################
@@ -55,6 +55,8 @@ save_button_context = ""
 startnavitoknownpoi_button_context = ""
 startnavitosavedpoi_button_context = ""
 pi_context = ""
+message_pois = ""
+datasource = "starmap" # local or starmap
 
 def linebreak_title(newtitle):
     i = 9
@@ -891,7 +893,8 @@ def get_script_path():
             return os.path.dirname(os.path.realpath(sys.argv[0]))
 
 def preload_poi_data():
-    global Database,Container_list,Space_POI_list,Planetary_POI_list,preloaded,mother,pi_context,startnavitosavedpoi_button_context
+    global Database,Container_list,Space_POI_list,Planetary_POI_list,preloaded,mother,pi_context,startnavitosavedpoi_button_context,datasource
+    #if datasource == "local":
     try:
         with open(get_script_path() + '\Database.json') as f:
             Database = json.load(f)
@@ -910,6 +913,13 @@ def preload_poi_data():
         #logger.debug(f"Preloaded TRUE")
     except:
         logger.debug(f"Database.json not found.")
+            
+    #if datasource == "starmap":
+    #    try:
+    #        logger.debug("Starmap.tk as datasource...")
+    #        
+    #    except Exception as e:
+    #        logger.debug("Starmap Datasource error: " + str(e))    
         
 
 
@@ -967,8 +977,9 @@ class StartNavi(Action):
         # For Debuggin, generate kind of random Coordinates
         pyperclip.copy("Coordinates: x:12792704755.989153 y:-74801598.619366 z:50267." + str(random.randint(0,50)))
         mother=self
-        logger.debug("Sending: " + str(message_pois))
-        mother.ws.send(message_pois)
+        if(message_pois != ""):
+            logger.debug("Sending: " + str(message_pois))
+            mother.ws.send(message_pois)
 
 class Calibrate(Action):
     UUID = "com.doabigcheese.scnav.calibrate"
@@ -1196,14 +1207,35 @@ class StartNaviToKnownPOI(Action):
             preload_poi_data()
             
     def on_key_up(self, obj: events_received_objs.KeyUp):
-        global Destination,Database,preloaded,NaviThread,watch_clipboard_active,stop_navithread,mother
+        global Destination,Database,preloaded,NaviThread,watch_clipboard_active,stop_navithread,mother,datasource
         if preloaded == False:
             preload_poi_data()
-        container = obj.payload.settings.get("container")
-        poi = obj.payload.settings.get("poi")
-        #logger.debug(f"start:" + str(container) + " - " + str(poi))
+            
+        if datasource == "local":
+            container = obj.payload.settings.get("container")
+            poi = obj.payload.settings.get("poi")
+            #logger.debug(f"start:" + str(container) + " - " + str(poi))
+            
+            Destination = Database["Containers"][container]["POI"][poi]
+            
+            
         
-        Destination = Database["Containers"][container]["POI"][poi]
+        if datasource == 'starmap' :
+            container = obj.payload.settings.get("container")
+            x = obj.payload.settings.get("x")
+            y = obj.payload.settings.get("y")
+            z = obj.payload.settings.get("z")
+            
+
+            #logger.debug(f"start:" + str(container) + " - " + str(x) + " - " + str(y) + " - " + str(z) + ".")
+            Destination = {
+                    'Name': 'Predefined POI from Starmap', 
+                    'Container': container,
+                    'X': x, 
+                    'Y': y, 
+                    'Z': z, 
+                    "QTMarker": "FALSE"
+                }
         
         if watch_clipboard_active == False:
             mother=self
