@@ -35,6 +35,7 @@ from streamdeck_sdk import (
     image_bytes_to_base64,
     logger
 )
+from streamdeck_sdk.sd_objs import events_received_objs
 import settings
 
 Container_list = []
@@ -1150,6 +1151,11 @@ class StartNaviToSavedPOI(Action):
                     
         except Exception as e:
             logger.debug("sendToPropertyInspector error happened: " + str(e) )
+            
+    def on_property_inspector_did_appear(self, obj:events_received_objs.PropertyInspectorDidAppear):
+        #return super().on_property_inspector_did_appear(obj)   
+        mother.ws.send(message_pois)
+        logger.debug("Sent saved message_POIs")     
             
     def on_key_up(self, obj: events_received_objs.KeyUp):
         global Destination,Database,preloaded,NaviThread,watch_clipboard_active,stop_navithread,mother
