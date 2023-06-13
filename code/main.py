@@ -1049,7 +1049,7 @@ def preload_poi_data():
                 #logger.debug("tdata: "+str(tdata))
 
                 tmpdata = json.loads(tdata) #lets convert to internal layout
-                logger.debug("tmpdata: " + str(tmpdata))
+                #logger.debug("tmpdata: " + str(tmpdata))
                 
                 
 
@@ -1070,9 +1070,9 @@ def preload_poi_data():
                     
                 #logger.debug("tmpdata_after convert: " + str(tmpdata))
                 
-            logger.debug("Database: "+str(Database))    
+            #logger.debug("Database: "+str(Database))    
                 
-            #preloaded = True
+            preloaded = True
             
         except Exception as e:
             logger.debug("Starmap Datasource error: " + str(e))    
