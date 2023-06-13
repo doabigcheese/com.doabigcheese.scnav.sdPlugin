@@ -7,8 +7,8 @@ Copy the folder com.doabigcheese.scnav.sdPlugin to your Streamdeck Plugin Direct
 e.g. should end up here: %appdata%\Elgato\StreamDeck\Plugins\
 
 restart the Stream Deck Software \
-"Update Location" Button will send /showlocation to the Chat (Chat have to be visible)
-POI Buttons can be predefined with a Location you want to navigate to
+"Update Location" Button will send /showlocation to the Chat (Chat have to be visible) \
+POI Buttons can be predefined with a Location you want to navigate to \
 The Output Buttons will display the information as soon as you start the navigation to a POI (press POI button), and then start updating current coordinates with "Update Location" button
 
 ![alt text](https://github.com/doabigcheese/com.doabigcheese.scnav.sdplugin/blob/master/Screenshot1.jpg?raw=true)
