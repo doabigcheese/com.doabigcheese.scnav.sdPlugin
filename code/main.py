@@ -94,7 +94,7 @@ def save_poi():
     #logger.debug(f"Save entered.")
     if watch_clipboard_active == True:
         save_triggered = True
-        #updatecoordinates()
+        updatecoordinates()
     else:
         message_saved_nok = json.dumps({"event": "showAlert",
                                         "context": save_button_context
@@ -1369,6 +1369,13 @@ class StartNaviToKnownPOI(Action):
             
     def on_key_up(self, obj: events_received_objs.KeyUp):
         global Destination,Database,preloaded,NaviThread,watch_clipboard_active,stop_navithread,mother,datasource
+        tmpdatasource = datasource
+        datasource = obj.payload.settings.get("datasource")
+        logger.debug("Datasource from button: "+str(datasource))
+        if tmpdatasource != datasource:
+            preload_poi_data()
+        else:
+            logger.debug("...same datasource as before ")    
         if preloaded == False:
             preload_poi_data()
             

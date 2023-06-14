@@ -11,8 +11,21 @@
 
 <body>
 <div class="sdpi-wrapper">
-    
 
+    <div type="radio" class="sdpi-item" id="datasource_radio" onchange="onchange_datasource()">
+        <div class="sdpi-item-label">Datasource:</div>
+        <div class="sdpi-item-value ">
+          <div class="sdpi-item-child">
+            <input id="starmap" type="radio" value="starmap" name="rdio"  >
+            <label for="starmap" class="sdpi-item-label"><span></span>Online from starmap.tk</label>
+          </div>
+          <div class="sdpi-item-child">
+            <input id="local" type="radio" value="local" name="rdio" checked >
+            <label for="local" class="sdpi-item-label"><span></span>Offline from Database.json</label>
+          </div>
+        </div>
+    </div>
+        <hr>
 
     <div class="sdpi-item">
         <div class="sdpi-item-label">Planet/Moon</div>
@@ -55,6 +68,8 @@
 <script>
     console.log('Property Inspector loaded', $PI);
 
+    
+    
     const container_el = document.getElementById("planetary_container_select")
     const poi_el = document.getElementById("planetary_target_select")
     const x_el = document.getElementById("x")
@@ -63,6 +78,7 @@
 
     let settings
 
+    
     $PI.onConnected(jsn => {
         console.log('Property Inspector connected', jsn);
         console.log(jsn.actionInfo.payload.settings);
@@ -81,7 +97,7 @@
 
         } else {
             console.log('container not found, defaulting');
-            container_el.value = "Daymar"
+            container_el.value = ""
             settings["container"] = container_el.value
             onchange_container();
         }
@@ -97,6 +113,23 @@
             settings["poi"] = poi_el.value
             onchange_poi();
         }
+        if (settings?.datasource) {
+            console.log("from settings: ",settings.datasource)
+            var radios = document.getElementsByName('rdio');
+            for (var i = 0, length = radios.length; i < length; i++) {
+                console.log("radio valui: ",radios[i].value)
+                if (radios[i].value==settings.datasource) {
+                    radios[i].checked = true
+                    console.log("selected")
+    
+                    // only one radio can be logically checked, don't check the rest
+                    break;
+                }
+            }
+        }
+            
+
+        
         if (settings?.x) {
             x_el.value = settings.x
         } else {
@@ -127,7 +160,34 @@
     });
 
 
-    
+    const onchange_datasource = () => {
+        console.log("new value datasource: ")
+        var radios = document.getElementsByName('rdio');
+        for (var i = 0, length = radios.length; i < length; i++) {
+            if (radios[i].checked) {
+                datasource = radios[i].value
+                settings["datasource"]= datasource
+                $PI.setSettings(settings);
+                console.log("Datasource selected: ", datasource)
+                if (datasource == "local") {
+                    x_el.hidden = true
+                    y_el.hidden = true
+                    z_el.hidden = true
+
+                }
+                else {
+                    x_el.hidden = false
+                    y_el.hidden = false
+                    z_el.hidden = false
+                }
+
+                // only one radio can be logically checked, don't check the rest
+                break;
+            }
+        }
+        clearSelected()
+        load_data()
+    }
 
     const onchange_container = () => {
         console.log(container_el.value);
@@ -202,8 +262,7 @@
         }
     }
 
-</script>
-<script>
+
     var Database={
         "Containers": {
             "Stanton": {
@@ -10235,8 +10294,21 @@
         },
         "Space_POI": {}
     };
-    datasource = "starmap"; // local or starmap
+    //datasource = "starmap"; // local or starmap
 
+    //var datasource = ""
+    function load_data() {
+        console.log("load data entered")
+    var radios = document.getElementsByName('rdio');
+    for (var i = 0, length = radios.length; i < length; i++) {
+        if (radios[i].checked) {
+            datasource = radios[i].value
+            console.log("Datasource selected: ", datasource)
+
+            // only one radio can be logically checked, don't check the rest
+            break;
+        }
+    }
     if (datasource == "local") {
         console.log("datasource local");
         var Container_list = Object.keys(Database["Containers"]);
@@ -10244,6 +10316,7 @@
         console.log(Container_list);
         
         var planetary_container_select = document.getElementById("planetary_container_select");
+        planetary_container_select.options.length = 0;
         Container_list.forEach(function (Container_list) {
             console.log(Container_list);
             planetary_container_select.appendChild(
@@ -10273,6 +10346,7 @@
         console.log("datasource starmap.tk");
         var Container_list = [];
         var planetary_container_select = document.getElementById("planetary_container_select");
+        planetary_container_select.options.length = 0;
         fetch('https://starmap.tk/api/v1/oc')
             .then((res) => {return res.json();})
             .then((out) => {
@@ -10293,10 +10367,10 @@
             })
             .catch(err => { throw err });
         
-        // TODO: send Database to plugin
            
         Planetary_POI_list = {};
         var planetary_target_select = document.getElementById("planetary_target_select");
+        planetary_target_select.options.length = 0;
 
         fetch('https://starmap.tk/api/v1/pois')
             .then((res) => {return res.json();})
@@ -10338,12 +10412,28 @@
                 );
             });
         }, false);
-        
-
-        
-        
-        
     }
+    } // end function
+
+    load_data();
+    clearSelected();
+        
+    function clearSelected(){
+        console.log("clearSelected aufgerufen")
+        var elements = document.getElementById("planetary_target_select").options;
+        var elements2 = document.getElementById("planetary_container_select").options;
+    
+        for(var i = 0; i < elements.length; i++){
+          elements[i].selected = false;
+        }
+        for(var i = 0; i < elements2.length; i++){
+            elements2[i].selected = false;
+          }
+      }
+        
+        
+        
+    
 
 
 </script>
