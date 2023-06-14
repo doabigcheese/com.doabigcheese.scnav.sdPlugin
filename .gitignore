@@ -2004,3 +2004,5 @@ code/venv/Scripts/wsdump.exe
 logs/com.doabigcheese.scnav.sdPlugin.log
 logs/init.log
 code/__pycache__/settings.cpython-310.pyc
+calibrationdata.txt
+saved_pois.txt
