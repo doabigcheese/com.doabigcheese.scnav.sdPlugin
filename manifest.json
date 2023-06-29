@@ -200,6 +200,33 @@
       "UUID": "com.doabigcheese.scnav.poi"
     },
     {
+      "Icon": "assets/actions/sandcavestour",
+      "Name": "Sandcaves Tour",
+      "States": [
+        {
+          "Image": "assets/keys/sandcavestour",
+          "Title": "POI",
+          "TitleAlignment": "middle",
+          "FontSize": "8",
+          "ShowTitle": true
+        },
+        {
+          "Image": "assets/keys/sandcavestour_active",
+          "Title": "POI",
+          "TitleAlignment": "middle",
+          "FontSize": "8",
+          "ShowTitle": true
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Start a Sandcave Tour on current detected Container",
+      "Controllers": [
+        "Keypad"
+      ],
+      "PropertyInspectorPath": "property_inspector/sandcavetour_pi.html",
+      "UUID": "com.doabigcheese.scnav.sandcavestour"
+    },
+    {
       "Icon": "assets/actions/savedpoi",
       "Name": "Saved POI",
       "States": [

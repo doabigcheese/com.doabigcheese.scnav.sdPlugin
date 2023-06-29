@@ -60,12 +60,17 @@ daytime_button_context = ""
 around_button_context = ""
 coords_button_context = ""
 save_button_context = ""
+sandcavestour_button_context = ""
 startnavitoknownpoi_button_context = ""
 startnavitosavedpoi_button_context = ""
 pi_context = ""
 message_pois = ""
 datasource = "starmap" # local or starmap
 daytime_toggle = "target"
+sandcavetour_active = False
+sandcavetour_init_done = False
+start_time=0
+Destination_queue=[]
 
 def linebreak_title(newtitle):
     i = 9
@@ -179,7 +184,32 @@ def get_lat_long_height(X : float, Y : float, Z : float, Container : dict):
     
     return [Latitude, Longitude, Height]
 
+def get_sandcaves_sorted(X : float, Y : float, Z : float, Container:dict):
+    Distances_to_POIs = []
+    logger.debug("gss_1")
+    #logger.debug(str(Container))
+    logger.debug("Player: "+str(X)+","+str(Y)+","+str(Z) )
+    for POI in Container["POI"]:
+        logger.debug("loop POI: " + str(POI))
+        if "Sand Cave" in str(Container["POI"][POI]['Classification']): #'Classification': 'Sand Cave
+            logger.debug("processing: "+str(Container["POI"][POI]))
+            Vector_POI = {
+            "X": abs(X - Container["POI"][POI]["X"]),
+            "Y": abs(Y - Container["POI"][POI]["Y"]),
+            "Z": abs(Z - Container["POI"][POI]["Z"])
+            }
+            logger.debug("Vector_POI: " + str(Vector_POI))
 
+            Distance_POI = vector_norm(Vector_POI)
+            Distances_to_POIs.append({"Name" : POI, "Distance" : Distance_POI, "X": Container["POI"][POI]['X'], "Y": Container["POI"][POI]['Y'], "Z": Container["POI"][POI]['Z'], "Container": Container["POI"][POI]['Container'], "QTMarker": Container["POI"][POI]['QTMarker'] })
+    
+    Player_to_Sandcaves_sorted= sorted(Distances_to_POIs, key=lambda k: k['Distance'])
+    logger.debug("final sandcaves sorted:"+str(Player_to_Sandcaves_sorted))
+    return Player_to_Sandcaves_sorted
+        
+    
+    
+    
 def get_closest_POI(X : float, Y : float, Z : float, Container : dict, Quantum_marker : bool = False):
     
     Distances_to_POIs = []
@@ -431,7 +461,7 @@ def get_current_container(X : float, Y : float, Z : float):
 
 def watch_clipboard():
     logger.debug(f"Watch Clipboard entered.")
-    global save_button_context,save_triggered,Database,Container_list,Space_POI_list,Planetary_POI_list,watch_clipboard_active,Destination,stop_navithread,bearing_button_context,daytime_button_context,nearest_button_context,around_button_context,mother,coords_button_context,calibrate_active,daytime_toggle
+    global save_button_context,save_triggered,Database,Container_list,Space_POI_list,Planetary_POI_list,watch_clipboard_active,Destination,stop_navithread,bearing_button_context,daytime_button_context,nearest_button_context,around_button_context,mother,coords_button_context,calibrate_active,daytime_toggle,sandcavetour_active,sandcavestour_button_context,sandcavetour_init_done,Destination_queue
     watch_clipboard_active = True
     #mother=threading.main_thread()
 
@@ -522,7 +552,8 @@ def watch_clipboard():
                 New_Player_Global_coordinates['Z'] = float(new_clipboard_splitted[7])/1000
                 #search in the Databse to see if the player is ina Container
                 Actual_Container = get_current_container(New_Player_Global_coordinates["X"], New_Player_Global_coordinates["Y"], New_Player_Global_coordinates["Z"])
-                logger.debug("Actual Container: " +str(Actual_Container))
+                #logger.debug("Actual Container: " +str(Actual_Container))
+                      
                 if calibrate_active:
                     logger.debug("Calibrate active")
                     ContainerName = Actual_Container['Name']
@@ -535,12 +566,40 @@ def watch_clipboard():
                 New_player_local_rotated_coordinates = get_local_rotated_coordinates(Time_passed_since_reference_in_seconds, New_Player_Global_coordinates["X"], New_Player_Global_coordinates["Y"], New_Player_Global_coordinates["Z"], Actual_Container)
 
                 logger.debug("1")
+                logger.debug("Sandcavetour_active: " + str(sandcavetour_active))
+                
+                if sandcavetour_active == True:
+                    logger.debug("Sandcavetour active, current container: " + str(Actual_Container['Name']))
+                    if sandcavetour_init_done == False:
+                        ContainerName = Actual_Container['Name']
+                        logger.debug("...init not done yet")
+                        #find all Sancaves in current container
+                        Destination_queue = get_sandcaves_sorted(New_player_local_rotated_coordinates["X"], New_player_local_rotated_coordinates["Y"], New_player_local_rotated_coordinates["Z"], Database["Containers"][ContainerName])
+                        logger.debug("s1")
+                        Destination = Destination_queue[0]
+                        logger.debug("s2")
+                        tourlenght = len(Destination_queue)
+                        logger.debug("Destination set to: " + str(Destination))
+                        message_tour = json.dumps({"event": "setTitle",
+                                            "context": sandcavestour_button_context,
+                                            "payload": {
+                                                "title": linebreak_title("NEXT ("+str(tourlenght)+")\n" + str(Destination['Name'])),
+                                                "target": 0,
+                                            }
+                                        })
+                        mother.ws.send(message_tour)
+                        logger.debug("s3")
+                        sandcavetour_init_done = True
+                        logger.debug("Init done")
+                    else:
+                        logger.debug("Init already done...")
                 #---------------------------------------------------New target local coordinates----------------------------------------------------
                 #Grab the rotation speed of the container in the Database and convert it in degrees/s
                 Target = Destination
-                logger.debug("Target = " +str(Target))
+                logger.debug("Target set.")
+                #logger.debug("Target = " +str(Target))
                 logger.debug("Target Name = " +str(Target["Container"]))
-                logger.debug("Database: "+str(Database))
+                #logger.debug("Database: "+str(Database))
                 target_Rotation_speed_in_hours_per_rotation = Database["Containers"][Target["Container"]]["Rotation Speed"]
                 logger.debug("rotspeed: " + str(target_Rotation_speed_in_hours_per_rotation))
                 try:
@@ -753,7 +812,7 @@ def watch_clipboard():
                 logger.debug("4:"+str(target_Latitude))
                 logger.debug("5:"+str(target_Longitude))
                 logger.debug("6:"+str(target_Height))
-                logger.debug("7:"+str(Database["Containers"][Target["Container"]]))
+                #logger.debug("7:"+str(Database["Containers"][Target["Container"]]))
                 logger.debug("8:"+str(Database["Containers"]["Stanton"]))
                 logger.debug("9:"+str(Time_passed_since_reference_in_seconds))
 
@@ -997,7 +1056,7 @@ def preload_poi_data():
             if response.status_code == 200:  # Erfolgreiche Anfrage
                 #logger.debug(str(response.text))
                 #cleanresponse = re.findall('[{.*}]', response.text)
-                data = esponse.json()  # JSON-Daten aus der Antwort extrahieren
+                data = response.json()  # JSON-Daten aus der Antwort extrahieren
                 # Mit den erhaltenen Daten arbeiten
                 #logger.debug("data:" + str(data))
                 #logger.debug('00')
@@ -1143,7 +1202,6 @@ def reset_buttons():
     
     mother.ws.send(message_coords)
     
-      
        
 
 class StartNavi(Action):
@@ -1153,7 +1211,9 @@ class StartNavi(Action):
 
     def on_key_up(self, obj: events_received_objs.KeyUp):
         # For Debuggin, generate kind of random Coordinates
-        pyperclip.copy("Coordinates: x:12792704755.989153 y:-74801598.619366 z:50267." + str(random.randint(0,50)))
+
+        #pyperclip.copy("Coordinates: x:12792704755.989153 y:-74801598.619366 z:50267." + str(random.randint(0,50))) #Magda
+        pyperclip.copy("Coordinates: x:-18930612193.865963 y:-2609992498.331003 z:-232631." + str(random.randint(0,50))) #Daymar
         mother=self
         if(message_pois != ""):
             logger.debug("Sending: " + str(message_pois))
@@ -1459,6 +1519,70 @@ class StartNaviToKnownPOI(Action):
             self.set_state(obj.context, 0)
             #logger.debug(f"...and restarted")
 
+class Sandcavestour(Action):
+    UUID = "com.doabigcheese.scnav.sandcavestour"
+    
+    def on_key_down(self, obj: events_received_objs.KeyDown):
+        global start_time
+        #check if longpress
+        start_time = time.time()
+        
+    def on_key_up(self, obj: events_received_objs.KeyUp):
+        global preloaded,mother,NaviThread,sandcavetour_active,watch_clipboard_active,stop_navithread,sandcavestour_button_context,start_time,sandcavetour_init_done,Destination_queue,Destination
+        logger.debug(f"Sandcavetour button pressed...")
+        end_time = time.time()
+        time_lapsed = end_time - start_time
+        sandcavestour_button_context= obj.context
+        logger.debug("longpresstimer: " + str(time_lapsed))
+        if time_lapsed > 2:
+            logger.debug("Longpress detected")
+            if sandcavetour_active == True:
+                Destination_queue.pop(0) #remove 1st element from destinationlist
+                Destination = Destination_queue[0]
+                logger.debug("s2")
+                tourlenght = len(Destination_queue)
+                logger.debug("Destination set to: " + str(Destination))
+                message_tour = json.dumps({"event": "setTitle",
+                                    "context": sandcavestour_button_context,
+                                    "payload": {
+                                        "title": linebreak_title("NEXT ("+str(tourlenght)+")\n" + str(Destination['Name'])),
+                                        "target": 0,
+                                    }
+                                })
+                self.ws.send(message_tour)
+                self.set_state(obj.context, 1)
+                #stop_navithread = True
+                #NaviThread.join()
+                #stop_navithread = False
+                #NaviThread=threading.Thread(target=watch_clipboard) #Prepare a new thread
+                #NaviThread.start()
+                
+        if time_lapsed <= 2:
+        
+            if preloaded == False:
+                logger.debug("preload...")
+                preload_poi_data()
+            if watch_clipboard_active == False:
+                logger.debug("datasourceinfo: "+str(datasource))
+                mother=self
+                
+                sandcavetour_active = True
+                NaviThread.start()
+                self.set_state(obj.context, 1)
+                
+            else:
+                stop_navithread = True
+                NaviThread.join()
+                stop_navithread = False
+                sandcavetour_active = False
+                Destination_queue = []
+                sandcavetour_init_done = False
+                NaviThread=threading.Thread(target=watch_clipboard) #Prepare a new thread
+                logger.debug(f"...stopped")
+                reset_buttons()
+                self.set_state(obj.context, 0)
+            
+    
 class StartNaviToCustomPOI(Action):
     UUID = "com.doabigcheese.scnav.custompoi"
     def on_key_up(self, obj: events_received_objs.KeyUp):
@@ -1515,6 +1639,7 @@ if __name__ == '__main__':
             Around(),
             Coords(),
             Calibrate(),
+            Sandcavestour(),
             
         ],
         log_file=settings.LOG_FILE_PATH,
