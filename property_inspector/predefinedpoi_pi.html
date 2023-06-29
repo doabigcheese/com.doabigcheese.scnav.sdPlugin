@@ -155,6 +155,8 @@
         let actionUUID = $PI.actionInfo.action;
         console.log('actionUUID:', actionUUID);
         // register a callback for the 'sendToPropertyInspector' event
+
+
         
         
     });
@@ -204,13 +206,21 @@
     }
     const onchange_poi = () => {
         console.log(poi_el.value);
-        console.log(poi_el.validity.valid)
+        console.log("validity: ",poi_el.validity.valid)
+        //console.log("title")
+        //document.title = "test1"; //poi_el.value
+        //document.querySelector('title').textContent = "newTitle";
         if (poi_el.validity.valid && poi_el.value) {
             settings["poi"] = poi_el.value
+            
             $PI.setSettings(settings);
         } else {
             poi_el.value = settings.poi
+            
         }
+        //console.log("title")
+        //document.title = "test1"; //poi_el.value
+        //document.querySelector('title').textContent = "newTitle";
         console.log('collecting xyz');
         fetch('https://starmap.tk/api/v1/pois')
             .then((res) => {return res.json();})
@@ -10431,8 +10441,7 @@
           }
       }
         
-        
-        
+      
     
 
 

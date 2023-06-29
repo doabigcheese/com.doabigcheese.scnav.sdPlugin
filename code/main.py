@@ -9,11 +9,18 @@
 # 
 #
 # *** debug: http://localhost:23654/
+#todo:
+#   -automatic title on button based on poi / planet
+#   -long press opens up verseguide poi page or starmap.tk database view
+#   - deactivate activated buttons when selecting new poi
+#   - button state when switching pages?
+#   - generate route for sandcaves on current container
 #########################################################################
 import random
 import requests
 import ahk
 import time
+import re
 
 from math import sqrt, degrees, radians, cos, acos, sin, asin, tan ,atan2, copysign, pi
 import pyperclip
@@ -58,6 +65,7 @@ startnavitosavedpoi_button_context = ""
 pi_context = ""
 message_pois = ""
 datasource = "starmap" # local or starmap
+daytime_toggle = "target"
 
 def linebreak_title(newtitle):
     i = 9
@@ -123,10 +131,12 @@ def rotate_point_2D(Unrotated_coordinates, angle):
     Rotated_coordinates = {}
     logger.debug("unrotated_x: "+str(Unrotated_coordinates["X"]))
     logger.debug("Angle: "+ str(angle))
+    logger.debug("unrotated_y: "+str(Unrotated_coordinates["Y"]))
     Rotated_coordinates["X"] = Unrotated_coordinates["X"] * cos(angle) - Unrotated_coordinates["Y"]*sin(angle)
     logger.debug("calc:"+str(Rotated_coordinates["X"]))
     Rotated_coordinates["Y"] = Unrotated_coordinates["X"] * sin(angle) + Unrotated_coordinates["Y"]*cos(angle)
     Rotated_coordinates["Z"] = Unrotated_coordinates["Z"]
+    logger.debug("calc_return:"+str(Rotated_coordinates))
     return (Rotated_coordinates)
 
 def get_local_rotated_coordinates(Time_passed : float, X : float, Y : float, Z : float, Actual_Container : dict):
@@ -421,7 +431,7 @@ def get_current_container(X : float, Y : float, Z : float):
 
 def watch_clipboard():
     logger.debug(f"Watch Clipboard entered.")
-    global save_button_context,save_triggered,Database,Container_list,Space_POI_list,Planetary_POI_list,watch_clipboard_active,Destination,stop_navithread,bearing_button_context,daytime_button_context,nearest_button_context,around_button_context,mother,coords_button_context,calibrate_active
+    global save_button_context,save_triggered,Database,Container_list,Space_POI_list,Planetary_POI_list,watch_clipboard_active,Destination,stop_navithread,bearing_button_context,daytime_button_context,nearest_button_context,around_button_context,mother,coords_button_context,calibrate_active,daytime_toggle
     watch_clipboard_active = True
     #mother=threading.main_thread()
 
@@ -853,10 +863,19 @@ def watch_clipboard():
                 message_daytime = json.dumps({"event": "setTitle",
                                         "context": daytime_button_context,
                                         "payload": {
-                                            "title": f"{target_next_event}:\n{time.strftime('%H:%M:%S', time.localtime(New_time + player_next_event_time*60))}",
+                                            "title": f"Target:\n{target_next_event}:\n{time.strftime('%H:%M:%S', time.localtime(New_time + target_next_event_time*60))}",
                                             "target": 0,
                                         }
                                     })
+                logger.debug("32.5")
+                if daytime_toggle == "player":
+                    message_daytime = json.dumps({"event": "setTitle",
+                                            "context": daytime_button_context,
+                                            "payload": {
+                                                "title": f"Player:\n{player_next_event}:\n{time.strftime('%H:%M:%S', time.localtime(New_time + player_next_event_time*60))}",
+                                                "target": 0,
+                                            }
+                                        })    
                 logger.debug("33")
                 message_around = json.dumps({"event": "setTitle",
                                         "context": around_button_context,
@@ -974,10 +993,13 @@ def preload_poi_data():
             logger.debug("Starmap.tk as datasource...")
             url = "https://starmap.tk/api/v1/oc/index.php?system=Stanton"
             response = requests.get(url)
+            ##logger.debug("Response: " + str(response.status_code))
             if response.status_code == 200:  # Erfolgreiche Anfrage
-                data = response.json()  # JSON-Daten aus der Antwort extrahieren
+                #logger.debug(str(response.text))
+                #cleanresponse = re.findall('[{.*}]', response.text)
+                data = esponse.json()  # JSON-Daten aus der Antwort extrahieren
                 # Mit den erhaltenen Daten arbeiten
-                #logger.debug(str(data))
+                #logger.debug("data:" + str(data))
                 #logger.debug('00')
                 tdata=str(data).replace("\'","\"").replace("None","0")
                 counter = 0
@@ -1044,7 +1066,7 @@ def preload_poi_data():
             response = requests.get(url)
             if response.status_code == 200:  # Erfolgreiche Anfrage
                 data = response.json()  # JSON-Daten aus der Antwort extrahieren
-                #logger.debug(str(data))
+                logger.debug(str(data))
                 tdata=str(data).replace("\'s","s").replace("\'","\"").replace("None","0")
                 #logger.debug("tdata: "+str(tdata))
 
@@ -1206,7 +1228,14 @@ class Daytime(Action):
     
 
     def on_key_up(self, obj: events_received_objs.KeyUp):   
-        pass 
+        global daytime_toggle
+        
+        if daytime_toggle == "target":
+            daytime_toggle = "player"
+            
+        else:
+            daytime_toggle = "target"
+        self.show_ok(obj.context) 
 
 class Coords(Action):
     UUID = "com.doabigcheese.scnav.coords"
@@ -1352,6 +1381,14 @@ class StartNaviToSavedPOI(Action):
             
 class StartNaviToKnownPOI(Action):
     UUID = "com.doabigcheese.scnav.poi"
+    
+    #detect longpress
+    #https://verseguide.com/location/STANTON
+    #<a href="/location/STANTON/II#Crusader" class="text-none animateMe pa-0 v-tab" tabindex="0" aria-selected="false" role="tab">
+    #-> alle location links scrapen
+    # x-box / y-box /z-box :<i aria-hidden="true" class="v-icon notranslate mdi mdi-alpha-x-box-outline theme--dark" style="font-size: 18px;"></i>
+    # km : <div class="v-list-item__subtitle">-259.27 km</div>
+    
     def on_will_appear(self, obj:events_received_objs.WillAppear):
         
         global startnavitoknownpoi_button_context,preloaded,mother
