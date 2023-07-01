@@ -14,7 +14,6 @@
 #   -long press opens up verseguide poi page or starmap.tk database view
 #   - deactivate activated buttons when selecting new poi
 #   - button state when switching pages?
-#   - generate route for sandcaves on current container
 #########################################################################
 import random
 import requests
@@ -214,18 +213,21 @@ def get_sandcaves_sorted(X : float, Y : float, Z : float, Container:dict):
     
             #Distances_to_POIs.append({"Name" : POI, "Distance" : Distance_POI, "X": Container["POI"][POI]['X'], "Y": Container["POI"][POI]['Y'], "Z": Container["POI"][POI]['Z'], "Container": Container["POI"][POI]['Container'], "QTMarker": Container["POI"][POI]['QTMarker'] })
     logger.debug("all POIs processed.")
-    Player_to_Sandcaves_sorted = sorted(Distances_to_POIs, key=lambda k: k['Distance'])
-    logger.debug("sorted to distance.")
-    logger.debug(str(Distances_to_POIs))
-    Sandcaves_to_QTMarker_sorted = sorted(Distances_to_POIs, key=lambda k: k['nextQTMarkerDistance'])
-    logger.debug("sorted to QTMarker distance")
-    logger.debug(str(Sandcaves_to_QTMarker_sorted))
-    if Player_to_Sandcaves_sorted[0]["Distance"] > Sandcaves_to_QTMarker_sorted[0]["nextQTMarkerDistance"]:
-        logger.debug("QTMarker Sandcave is next")
-        return Sandcaves_to_QTMarker_sorted
+    if len(Distances_to_POIs) == 0:
+        return Distances_to_POIs
     else:
-        logger.debug("Sandcave without QT is next")
-        return Player_to_Sandcaves_sorted
+        Player_to_Sandcaves_sorted = sorted(Distances_to_POIs, key=lambda k: k['Distance'])
+        logger.debug("sorted to distance.")
+        logger.debug(str(Distances_to_POIs))
+        Sandcaves_to_QTMarker_sorted = sorted(Distances_to_POIs, key=lambda k: k['nextQTMarkerDistance'])
+        logger.debug("sorted to QTMarker distance")
+        logger.debug(str(Sandcaves_to_QTMarker_sorted))
+        if Player_to_Sandcaves_sorted[0]["Distance"] > Sandcaves_to_QTMarker_sorted[0]["nextQTMarkerDistance"]:
+            logger.debug("QTMarker Sandcave is next")
+            return Sandcaves_to_QTMarker_sorted
+        else:
+            logger.debug("Sandcave without QT is next")
+            return Player_to_Sandcaves_sorted
     
         
 def reorder_Destination_queue(X : float, Y : float, Z : float, queue:dict): 
@@ -636,445 +638,454 @@ def watch_clipboard():
                         #find all Sancaves in current container
                         Destination_queue = get_sandcaves_sorted(New_player_local_rotated_coordinates["X"], New_player_local_rotated_coordinates["Y"], New_player_local_rotated_coordinates["Z"], Database["Containers"][ContainerName])
                         logger.debug("s1")
-                        Destination = Destination_queue[0]
-                        logger.debug("s2")
                         tourlenght = len(Destination_queue)
-                        logger.debug("Destination set to: " + str(Destination))
-                        message_tour = json.dumps({"event": "setTitle",
-                                            "context": sandcavestour_button_context,
+                        if tourlenght == 0:
+                            logger.debug("No sand caves found on current container")
+                            message_saved_nok = json.dumps({"event": "showAlert",
+                                        "context": sandcavestour_button_context
+                                    })
+                            mother.ws.send(message_saved_nok)    
+                        else:    
+                            logger.debug("s2")
+                            Destination = Destination_queue[0]
+                            
+                            logger.debug("Destination set to: " + str(Destination))
+                            message_tour = json.dumps({"event": "setTitle",
+                                                "context": sandcavestour_button_context,
+                                                "payload": {
+                                                    "title": linebreak_title("NEXT ("+str(tourlenght)+")\n" + str(Destination['Name'])),
+                                                    "target": 0,
+                                                }
+                                            })
+                            mother.ws.send(message_tour)
+                            logger.debug("s3")
+                            sandcavetour_init_done = True
+                            logger.debug("Init done")
+                    else:
+                        logger.debug("Init already done...")
+                
+                if Destination != []: #(sandcavetour_active and sandcavetour_init_done) or not sandcavetour_active:        
+                    #---------------------------------------------------New target local coordinates----------------------------------------------------
+                    #Grab the rotation speed of the container in the Database and convert it in degrees/s
+                    Target = Destination
+                    logger.debug("Target set:"+str(Target))
+                    #logger.debug("Target = " +str(Target))
+                    logger.debug("Target Name = " +str(Target["Container"]))
+                    #logger.debug("Database: "+str(Database))
+                    target_Rotation_speed_in_hours_per_rotation = Database["Containers"][Target["Container"]]["Rotation Speed"]
+                    logger.debug("rotspeed: " + str(target_Rotation_speed_in_hours_per_rotation))
+                    try:
+                        target_Rotation_speed_in_degrees_per_second = 0.1 * (1/target_Rotation_speed_in_hours_per_rotation)
+                    except ZeroDivisionError:
+                        target_Rotation_speed_in_degrees_per_second = 0
+                    logger.debug("11")
+                    #Get the actual rotation state in degrees using the rotation speed of the container, the actual time and a rotational adjustment value
+                    target_Rotation_state_in_degrees = ((target_Rotation_speed_in_degrees_per_second * Time_passed_since_reference_in_seconds) + Database["Containers"][Target["Container"]]["Rotation Adjust"]) % 360
+                    logger.debug("12")
+                    logger.debug("Rot in degrees: " + str(target_Rotation_state_in_degrees))
+                    logger.debug("Target: "+str(Target))
+                    #get the new player rotated coordinates
+                    target_rotated_coordinates = rotate_point_2D(Target, radians(target_Rotation_state_in_degrees))
+
+                    logger.debug("2")
+
+
+                    #-------------------------------------------------player local Long Lat Height--------------------------------------------------
+                    
+                    if Actual_Container['Name'] != "None":
+                        player_Latitude, player_Longitude, player_Height = get_lat_long_height(New_player_local_rotated_coordinates["X"], New_player_local_rotated_coordinates["Y"], New_player_local_rotated_coordinates["Z"], Actual_Container)
+                    
+                    #-------------------------------------------------target local Long Lat Height--------------------------------------------------
+                    target_Latitude, target_Longitude, target_Height = get_lat_long_height(Target["X"], Target["Y"], Target["Z"], Database["Containers"][Target["Container"]])
+
+                    logger.debug("3")
+
+                    #---------------------------------------------------Distance to POI-----------------------------------------------------------------
+                    New_Distance_to_POI = {}
+                    logger.debug("Target Container: "+str(Target["Container"]))
+                    logger.debug("Actual Container: "+str(Actual_Container))
+                    logger.debug("Destination:" + str(Destination))
+                    if Actual_Container == Target["Container"]:
+                        logger.debug("Actual Container = Target")
+                        for i in ["X", "Y", "Z"]:
+                            New_Distance_to_POI[i] = abs(Target[i] - New_player_local_rotated_coordinates[i])
+                    
+                    
+                    else:
+                        for i in ["X", "Y", "Z"]:
+                            New_Distance_to_POI[i] = abs((target_rotated_coordinates[i] + Database["Containers"][Target["Container"]][i]) - New_Player_Global_coordinates[i])
+                    logger.debug("4")
+                    #get the real new distance between the player and the target
+                    New_Distance_to_POI_Total = vector_norm(New_Distance_to_POI)
+                    logger.debug("5")
+                    if New_Distance_to_POI_Total <= 100:
+                        New_Distance_to_POI_Total_color = "#00ff00"
+                    elif New_Distance_to_POI_Total <= 1000:
+                        New_Distance_to_POI_Total_color = "#ffd000"
+                    else :
+                        New_Distance_to_POI_Total_color = "#ff3700"
+
+                    logger.debug("6")
+                    #---------------------------------------------------Delta Distance to POI-----------------------------------------------------------
+                    #get the real old distance between the player and the target
+                    Old_Distance_to_POI_Total = vector_norm(Old_Distance_to_POI)
+                    logger.debug("7")
+
+
+
+                    #get the 3 XYZ distance travelled since last update
+                    Delta_Distance_to_POI = {}
+                    for i in ["X", "Y", "Z"]:
+                        Delta_Distance_to_POI[i] = New_Distance_to_POI[i] - Old_Distance_to_POI[i]
+                    logger.debug("8")
+                    #get the real distance travelled since last update
+                    Delta_Distance_to_POI_Total = New_Distance_to_POI_Total - Old_Distance_to_POI_Total
+                    logger.debug("9")
+                    if Delta_Distance_to_POI_Total <= 0:
+                        Delta_distance_to_poi_color = "#00ff00"
+                    else:
+                        Delta_distance_to_poi_color = "#ff3700"
+
+
+
+                    #---------------------------------------------------Estimated time of arrival to POI------------------------------------------------
+                    #get the time between the last update and this update
+                    Delta_time = New_time - Old_time
+                    logger.debug("10")
+
+                    #get the time it would take to reach destination using the same speed
+                    try :
+                        Estimated_time_of_arrival = (Delta_time*New_Distance_to_POI_Total)/abs(Delta_Distance_to_POI_Total)
+                        logger.debug("11")
+                    except ZeroDivisionError:
+                        Estimated_time_of_arrival = 0.00
+
+
+
+                    #----------------------------------------------------Closest Quantumable POI--------------------------------------------------------
+                    if Target["QTMarker"] == "FALSE":
+                        logger.debug("11.5")
+                        Target_to_POIs_Distances_Sorted = get_closest_POI(Target["X"], Target["Y"], Target["Z"], Database["Containers"][Target["Container"]], True)
+                        logger.debug("11.6")
+                        logger.debug(str(Target_to_POIs_Distances_Sorted))
+                    
+                    else :
+                        logger.debug("11.7")
+                        Target_to_POIs_Distances_Sorted = [{
+                            "Name" : "POI itself",
+                            "Distance" : 0
+                        }]
+                        logger.debug("11.8")
+
+                    logger.debug("12")
+                    #----------------------------------------------------Player Closest POI--------------------------------------------------------
+                    Player_to_POIs_Distances_Sorted = get_closest_POI(New_player_local_rotated_coordinates["X"], New_player_local_rotated_coordinates["Y"], New_player_local_rotated_coordinates["Z"], Actual_Container, False)
+
+                    logger.debug("13")
+                    #-------------------------------------------------------3 Closest OMs to player---------------------------------------------------------------
+                    #player_Closest_OM = get_closest_oms(New_player_local_rotated_coordinates["X"], New_player_local_rotated_coordinates["Y"], New_player_local_rotated_coordinates["Z"], Actual_Container)
+                    player_Closest_OM = "n/a"
+                    logger.debug("14_disabled")
+
+                    #-------------------------------------------------------3 Closest OMs to target---------------------------------------------------------------
+                    #target_Closest_OM = get_closest_oms(Target["X"], Target["Y"], Target["Z"], Database["Containers"][Target["Container"]])
+                    target_Closest_OM="n/a"               
+                    logger.debug("15_disabled")
+
+                    #----------------------------------------------------Course Deviation to POI--------------------------------------------------------
+                    #get the vector between current_pos and previous_pos
+                    Previous_current_pos_vector = {}
+                    for i in ['X', 'Y', 'Z']:
+                        Previous_current_pos_vector[i] = New_player_local_rotated_coordinates[i] - Old_player_local_rotated_coordinates[i]
+
+                    logger.debug("16")
+                    #get the vector between current_pos and target_pos
+                    Current_target_pos_vector = {}
+                    for i in ['X', 'Y', 'Z']:
+                        Current_target_pos_vector[i] = Target[i] - New_player_local_rotated_coordinates[i]
+
+                    logger.debug("17")
+                    #get the angle between the current-target_pos vector and the previous-current_pos vector
+                    Total_deviation_from_target = angle_between_vectors(Previous_current_pos_vector, Current_target_pos_vector)
+
+                    logger.debug("18")
+                    if Total_deviation_from_target <= 10:
+                        Total_deviation_from_target_color = "#00ff00"
+                    elif Total_deviation_from_target <= 20:
+                        Total_deviation_from_target_color = "#ffd000"
+                    else:
+                        Total_deviation_from_target_color = "#ff3700"
+
+                    logger.debug("19")
+                    #----------------------------------------------------------Flat_angle--------------------------------------------------------------
+                    previous = Old_player_local_rotated_coordinates
+                    current = New_player_local_rotated_coordinates
+
+
+                    #Vector AB (Previous -> Current)
+                    previous_to_current = {}
+                    for i in ["X", "Y", "Z"]:
+                        previous_to_current[i] = current[i] - previous[i]
+                    logger.debug("20")
+                    #Vector AC (C = center of the planet, Previous -> Center)
+                    previous_to_center = {}
+                    for i in ["X", "Y", "Z"]:
+                        previous_to_center[i] = 0 - previous[i]
+                    logger.debug("21")
+                    #Vector BD (Current -> Target)
+                    current_to_target = {}
+                    for i in ["X", "Y", "Z"]:
+                        current_to_target[i] = Target[i] - current[i]
+                    logger.debug("22")
+                        #Vector BC (C = center of the planet, Current -> Center)
+                    current_to_center = {}
+                    for i in ["X", "Y", "Z"]:
+                        current_to_center[i] = 0 - current[i]
+
+                    logger.debug("23")
+
+                    #Normal vector of a plane:
+                    #abc : Previous/Current/Center
+                    n1 = {}
+                    n1["X"] = previous_to_current["Y"] * previous_to_center["Z"] - previous_to_current["Z"] * previous_to_center["Y"]
+                    n1["Y"] = previous_to_current["Z"] * previous_to_center["X"] - previous_to_current["X"] * previous_to_center["Z"]
+                    n1["Z"] = previous_to_current["X"] * previous_to_center["Y"] - previous_to_current["Y"] * previous_to_center["X"]
+                    logger.debug("24")
+                    #acd : Previous/Center/Target
+                    n2 = {}
+                    n2["X"] = current_to_target["Y"] * current_to_center["Z"] - current_to_target["Z"] * current_to_center["Y"]
+                    n2["Y"] = current_to_target["Z"] * current_to_center["X"] - current_to_target["X"] * current_to_center["Z"]
+                    n2["Z"] = current_to_target["X"] * current_to_center["Y"] - current_to_target["Y"] * current_to_center["X"]
+                    logger.debug("25")
+                    Flat_angle = angle_between_vectors(n1, n2)
+                    logger.debug("26")
+
+                    if Flat_angle <= 10:
+                        Flat_angle_color = "#00ff00"
+                    elif Flat_angle <= 20:
+                        Flat_angle_color = "#ffd000"
+                    else:
+                        Flat_angle_color = "#ff3700"
+
+
+
+
+                    #----------------------------------------------------------Heading--------------------------------------------------------------
+                    
+                    bearingX = cos(radians(target_Latitude)) * sin(radians(target_Longitude) - radians(player_Longitude))
+                    bearingY = cos(radians(player_Latitude)) * sin(radians(target_Latitude)) - sin(radians(player_Latitude)) * cos(radians(target_Latitude)) * cos(radians(target_Longitude) - radians(player_Longitude))
+
+                    Bearing = (degrees(atan2(bearingX, bearingY)) + 360) % 360
+
+                    logger.debug("28_1")
+                    logger.debug("1:"+str(Target["X"]))
+                    logger.debug("2:"+str(Target["Y"]))
+                    logger.debug("3:"+str(Target["Z"]))
+                    logger.debug("4:"+str(target_Latitude))
+                    logger.debug("5:"+str(target_Longitude))
+                    logger.debug("6:"+str(target_Height))
+                    #logger.debug("7:"+str(Database["Containers"][Target["Container"]]))
+                    logger.debug("8:"+str(Database["Containers"]["Stanton"]))
+                    logger.debug("9:"+str(Time_passed_since_reference_in_seconds))
+
+
+                    #-------------------------------------------------Sunrise Sunset Calculation----------------------------------------------------
+                    player_state_of_the_day, player_next_event, player_next_event_time = get_sunset_sunrise_predictions(
+                        New_player_local_rotated_coordinates["X"], 
+                        New_player_local_rotated_coordinates["Y"], 
+                        New_player_local_rotated_coordinates["Z"], 
+                        player_Latitude, 
+                        player_Longitude, 
+                        player_Height, 
+                        Actual_Container, 
+                        Database["Containers"]["Stanton"],
+                        Time_passed_since_reference_in_seconds
+                    )
+                    logger.debug("28")                
+                    target_state_of_the_day, target_next_event, target_next_event_time = get_sunset_sunrise_predictions(
+                        Target["X"], 
+                        Target["Y"], 
+                        Target["Z"], 
+                        target_Latitude, 
+                        target_Longitude, 
+                        target_Height, 
+                        Database["Containers"][Target["Container"]], 
+                        Database["Containers"]["Stanton"],
+                        Time_passed_since_reference_in_seconds
+                    )
+
+                    logger.debug("29")
+                    #------------------------------------------------------------Backend to Frontend------------------------------------------------------------
+                    try:
+                        new_data = {
+                            "updated" : f"{time.strftime('%H:%M:%S', time.localtime(time.time()))}",
+                            "target" : Target['Name'],
+                            "player_actual_container" : Actual_Container['Name'],
+                            "target_container" : Target['Container'],
+                            "player_x" : round(New_player_local_rotated_coordinates['X'], 3),
+                            "player_y" : round(New_player_local_rotated_coordinates['Y'], 3),
+                            "player_z" : round(New_player_local_rotated_coordinates['Z'], 3),
+                            "player_long" : f"{round(player_Longitude, 2)}°",
+                            "player_lat" : f"{round(player_Latitude, 2)}°",
+                            "player_height" : f"{round(player_Height, 1)} km",
+                            #"player_OM1" : f"{player_Closest_OM['Z']['OM']['Name']} : {round(player_Closest_OM['Z']['Distance'], 3)} km",
+                            #"player_OM2" : f"{player_Closest_OM['Y']['OM']['Name']} : {round(player_Closest_OM['Y']['Distance'], 3)} km",
+                            #"player_OM3" : f"{player_Closest_OM['X']['OM']['Name']} : {round(player_Closest_OM['X']['Distance'], 3)} km",
+                            "player_closest_poi" : f"{Player_to_POIs_Distances_Sorted[0]['Name']} : {round(Player_to_POIs_Distances_Sorted[0]['Distance'], 3)} km",
+                            "player_state_of_the_day" : f"{player_state_of_the_day}", 
+                            "player_next_event" : f"{player_next_event}", 
+                            "player_next_event_time" : f"{time.strftime('%H:%M:%S', time.localtime(New_time + player_next_event_time*60))}",
+                            "target_x" : Target["X"],
+                            "target_y" : Target["Y"],
+                            "target_z" : Target["Z"],
+                            "target_long" : f"{round(target_Longitude, 2)}°",
+                            "target_lat" : f"{round(target_Latitude, 2)}°",
+                            "target_height" : f"{round(target_Height, 1)} km",
+                            #"target_OM1" : f"{target_Closest_OM['Z']['OM']['Name']} : {round(target_Closest_OM['Z']['Distance'], 3)} km",
+                            #"target_OM2" : f"{target_Closest_OM['Y']['OM']['Name']} : {round(target_Closest_OM['Y']['Distance'], 3)} km",
+                            #"target_OM3" : f"{target_Closest_OM['X']['OM']['Name']} : {round(target_Closest_OM['X']['Distance'], 3)} km",
+                            "target_closest_QT_beacon" : f"{Target_to_POIs_Distances_Sorted[0]['Name']} : {round(Target_to_POIs_Distances_Sorted[0]['Distance'], 3)} km",
+                            "target_state_of_the_day" : f"{target_state_of_the_day}", 
+                            "target_next_event" : f"{target_next_event}", 
+                            "target_next_event_time" : f"{time.strftime('%H:%M:%S', time.localtime(New_time + target_next_event_time*60))}",
+                            "distance_to_poi" : f"{round(New_Distance_to_POI_Total, 3)} km",
+                            "distance_to_poi_color" : New_Distance_to_POI_Total_color,
+                            "delta_distance_to_poi" : f"{round(abs(Delta_Distance_to_POI_Total), 3)} km",
+                            "delta_distance_to_poi_color" : Delta_distance_to_poi_color,
+                            "total_deviation" : f"{round(Total_deviation_from_target, 1)}°",
+                            "total_deviation_color" : Total_deviation_from_target_color,
+                            "horizontal_deviation" : f"{round(Flat_angle, 1)}°",
+                            "horizontal_deviation_color" : Flat_angle_color,
+                            "heading" : f"{round(Bearing, 1)}°",
+                            "ETA" : f"{str(datetime.timedelta(seconds=round(Estimated_time_of_arrival, 0)))}"
+                        }
+                    except Exception as e:
+                        logger.debug("error: "+str(e)
+                                    )
+                    logger.debug("30")
+                    logger.debug(f"{round(Bearing, 0)}°")
+                    logger.debug(f"{round(New_Distance_to_POI_Total, 1)} km")
+                    
+                    
+                    message_bearing = json.dumps({"event": "setTitle",
+                                            "context": bearing_button_context,
                                             "payload": {
-                                                "title": linebreak_title("NEXT ("+str(tourlenght)+")\n" + str(Destination['Name'])),
+                                                "title": f"HEADING\n{round(Bearing, 0)}°\n{round(New_Distance_to_POI_Total, 1)} km",
                                                 "target": 0,
                                             }
                                         })
-                        mother.ws.send(message_tour)
-                        logger.debug("s3")
-                        sandcavetour_init_done = True
-                        logger.debug("Init done")
+                    logger.debug("31")
+                    #logger.debug("31.1:"+str(Target_to_POIs_Distances_Sorted))
+                    #logger.debug("31.2:"+str(Target_to_POIs_Distances_Sorted[0]['Distance']))
+                    if Target_to_POIs_Distances_Sorted:
+                        next_poi_name = Target_to_POIs_Distances_Sorted[0]['Name']
+                        next_poi_distance = Target_to_POIs_Distances_Sorted[0]['Distance']
                     else:
-                        logger.debug("Init already done...")
-                        
-                #---------------------------------------------------New target local coordinates----------------------------------------------------
-                #Grab the rotation speed of the container in the Database and convert it in degrees/s
-                Target = Destination
-                logger.debug("Target set.")
-                #logger.debug("Target = " +str(Target))
-                logger.debug("Target Name = " +str(Target["Container"]))
-                #logger.debug("Database: "+str(Database))
-                target_Rotation_speed_in_hours_per_rotation = Database["Containers"][Target["Container"]]["Rotation Speed"]
-                logger.debug("rotspeed: " + str(target_Rotation_speed_in_hours_per_rotation))
-                try:
-                    target_Rotation_speed_in_degrees_per_second = 0.1 * (1/target_Rotation_speed_in_hours_per_rotation)
-                except ZeroDivisionError:
-                    target_Rotation_speed_in_degrees_per_second = 0
-                logger.debug("11")
-                #Get the actual rotation state in degrees using the rotation speed of the container, the actual time and a rotational adjustment value
-                target_Rotation_state_in_degrees = ((target_Rotation_speed_in_degrees_per_second * Time_passed_since_reference_in_seconds) + Database["Containers"][Target["Container"]]["Rotation Adjust"]) % 360
-                logger.debug("12")
-                logger.debug("Rot in degrees: " + str(target_Rotation_state_in_degrees))
-                logger.debug("Target: "+str(Target))
-                #get the new player rotated coordinates
-                target_rotated_coordinates = rotate_point_2D(Target, radians(target_Rotation_state_in_degrees))
-
-                logger.debug("2")
-
-
-                #-------------------------------------------------player local Long Lat Height--------------------------------------------------
-                
-                if Actual_Container['Name'] != "None":
-                    player_Latitude, player_Longitude, player_Height = get_lat_long_height(New_player_local_rotated_coordinates["X"], New_player_local_rotated_coordinates["Y"], New_player_local_rotated_coordinates["Z"], Actual_Container)
-                
-                #-------------------------------------------------target local Long Lat Height--------------------------------------------------
-                target_Latitude, target_Longitude, target_Height = get_lat_long_height(Target["X"], Target["Y"], Target["Z"], Database["Containers"][Target["Container"]])
-
-                logger.debug("3")
-
-                #---------------------------------------------------Distance to POI-----------------------------------------------------------------
-                New_Distance_to_POI = {}
-                logger.debug("Target Container: "+str(Target["Container"]))
-                logger.debug("Actual Container: "+str(Actual_Container))
-                logger.debug("Destination:" + str(Destination))
-                if Actual_Container == Target["Container"]:
-                    logger.debug("Actual Container = Target")
-                    for i in ["X", "Y", "Z"]:
-                        New_Distance_to_POI[i] = abs(Target[i] - New_player_local_rotated_coordinates[i])
-                
-                
-                else:
-                    for i in ["X", "Y", "Z"]:
-                        New_Distance_to_POI[i] = abs((target_rotated_coordinates[i] + Database["Containers"][Target["Container"]][i]) - New_Player_Global_coordinates[i])
-                logger.debug("4")
-                #get the real new distance between the player and the target
-                New_Distance_to_POI_Total = vector_norm(New_Distance_to_POI)
-                logger.debug("5")
-                if New_Distance_to_POI_Total <= 100:
-                    New_Distance_to_POI_Total_color = "#00ff00"
-                elif New_Distance_to_POI_Total <= 1000:
-                    New_Distance_to_POI_Total_color = "#ffd000"
-                else :
-                    New_Distance_to_POI_Total_color = "#ff3700"
-
-                logger.debug("6")
-                #---------------------------------------------------Delta Distance to POI-----------------------------------------------------------
-                #get the real old distance between the player and the target
-                Old_Distance_to_POI_Total = vector_norm(Old_Distance_to_POI)
-                logger.debug("7")
-
-
-
-                #get the 3 XYZ distance travelled since last update
-                Delta_Distance_to_POI = {}
-                for i in ["X", "Y", "Z"]:
-                    Delta_Distance_to_POI[i] = New_Distance_to_POI[i] - Old_Distance_to_POI[i]
-                logger.debug("8")
-                #get the real distance travelled since last update
-                Delta_Distance_to_POI_Total = New_Distance_to_POI_Total - Old_Distance_to_POI_Total
-                logger.debug("9")
-                if Delta_Distance_to_POI_Total <= 0:
-                    Delta_distance_to_poi_color = "#00ff00"
-                else:
-                    Delta_distance_to_poi_color = "#ff3700"
-
-
-
-                #---------------------------------------------------Estimated time of arrival to POI------------------------------------------------
-                #get the time between the last update and this update
-                Delta_time = New_time - Old_time
-                logger.debug("10")
-
-                #get the time it would take to reach destination using the same speed
-                try :
-                    Estimated_time_of_arrival = (Delta_time*New_Distance_to_POI_Total)/abs(Delta_Distance_to_POI_Total)
-                    logger.debug("11")
-                except ZeroDivisionError:
-                    Estimated_time_of_arrival = 0.00
-
-
-
-                #----------------------------------------------------Closest Quantumable POI--------------------------------------------------------
-                if Target["QTMarker"] == "FALSE":
-                    logger.debug("11.5")
-                    Target_to_POIs_Distances_Sorted = get_closest_POI(Target["X"], Target["Y"], Target["Z"], Database["Containers"][Target["Container"]], True)
-                    logger.debug("11.6")
-                    logger.debug(str(Target_to_POIs_Distances_Sorted))
-                
-                else :
-                    logger.debug("11.7")
-                    Target_to_POIs_Distances_Sorted = [{
-                        "Name" : "POI itself",
-                        "Distance" : 0
-                    }]
-                    logger.debug("11.8")
-
-                logger.debug("12")
-                #----------------------------------------------------Player Closest POI--------------------------------------------------------
-                Player_to_POIs_Distances_Sorted = get_closest_POI(New_player_local_rotated_coordinates["X"], New_player_local_rotated_coordinates["Y"], New_player_local_rotated_coordinates["Z"], Actual_Container, False)
-
-                logger.debug("13")
-                #-------------------------------------------------------3 Closest OMs to player---------------------------------------------------------------
-                #player_Closest_OM = get_closest_oms(New_player_local_rotated_coordinates["X"], New_player_local_rotated_coordinates["Y"], New_player_local_rotated_coordinates["Z"], Actual_Container)
-                player_Closest_OM = "n/a"
-                logger.debug("14_disabled")
-
-                #-------------------------------------------------------3 Closest OMs to target---------------------------------------------------------------
-                #target_Closest_OM = get_closest_oms(Target["X"], Target["Y"], Target["Z"], Database["Containers"][Target["Container"]])
-                target_Closest_OM="n/a"               
-                logger.debug("15_disabled")
-
-                #----------------------------------------------------Course Deviation to POI--------------------------------------------------------
-                #get the vector between current_pos and previous_pos
-                Previous_current_pos_vector = {}
-                for i in ['X', 'Y', 'Z']:
-                    Previous_current_pos_vector[i] = New_player_local_rotated_coordinates[i] - Old_player_local_rotated_coordinates[i]
-
-                logger.debug("16")
-                #get the vector between current_pos and target_pos
-                Current_target_pos_vector = {}
-                for i in ['X', 'Y', 'Z']:
-                    Current_target_pos_vector[i] = Target[i] - New_player_local_rotated_coordinates[i]
-
-                logger.debug("17")
-                #get the angle between the current-target_pos vector and the previous-current_pos vector
-                Total_deviation_from_target = angle_between_vectors(Previous_current_pos_vector, Current_target_pos_vector)
-
-                logger.debug("18")
-                if Total_deviation_from_target <= 10:
-                    Total_deviation_from_target_color = "#00ff00"
-                elif Total_deviation_from_target <= 20:
-                    Total_deviation_from_target_color = "#ffd000"
-                else:
-                    Total_deviation_from_target_color = "#ff3700"
-
-                logger.debug("19")
-                #----------------------------------------------------------Flat_angle--------------------------------------------------------------
-                previous = Old_player_local_rotated_coordinates
-                current = New_player_local_rotated_coordinates
-
-
-                #Vector AB (Previous -> Current)
-                previous_to_current = {}
-                for i in ["X", "Y", "Z"]:
-                    previous_to_current[i] = current[i] - previous[i]
-                logger.debug("20")
-                #Vector AC (C = center of the planet, Previous -> Center)
-                previous_to_center = {}
-                for i in ["X", "Y", "Z"]:
-                    previous_to_center[i] = 0 - previous[i]
-                logger.debug("21")
-                #Vector BD (Current -> Target)
-                current_to_target = {}
-                for i in ["X", "Y", "Z"]:
-                    current_to_target[i] = Target[i] - current[i]
-                logger.debug("22")
-                    #Vector BC (C = center of the planet, Current -> Center)
-                current_to_center = {}
-                for i in ["X", "Y", "Z"]:
-                    current_to_center[i] = 0 - current[i]
-
-                logger.debug("23")
-
-                #Normal vector of a plane:
-                #abc : Previous/Current/Center
-                n1 = {}
-                n1["X"] = previous_to_current["Y"] * previous_to_center["Z"] - previous_to_current["Z"] * previous_to_center["Y"]
-                n1["Y"] = previous_to_current["Z"] * previous_to_center["X"] - previous_to_current["X"] * previous_to_center["Z"]
-                n1["Z"] = previous_to_current["X"] * previous_to_center["Y"] - previous_to_current["Y"] * previous_to_center["X"]
-                logger.debug("24")
-                #acd : Previous/Center/Target
-                n2 = {}
-                n2["X"] = current_to_target["Y"] * current_to_center["Z"] - current_to_target["Z"] * current_to_center["Y"]
-                n2["Y"] = current_to_target["Z"] * current_to_center["X"] - current_to_target["X"] * current_to_center["Z"]
-                n2["Z"] = current_to_target["X"] * current_to_center["Y"] - current_to_target["Y"] * current_to_center["X"]
-                logger.debug("25")
-                Flat_angle = angle_between_vectors(n1, n2)
-                logger.debug("26")
-
-                if Flat_angle <= 10:
-                    Flat_angle_color = "#00ff00"
-                elif Flat_angle <= 20:
-                    Flat_angle_color = "#ffd000"
-                else:
-                    Flat_angle_color = "#ff3700"
-
-
-
-
-                #----------------------------------------------------------Heading--------------------------------------------------------------
-                
-                bearingX = cos(radians(target_Latitude)) * sin(radians(target_Longitude) - radians(player_Longitude))
-                bearingY = cos(radians(player_Latitude)) * sin(radians(target_Latitude)) - sin(radians(player_Latitude)) * cos(radians(target_Latitude)) * cos(radians(target_Longitude) - radians(player_Longitude))
-
-                Bearing = (degrees(atan2(bearingX, bearingY)) + 360) % 360
-
-                logger.debug("28_1")
-                logger.debug("1:"+str(Target["X"]))
-                logger.debug("2:"+str(Target["Y"]))
-                logger.debug("3:"+str(Target["Z"]))
-                logger.debug("4:"+str(target_Latitude))
-                logger.debug("5:"+str(target_Longitude))
-                logger.debug("6:"+str(target_Height))
-                #logger.debug("7:"+str(Database["Containers"][Target["Container"]]))
-                logger.debug("8:"+str(Database["Containers"]["Stanton"]))
-                logger.debug("9:"+str(Time_passed_since_reference_in_seconds))
-
-
-                #-------------------------------------------------Sunrise Sunset Calculation----------------------------------------------------
-                player_state_of_the_day, player_next_event, player_next_event_time = get_sunset_sunrise_predictions(
-                    New_player_local_rotated_coordinates["X"], 
-                    New_player_local_rotated_coordinates["Y"], 
-                    New_player_local_rotated_coordinates["Z"], 
-                    player_Latitude, 
-                    player_Longitude, 
-                    player_Height, 
-                    Actual_Container, 
-                    Database["Containers"]["Stanton"],
-                    Time_passed_since_reference_in_seconds
-                )
-                logger.debug("28")                
-                target_state_of_the_day, target_next_event, target_next_event_time = get_sunset_sunrise_predictions(
-                    Target["X"], 
-                    Target["Y"], 
-                    Target["Z"], 
-                    target_Latitude, 
-                    target_Longitude, 
-                    target_Height, 
-                    Database["Containers"][Target["Container"]], 
-                    Database["Containers"]["Stanton"],
-                    Time_passed_since_reference_in_seconds
-                )
-
-                logger.debug("29")
-                #------------------------------------------------------------Backend to Frontend------------------------------------------------------------
-                try:
-                    new_data = {
-                        "updated" : f"{time.strftime('%H:%M:%S', time.localtime(time.time()))}",
-                        "target" : Target['Name'],
-                        "player_actual_container" : Actual_Container['Name'],
-                        "target_container" : Target['Container'],
-                        "player_x" : round(New_player_local_rotated_coordinates['X'], 3),
-                        "player_y" : round(New_player_local_rotated_coordinates['Y'], 3),
-                        "player_z" : round(New_player_local_rotated_coordinates['Z'], 3),
-                        "player_long" : f"{round(player_Longitude, 2)}°",
-                        "player_lat" : f"{round(player_Latitude, 2)}°",
-                        "player_height" : f"{round(player_Height, 1)} km",
-                        #"player_OM1" : f"{player_Closest_OM['Z']['OM']['Name']} : {round(player_Closest_OM['Z']['Distance'], 3)} km",
-                        #"player_OM2" : f"{player_Closest_OM['Y']['OM']['Name']} : {round(player_Closest_OM['Y']['Distance'], 3)} km",
-                        #"player_OM3" : f"{player_Closest_OM['X']['OM']['Name']} : {round(player_Closest_OM['X']['Distance'], 3)} km",
-                        "player_closest_poi" : f"{Player_to_POIs_Distances_Sorted[0]['Name']} : {round(Player_to_POIs_Distances_Sorted[0]['Distance'], 3)} km",
-                        "player_state_of_the_day" : f"{player_state_of_the_day}", 
-                        "player_next_event" : f"{player_next_event}", 
-                        "player_next_event_time" : f"{time.strftime('%H:%M:%S', time.localtime(New_time + player_next_event_time*60))}",
-                        "target_x" : Target["X"],
-                        "target_y" : Target["Y"],
-                        "target_z" : Target["Z"],
-                        "target_long" : f"{round(target_Longitude, 2)}°",
-                        "target_lat" : f"{round(target_Latitude, 2)}°",
-                        "target_height" : f"{round(target_Height, 1)} km",
-                        #"target_OM1" : f"{target_Closest_OM['Z']['OM']['Name']} : {round(target_Closest_OM['Z']['Distance'], 3)} km",
-                        #"target_OM2" : f"{target_Closest_OM['Y']['OM']['Name']} : {round(target_Closest_OM['Y']['Distance'], 3)} km",
-                        #"target_OM3" : f"{target_Closest_OM['X']['OM']['Name']} : {round(target_Closest_OM['X']['Distance'], 3)} km",
-                        "target_closest_QT_beacon" : f"{Target_to_POIs_Distances_Sorted[0]['Name']} : {round(Target_to_POIs_Distances_Sorted[0]['Distance'], 3)} km",
-                        "target_state_of_the_day" : f"{target_state_of_the_day}", 
-                        "target_next_event" : f"{target_next_event}", 
-                        "target_next_event_time" : f"{time.strftime('%H:%M:%S', time.localtime(New_time + target_next_event_time*60))}",
-                        "distance_to_poi" : f"{round(New_Distance_to_POI_Total, 3)} km",
-                        "distance_to_poi_color" : New_Distance_to_POI_Total_color,
-                        "delta_distance_to_poi" : f"{round(abs(Delta_Distance_to_POI_Total), 3)} km",
-                        "delta_distance_to_poi_color" : Delta_distance_to_poi_color,
-                        "total_deviation" : f"{round(Total_deviation_from_target, 1)}°",
-                        "total_deviation_color" : Total_deviation_from_target_color,
-                        "horizontal_deviation" : f"{round(Flat_angle, 1)}°",
-                        "horizontal_deviation_color" : Flat_angle_color,
-                        "heading" : f"{round(Bearing, 1)}°",
-                        "ETA" : f"{str(datetime.timedelta(seconds=round(Estimated_time_of_arrival, 0)))}"
-                    }
-                except Exception as e:
-                    logger.debug("error: "+str(e)
-                                 )
-                logger.debug("30")
-                logger.debug(f"{round(Bearing, 0)}°")
-                logger.debug(f"{round(New_Distance_to_POI_Total, 1)} km")
-                
-                
-                message_bearing = json.dumps({"event": "setTitle",
-                                        "context": bearing_button_context,
-                                        "payload": {
-                                            "title": f"HEADING\n{round(Bearing, 0)}°\n{round(New_Distance_to_POI_Total, 1)} km",
-                                            "target": 0,
-                                        }
-                                    })
-                logger.debug("31")
-                #logger.debug("31.1:"+str(Target_to_POIs_Distances_Sorted))
-                #logger.debug("31.2:"+str(Target_to_POIs_Distances_Sorted[0]['Distance']))
-                if Target_to_POIs_Distances_Sorted:
-                    next_poi_name = Target_to_POIs_Distances_Sorted[0]['Name']
-                    next_poi_distance = Target_to_POIs_Distances_Sorted[0]['Distance']
-                else:
-                    next_poi_name = "n/a"
-                    next_poi_distance = 0     
-                message_nearest = json.dumps({"event": "setTitle",
-                                        "context": nearest_button_context,
-                                        "payload": {
-                                            "title": "NEXT\n" + linebreak_title(next_poi_name) + f"\n{round(next_poi_distance, 1)} km",
-                                            "target": 0,
-                                        }
-                                    })
-                logger.debug("32")
-                message_daytime = json.dumps({"event": "setTitle",
-                                        "context": daytime_button_context,
-                                        "payload": {
-                                            "title": f"Target:\n{target_next_event}:\n{time.strftime('%H:%M:%S', time.localtime(New_time + target_next_event_time*60))}",
-                                            "target": 0,
-                                        }
-                                    })
-                logger.debug("32.5")
-                if daytime_toggle == "player":
+                        next_poi_name = "n/a"
+                        next_poi_distance = 0     
+                    message_nearest = json.dumps({"event": "setTitle",
+                                            "context": nearest_button_context,
+                                            "payload": {
+                                                "title": "NEXT\n" + linebreak_title(next_poi_name) + f"\n{round(next_poi_distance, 1)} km",
+                                                "target": 0,
+                                            }
+                                        })
+                    logger.debug("32")
                     message_daytime = json.dumps({"event": "setTitle",
                                             "context": daytime_button_context,
                                             "payload": {
-                                                "title": f"Player:\n{player_next_event}:\n{time.strftime('%H:%M:%S', time.localtime(New_time + player_next_event_time*60))}",
+                                                "title": f"Target:\n{target_next_event}:\n{time.strftime('%H:%M:%S', time.localtime(New_time + target_next_event_time*60))}",
                                                 "target": 0,
                                             }
-                                        })    
-                logger.debug("33")
-                message_around = json.dumps({"event": "setTitle",
-                                        "context": around_button_context,
-                                        "payload": {
-                                            "title": "AROUND\n" + linebreak_title(Player_to_POIs_Distances_Sorted[0]['Name']) + f"\n{round(Player_to_POIs_Distances_Sorted[0]['Distance'], 1)} km",
-                                            "target": 0,
-                                        }
-                                    })
-                logger.debug("34")
-                message_coords = json.dumps({"event": "setTitle",
-                                        "context": coords_button_context,
-                                        "payload": {
-                                            "title": "COORDS\nX: " + str(round(New_player_local_rotated_coordinates['X'], 3)) + "\nY: " + str(round(New_player_local_rotated_coordinates['Y'], 3)) + "\nZ: " + str(round(New_player_local_rotated_coordinates['Z'], 3)),
-                                            "target": 0,
-                                        }
-                                    })
-                logger.debug("35")
-                mother.ws.send(message_bearing)
-                #logger.debug("send bearing: " + message_bearing)
-                mother.ws.send(message_nearest)
-                #logger.debug("send nearest: " + message_nearest)
-                mother.ws.send(message_daytime)
-                #logger.debug("send daytime: " + message_daytime)
-                mother.ws.send(message_around)
-                #logger.debug("send around: " + message_around)
-                mother.ws.send(message_coords)
-                #logger.debug("send coords: " + message_coords)
+                                        })
+                    logger.debug("32.5")
+                    if daytime_toggle == "player":
+                        message_daytime = json.dumps({"event": "setTitle",
+                                                "context": daytime_button_context,
+                                                "payload": {
+                                                    "title": f"Player:\n{player_next_event}:\n{time.strftime('%H:%M:%S', time.localtime(New_time + player_next_event_time*60))}",
+                                                    "target": 0,
+                                                }
+                                            })    
+                    logger.debug("33")
+                    message_around = json.dumps({"event": "setTitle",
+                                            "context": around_button_context,
+                                            "payload": {
+                                                "title": "AROUND\n" + linebreak_title(Player_to_POIs_Distances_Sorted[0]['Name']) + f"\n{round(Player_to_POIs_Distances_Sorted[0]['Distance'], 1)} km",
+                                                "target": 0,
+                                            }
+                                        })
+                    logger.debug("34")
+                    message_coords = json.dumps({"event": "setTitle",
+                                            "context": coords_button_context,
+                                            "payload": {
+                                                "title": "COORDS\nX: " + str(round(New_player_local_rotated_coordinates['X'], 3)) + "\nY: " + str(round(New_player_local_rotated_coordinates['Y'], 3)) + "\nZ: " + str(round(New_player_local_rotated_coordinates['Z'], 3)),
+                                                "target": 0,
+                                            }
+                                        })
+                    logger.debug("35")
+                    mother.ws.send(message_bearing)
+                    #logger.debug("send bearing: " + message_bearing)
+                    mother.ws.send(message_nearest)
+                    #logger.debug("send nearest: " + message_nearest)
+                    mother.ws.send(message_daytime)
+                    #logger.debug("send daytime: " + message_daytime)
+                    mother.ws.send(message_around)
+                    #logger.debug("send around: " + message_around)
+                    mother.ws.send(message_coords)
+                    #logger.debug("send coords: " + message_coords)
 
-                #logger.debug("send data: " + message)
-                
-                if calibrate_active:
-                    logger.debug("Calculating calibration...")
-                    logger.debug("OM Radius, später *2 *pi: " + str(Database["Containers"][Actual_Container['Name']]["OM Radius"]))
-                    #Logic taken from Jericho Tool (c) Graupunkt
-                    Circumference360Degrees = pi * 2 * float(Database["Containers"][Actual_Container['Name']]["OM Radius"]) * 1000
-                    logger.debug("Circumference360Degrees: "+str(Circumference360Degrees))
-                    #Very high or low values are presented by ps as scientific results, therefore we force the nubmer (decimal) and limit it to 7 digits after comma
-                    #Multiplied by 1000 to convert km into m and invert it to correct the deviation
-                    RotationSpeedAdjustment = round((New_player_local_rotated_coordinates['X'] * 1000 * 360 / Circumference360Degrees),7) * -1
-                    logger.debug("New player local rotatet x: "+ str(New_player_local_rotated_coordinates['X']) + " RotationsSpeedAdjustment: "+str(RotationSpeedAdjustment))
-                    #GET Adjustment for Rotationspeed 
-                    FinalRotationAdjustment = Database["Containers"][Target["Container"]]["Rotation Adjust"] + RotationSpeedAdjustment #-replace(",",".")
-                    logger.debug("FinalRotationAdjustment: "+str(FinalRotationAdjustment))
-                    #WRITE CHANGES TO OBJECT CONTAINER
-                    #(Get-Content $OcCsvPath).replace(($CurrentDetectedOCADX -replace(",",".")), $FinalRotationAdjustment) | Set-Content $OcCsvPath
-                    logger.debug("Rotation for "+str(Actual_Container['Name'])+" calibrated from "+str(Database["Containers"][Target["Container"]]["Rotation Adjust"])+"° to "+str(FinalRotationAdjustment)+"° by "+str(RotationSpeedAdjustment)+". Please replace the value manually in the Database.json")
-                    with open("calibrationdata.txt", "a") as myfile:
-                            myfile.write(str(Actual_Container['Name']) + ": "+str(FinalRotationAdjustment))
-                            myfile.write("\n")
-                            
-                if save_triggered == True:
-                    save_triggered = False
-                    #logger.debug("Saving Location to file...")
-                    timestamp=datetime.datetime.utcnow()
-                    poi_name=str(Actual_Container['Name']) + "_" + str(int(Player_to_POIs_Distances_Sorted[0]['Distance'])) + "km_next_to_" + str(Player_to_POIs_Distances_Sorted[0]['Name']) + "_" + str(timestamp)
-                    #logger.debug(poi_name)
-                    save_data = Actual_Container['Name'] + "," + str(round(New_player_local_rotated_coordinates['X'], 3)) + "," + str(round(New_player_local_rotated_coordinates['Y'], 3)) + "," + str(round(New_player_local_rotated_coordinates['Z'], 3)) + "," + poi_name.replace(" ","_").replace(":","_").replace(".","_")
-                    #logger.debug(save_data)
-                    with open("saved_pois.txt", "a") as sfile:
-                            sfile.write(save_data)
-                            sfile.write("\n")
-                    message_saved_ok = json.dumps({"event": "showOk",
-                                        "context": save_button_context
-                                    })
-                    mother.ws.send(message_saved_ok)       
+                    #logger.debug("send data: " + message)
+                    
+                    if calibrate_active:
+                        logger.debug("Calculating calibration...")
+                        logger.debug("OM Radius, später *2 *pi: " + str(Database["Containers"][Actual_Container['Name']]["OM Radius"]))
+                        #Logic taken from Jericho Tool (c) Graupunkt
+                        Circumference360Degrees = pi * 2 * float(Database["Containers"][Actual_Container['Name']]["OM Radius"]) * 1000
+                        logger.debug("Circumference360Degrees: "+str(Circumference360Degrees))
+                        #Very high or low values are presented by ps as scientific results, therefore we force the nubmer (decimal) and limit it to 7 digits after comma
+                        #Multiplied by 1000 to convert km into m and invert it to correct the deviation
+                        RotationSpeedAdjustment = round((New_player_local_rotated_coordinates['X'] * 1000 * 360 / Circumference360Degrees),7) * -1
+                        logger.debug("New player local rotatet x: "+ str(New_player_local_rotated_coordinates['X']) + " RotationsSpeedAdjustment: "+str(RotationSpeedAdjustment))
+                        #GET Adjustment for Rotationspeed 
+                        FinalRotationAdjustment = Database["Containers"][Target["Container"]]["Rotation Adjust"] + RotationSpeedAdjustment #-replace(",",".")
+                        logger.debug("FinalRotationAdjustment: "+str(FinalRotationAdjustment))
+                        #WRITE CHANGES TO OBJECT CONTAINER
+                        #(Get-Content $OcCsvPath).replace(($CurrentDetectedOCADX -replace(",",".")), $FinalRotationAdjustment) | Set-Content $OcCsvPath
+                        logger.debug("Rotation for "+str(Actual_Container['Name'])+" calibrated from "+str(Database["Containers"][Target["Container"]]["Rotation Adjust"])+"° to "+str(FinalRotationAdjustment)+"° by "+str(RotationSpeedAdjustment)+". Please replace the value manually in the Database.json")
+                        with open("calibrationdata.txt", "a") as myfile:
+                                myfile.write(str(Actual_Container['Name']) + ": "+str(FinalRotationAdjustment))
+                                myfile.write("\n")
+                                
+                    if save_triggered == True:
+                        save_triggered = False
+                        #logger.debug("Saving Location to file...")
+                        timestamp=datetime.datetime.utcnow()
+                        poi_name=str(Actual_Container['Name']) + "_" + str(int(Player_to_POIs_Distances_Sorted[0]['Distance'])) + "km_next_to_" + str(Player_to_POIs_Distances_Sorted[0]['Name']) + "_" + str(timestamp)
+                        #logger.debug(poi_name)
+                        save_data = Actual_Container['Name'] + "," + str(round(New_player_local_rotated_coordinates['X'], 3)) + "," + str(round(New_player_local_rotated_coordinates['Y'], 3)) + "," + str(round(New_player_local_rotated_coordinates['Z'], 3)) + "," + poi_name.replace(" ","_").replace(":","_").replace(".","_")
+                        #logger.debug(save_data)
+                        with open("saved_pois.txt", "a") as sfile:
+                                sfile.write(save_data)
+                                sfile.write("\n")
+                        message_saved_ok = json.dumps({"event": "showOk",
+                                            "context": save_button_context
+                                        })
+                        mother.ws.send(message_saved_ok)       
 
-                #---------------------------------------------------Update coordinates for the next update------------------------------------------
-                for i in ["X", "Y", "Z"]:
-                    Old_player_Global_coordinates[i] = New_Player_Global_coordinates[i]
+                    #---------------------------------------------------Update coordinates for the next update------------------------------------------
+                    for i in ["X", "Y", "Z"]:
+                        Old_player_Global_coordinates[i] = New_Player_Global_coordinates[i]
 
-                for i in ["X", "Y", "Z"]:
-                    Old_player_local_rotated_coordinates[i] = New_player_local_rotated_coordinates[i]
+                    for i in ["X", "Y", "Z"]:
+                        Old_player_local_rotated_coordinates[i] = New_player_local_rotated_coordinates[i]
 
-                for i in ["X", "Y", "Z"]:
-                    Old_Distance_to_POI[i] = New_Distance_to_POI[i]
+                    for i in ["X", "Y", "Z"]:
+                        Old_Distance_to_POI[i] = New_Distance_to_POI[i]
 
-                Old_time = New_time
+                    Old_time = New_time
 
-                #-------------------------------------------------------------------------------------------------------------------------------------------
+                    #-------------------------------------------------------------------------------------------------------------------------------------------
                 
 NaviThread=threading.Thread(target=watch_clipboard)
 
