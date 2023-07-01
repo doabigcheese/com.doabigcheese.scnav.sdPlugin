@@ -189,9 +189,11 @@ def get_lat_long_height(X : float, Y : float, Z : float, Container : dict):
     return [Latitude, Longitude, Height]
 
 def get_sandcaves_sorted(X : float, Y : float, Z : float, Container:dict):
+    global datasource
     Distances_to_POIs = []
     logger.debug("gss_1")
     #logger.debug(str(Container))
+    logger.debug(str(datasource))
     logger.debug("Player: "+str(X)+","+str(Y)+","+str(Z) )
     for POI in Container["POI"]:
         logger.debug("loop POI: " + str(POI))
@@ -1581,7 +1583,11 @@ class StartNaviToKnownPOI(Action):
 
         else:
             stop_navithread = True
-            NaviThread.join()
+            try:
+                NaviThread.join()
+            except:
+                logger.debug("Cannot join thread")
+                watch_clipboard_active = False
             stop_navithread = False
             NaviThread=threading.Thread(target=watch_clipboard) #Prepare a new thread
             logger.debug(f"...stopped")
@@ -1600,7 +1606,7 @@ class Sandcavestour(Action):
         start_time = time.time()
         
     def on_key_up(self, obj: events_received_objs.KeyUp):
-        global preloaded,mother,NaviThread,sandcavetour_active,watch_clipboard_active,stop_navithread,sandcavestour_button_context,start_time,sandcavetour_init_done,Destination_queue,Destination,knownPlayerContainername
+        global preloaded,mother,NaviThread,sandcavetour_active,watch_clipboard_active,stop_navithread,sandcavestour_button_context,start_time,sandcavetour_init_done,Destination_queue,Destination,knownPlayerContainername,datasource
         logger.debug(f"Sandcavetour button pressed...")
         end_time = time.time()
         time_lapsed = end_time - start_time
@@ -1633,7 +1639,10 @@ class Sandcavestour(Action):
                 #NaviThread.start()
                 
         if time_lapsed <= 2:
-        
+            if datasource == "local":
+                datasource="starmap"
+                preloaded = False
+                
             if preloaded == False:
                 logger.debug("preload...")
                 preload_poi_data()
@@ -1655,7 +1664,11 @@ class Sandcavestour(Action):
                 
             else:
                 stop_navithread = True
-                NaviThread.join()
+                try:
+                    NaviThread.join()
+                except:
+                    logger.debug("Cannot join thread")
+                    watch_clipboard_active = False
                 stop_navithread = False
                 sandcavetour_active = False
                 Destination_queue = []
