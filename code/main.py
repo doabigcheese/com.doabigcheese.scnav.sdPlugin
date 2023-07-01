@@ -71,6 +71,11 @@ sandcavetour_active = False
 sandcavetour_init_done = False
 start_time=0
 Destination_queue=[]
+knownPlayerX=0
+knownPlayerY=0
+knownPlayerZ=0
+knownPlayerContainername=""
+
 
 def linebreak_title(newtitle):
     i = 9
@@ -198,16 +203,68 @@ def get_sandcaves_sorted(X : float, Y : float, Z : float, Container:dict):
             "Y": abs(Y - Container["POI"][POI]["Y"]),
             "Z": abs(Z - Container["POI"][POI]["Z"])
             }
-            logger.debug("Vector_POI: " + str(Vector_POI))
+            #logger.debug("Vector_POI: " + str(Vector_POI))
 
             Distance_POI = vector_norm(Vector_POI)
-            Distances_to_POIs.append({"Name" : POI, "Distance" : Distance_POI, "X": Container["POI"][POI]['X'], "Y": Container["POI"][POI]['Y'], "Z": Container["POI"][POI]['Z'], "Container": Container["POI"][POI]['Container'], "QTMarker": Container["POI"][POI]['QTMarker'] })
+            #and calculate for every sand cave next QT marker distance
+            Cave_to_POIs_Distances_Sorted = get_closest_POI(Container["POI"][POI]["X"], Container["POI"][POI]["Y"], Container["POI"][POI]["Z"], Container, True)
+            Nearest_POI_to_singleCave = Cave_to_POIs_Distances_Sorted[0]
+            logger.debug("Nearest QTmarker to Cave:"+str(Nearest_POI_to_singleCave))
+            Distances_to_POIs.append({"Name" : POI, "Distance" : Distance_POI, "nextQTMarkerDistance" : Nearest_POI_to_singleCave["Distance"], "X": Container["POI"][POI]['X'], "Y": Container["POI"][POI]['Y'], "Z": Container["POI"][POI]['Z'], "Container": Container["POI"][POI]['Container'], "QTMarker": Container["POI"][POI]['QTMarker'] })
+    
+            #Distances_to_POIs.append({"Name" : POI, "Distance" : Distance_POI, "X": Container["POI"][POI]['X'], "Y": Container["POI"][POI]['Y'], "Z": Container["POI"][POI]['Z'], "Container": Container["POI"][POI]['Container'], "QTMarker": Container["POI"][POI]['QTMarker'] })
+    logger.debug("all POIs processed.")
+    Player_to_Sandcaves_sorted = sorted(Distances_to_POIs, key=lambda k: k['Distance'])
+    logger.debug("sorted to distance.")
+    logger.debug(str(Distances_to_POIs))
+    Sandcaves_to_QTMarker_sorted = sorted(Distances_to_POIs, key=lambda k: k['nextQTMarkerDistance'])
+    logger.debug("sorted to QTMarker distance")
+    logger.debug(str(Sandcaves_to_QTMarker_sorted))
+    if Player_to_Sandcaves_sorted[0]["Distance"] > Sandcaves_to_QTMarker_sorted[0]["nextQTMarkerDistance"]:
+        logger.debug("QTMarker Sandcave is next")
+        return Sandcaves_to_QTMarker_sorted
+    else:
+        logger.debug("Sandcave without QT is next")
+        return Player_to_Sandcaves_sorted
+    
+        
+def reorder_Destination_queue(X : float, Y : float, Z : float, queue:dict): 
+    Distances_to_POIs = []
+    logger.debug("rdq_1")
+    #logger.debug(str(Container))
+    logger.debug("Player: "+str(X)+","+str(Y)+","+str(Z) )
+    for POI in queue:
+        logger.debug("loop Cave: " + str(POI))
+
+        Vector_POI = {
+        "X": abs(X - POI["X"]),
+        "Y": abs(Y - POI["Y"]),
+        "Z": abs(Z - POI["Z"])
+        }
+        logger.debug("Vector_POI: " + str(Vector_POI))
+
+        Distance_POI = vector_norm(Vector_POI)
+        #and calculate for every sand cave next QT marker distance
+        #Cave_to_POIs_Distances_Sorted = get_closest_POI(Container["POI"][POI]["X"], Container["POI"][POI]["Y"], Container["POI"][POI]["Z"], Container, True)
+        Nearest_POI_to_singleCaveDistance = POI["nextQTMarkerDistance"]
+        #logger.debug("Nearest QTmarker to Cave:"+str(Nearest_POI_to_singleCave))
+        logger.debug("append next")
+        Distances_to_POIs.append({"Name" : POI, "Distance" : Distance_POI, "nextQTMarkerDistance" : Nearest_POI_to_singleCaveDistance, "X": POI["X"], "Y": POI["Y"], "Z": POI["Z"], "Container": POI['Container'], "QTMarker": POI['QTMarker'] })
+        logger.debug("append done")
     
     Player_to_Sandcaves_sorted= sorted(Distances_to_POIs, key=lambda k: k['Distance'])
-    logger.debug("final sandcaves sorted:"+str(Player_to_Sandcaves_sorted))
-    return Player_to_Sandcaves_sorted
-        
+    Sandcaves_to_QTMarker_sorted = sorted(Distances_to_POIs, key=lambda k: k['nextQTMarkerDistance'])
     
+    logger.debug("final player2sandcaves sorted:"+str(Player_to_Sandcaves_sorted))
+    logger.debug("final sandcaves2QT sorted:"+str(Sandcaves_to_QTMarker_sorted))
+    
+    if Player_to_Sandcaves_sorted[0]["Distance"] > Sandcaves_to_QTMarker_sorted[0]["nextQTMarkerDistance"]:
+        logger.debug("QTMarker Sandcave is next")
+        return Sandcaves_to_QTMarker_sorted
+    else:
+        logger.debug("Sandcave without QT is next")
+        return Player_to_Sandcaves_sorted
+      
     
     
 def get_closest_POI(X : float, Y : float, Z : float, Container : dict, Quantum_marker : bool = False):
@@ -215,23 +272,23 @@ def get_closest_POI(X : float, Y : float, Z : float, Container : dict, Quantum_m
     Distances_to_POIs = []
     
     for POI in Container["POI"]:
-        logger.debug("processing: "+str(Container["POI"][POI]))
+        #logger.debug("processing: "+str(Container["POI"][POI]))
         Vector_POI = {
             "X": abs(X - Container["POI"][POI]["X"]),
             "Y": abs(Y - Container["POI"][POI]["Y"]),
             "Z": abs(Z - Container["POI"][POI]["Z"])
         }
-        logger.debug("Vector_POI: " + str(Vector_POI))
+        #logger.debug("Vector_POI: " + str(Vector_POI))
 
         Distance_POI = vector_norm(Vector_POI)
         
-        logger.debug("Quantum_marker: " + str(Quantum_marker))
-        logger.debug("Quantum_marker POI: " + str(Container["POI"][POI]["QTMarker"]))
+        #logger.debug("Quantum_marker: " + str(Quantum_marker))
+        #logger.debug("Quantum_marker POI: " + str(Container["POI"][POI]["QTMarker"]))
 
         if Quantum_marker and Container["POI"][POI]["QTMarker"] == "TRUE" or not Quantum_marker:
             Distances_to_POIs.append({"Name" : POI, "Distance" : Distance_POI})
-            logger.debug("Added to closest POI list: "+str(POI)+" with "+str(Distance_POI))
-    logger.debug("final:"+str(Distances_to_POIs))
+            #logger.debug("Added to closest POI list: "+str(POI)+" with "+str(Distance_POI))
+    #logger.debug("final:"+str(Distances_to_POIs))
     Target_to_POIs_Distances_Sorted = sorted(Distances_to_POIs, key=lambda k: k['Distance'])
     logger.debug("final sorted:"+str(Target_to_POIs_Distances_Sorted))
     return Target_to_POIs_Distances_Sorted
@@ -461,7 +518,7 @@ def get_current_container(X : float, Y : float, Z : float):
 
 def watch_clipboard():
     logger.debug(f"Watch Clipboard entered.")
-    global save_button_context,save_triggered,Database,Container_list,Space_POI_list,Planetary_POI_list,watch_clipboard_active,Destination,stop_navithread,bearing_button_context,daytime_button_context,nearest_button_context,around_button_context,mother,coords_button_context,calibrate_active,daytime_toggle,sandcavetour_active,sandcavestour_button_context,sandcavetour_init_done,Destination_queue
+    global save_button_context,save_triggered,Database,Container_list,Space_POI_list,Planetary_POI_list,watch_clipboard_active,Destination,stop_navithread,bearing_button_context,daytime_button_context,nearest_button_context,around_button_context,mother,coords_button_context,calibrate_active,daytime_toggle,sandcavetour_active,sandcavestour_button_context,sandcavetour_init_done,Destination_queue,knownPlayerX,knownPlayerY,knownPlayerZ,knownPlayerContainername
     watch_clipboard_active = True
     #mother=threading.main_thread()
 
@@ -552,6 +609,7 @@ def watch_clipboard():
                 New_Player_Global_coordinates['Z'] = float(new_clipboard_splitted[7])/1000
                 #search in the Databse to see if the player is ina Container
                 Actual_Container = get_current_container(New_Player_Global_coordinates["X"], New_Player_Global_coordinates["Y"], New_Player_Global_coordinates["Z"])
+                knownPlayerContainername=Actual_Container['Name']
                 #logger.debug("Actual Container: " +str(Actual_Container))
                       
                 if calibrate_active:
@@ -567,7 +625,9 @@ def watch_clipboard():
 
                 logger.debug("1")
                 logger.debug("Sandcavetour_active: " + str(sandcavetour_active))
-                
+                knownPlayerX=New_player_local_rotated_coordinates["X"]
+                knownPlayerY=New_player_local_rotated_coordinates["Y"]
+                knownPlayerZ=New_player_local_rotated_coordinates["Z"]
                 if sandcavetour_active == True:
                     logger.debug("Sandcavetour active, current container: " + str(Actual_Container['Name']))
                     if sandcavetour_init_done == False:
@@ -593,6 +653,7 @@ def watch_clipboard():
                         logger.debug("Init done")
                     else:
                         logger.debug("Init already done...")
+                        
                 #---------------------------------------------------New target local coordinates----------------------------------------------------
                 #Grab the rotation speed of the container in the Database and convert it in degrees/s
                 Target = Destination
@@ -1528,7 +1589,7 @@ class Sandcavestour(Action):
         start_time = time.time()
         
     def on_key_up(self, obj: events_received_objs.KeyUp):
-        global preloaded,mother,NaviThread,sandcavetour_active,watch_clipboard_active,stop_navithread,sandcavestour_button_context,start_time,sandcavetour_init_done,Destination_queue,Destination
+        global preloaded,mother,NaviThread,sandcavetour_active,watch_clipboard_active,stop_navithread,sandcavestour_button_context,start_time,sandcavetour_init_done,Destination_queue,Destination,knownPlayerContainername
         logger.debug(f"Sandcavetour button pressed...")
         end_time = time.time()
         time_lapsed = end_time - start_time
@@ -1538,6 +1599,8 @@ class Sandcavestour(Action):
             logger.debug("Longpress detected")
             if sandcavetour_active == True:
                 Destination_queue.pop(0) #remove 1st element from destinationlist
+                #re_sort the queue:
+                reorder_Destination_queue(knownPlayerX,knownPlayerY,knownPlayerZ,Destination_queue)
                 Destination = Destination_queue[0]
                 logger.debug("s2")
                 tourlenght = len(Destination_queue)
@@ -1551,6 +1614,7 @@ class Sandcavestour(Action):
                                 })
                 self.ws.send(message_tour)
                 self.set_state(obj.context, 1)
+                updatecoordinates()
                 #stop_navithread = True
                 #NaviThread.join()
                 #stop_navithread = False
@@ -1569,6 +1633,14 @@ class Sandcavestour(Action):
                 sandcavetour_active = True
                 NaviThread.start()
                 self.set_state(obj.context, 1)
+                message_tour = json.dumps({"event": "setTitle",
+                                    "context": sandcavestour_button_context,
+                                    "payload": {
+                                        "title": "Sandcave Tour\n(started)",
+                                        "target": 0,
+                                    }
+                                })
+                self.ws.send(message_tour)
                 
             else:
                 stop_navithread = True
