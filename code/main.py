@@ -20,6 +20,7 @@ import requests
 import ahk
 import time
 import re
+import webbrowser
 
 from math import sqrt, degrees, radians, cos, acos, sin, asin, tan ,atan2, copysign, pi
 import pyperclip
@@ -30,6 +31,10 @@ import csv
 import sys
 import threading
 import json
+import asyncio
+from bs4 import BeautifulSoup
+from pyppeteer import launch
+
 
 
 from streamdeck_sdk import (
@@ -263,10 +268,10 @@ def reorder_Destination_queue(X : float, Y : float, Z : float, queue:dict):
     logger.debug("final sandcaves2QT sorted:"+str(Sandcaves_to_QTMarker_sorted))
     
     if Player_to_Sandcaves_sorted[0]["Distance"] > Sandcaves_to_QTMarker_sorted[0]["nextQTMarkerDistance"]:
-        logger.debug("QTMarker Sandcave is next")
+        logger.debug("QTMarker Sandcave is next: " + str(Player_to_Sandcaves_sorted[0]["Distance"]) + " vs "+str(Sandcaves_to_QTMarker_sorted[0]["nextQTMarkerDistance"]))
         return Sandcaves_to_QTMarker_sorted
     else:
-        logger.debug("Sandcave without QT is next")
+        logger.debug("Sandcave without QT is next: " + str(Player_to_Sandcaves_sorted[0]["Distance"]) + " vs "+str(Sandcaves_to_QTMarker_sorted[0]["nextQTMarkerDistance"]))
         return Player_to_Sandcaves_sorted
       
     
@@ -650,12 +655,15 @@ def watch_clipboard():
                         else:    
                             logger.debug("s2")
                             Destination = Destination_queue[0]
-                            
+                            if Destination['Distance'] < Destination['nextQTMarkerDistance']:
+                                next_hint = "(fly "+str(int(Destination['Distance']))+")"
+                            else:
+                                next_hint = "(QT "+str(int(Destination['nextQTMarkerDistance'])) +")"
                             logger.debug("Destination set to: " + str(Destination))
                             message_tour = json.dumps({"event": "setTitle",
                                                 "context": sandcavestour_button_context,
                                                 "payload": {
-                                                    "title": linebreak_title("NEXT ("+str(tourlenght)+")\n" + str(Destination['Name'])),
+                                                    "title": linebreak_title("NEXT ("+str(tourlenght)+")" + next_hint + "\n" + str(Destination['Name'])),
                                                     "target": 0,
                                                 }
                                             })
@@ -1237,6 +1245,26 @@ def preload_poi_data():
 logger.debug("Going for preload...")
 preload_poi_data()
 
+
+def open_verseguideinfo(X:float, Y:float, Z:float, Containername):
+    logger.debug("Verseguide info ...")
+    logger.debug("received: "+ str(Containername) +", " + str(X)+", " + str(Y)+", " + str(Z))
+    #Wala, -42.545, 279.059, 19.438
+    #-42.55,279.06,19.44,Samson & Son's Salvage Center,https://verseguide.com/location/STANTON/3B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdvd2UQIcJqVlURWIFtv588TLk8vlQ9TI5INaSqvoOYlIdW3,Wala
+
+    with open("table.txt", "r") as file:
+        for line in file:
+            values = line.strip().split(",") 
+
+            if ( abs(float(X) - float(values[0])) <= 0.5) and  ( abs(float(Y) - float(values[1])) <= 0.5) and ( abs(float(Z) - float(values[2])) <= 0.5) and (Containername == values[5]):
+                logger.debug("Longpress verseguide: " + str(line.strip()))
+                webbrowser.open(str(values[4])) 
+                break
+            else:
+                logger.debug("Longpress, but no match: "+str(values[0]) + ","+str(values[1]) + ","+str(values[2]) + ","+str(values[5]) )    
+        
+    
+    
 def reset_buttons():
     global mother
     message_bearing = json.dumps({"event": "setTitle",
@@ -1537,65 +1565,86 @@ class StartNaviToKnownPOI(Action):
         pi_context = obj.context
         if preloaded == False:
             preload_poi_data()
-            
+    
+    def on_key_down(self, obj: events_received_objs.KeyDown):
+        global start_time
+        #check if longpress
+        start_time = time.time()
+                
     def on_key_up(self, obj: events_received_objs.KeyUp):
-        global Destination,Database,preloaded,NaviThread,watch_clipboard_active,stop_navithread,mother,datasource
+        global Destination,Database,preloaded,NaviThread,watch_clipboard_active,stop_navithread,mother,datasource,start_time
         tmpdatasource = datasource
         datasource = obj.payload.settings.get("datasource")
-        logger.debug("Datasource from button: "+str(datasource))
-        if tmpdatasource != datasource:
-            preload_poi_data()
-        else:
-            logger.debug("...same datasource as before ")    
-        if preloaded == False:
-            preload_poi_data()
+        end_time = time.time()
+        time_lapsed = end_time - start_time
+        logger.debug("longpresstimer: " + str(time_lapsed))
+        if time_lapsed > 2:
             
-        if datasource == "local":
-            container = obj.payload.settings.get("container")
-            poi = obj.payload.settings.get("poi")
-            #logger.debug(f"start:" + str(container) + " - " + str(poi))
+            logger.debug("Longpress detected")
+            if datasource == 'starmap' :
+                container = obj.payload.settings.get("container")
+                x = obj.payload.settings.get("x")
+                y = obj.payload.settings.get("y")
+                z = obj.payload.settings.get("z")
+                open_verseguideinfo(x,y,z,container)
+            else:
+                logger.debug("open verseguide works only with starmap as datasource...")    
             
-            Destination = Database["Containers"][container]["POI"][poi]
+        else:    
+            logger.debug("Datasource from button: "+str(datasource))
+            if tmpdatasource != datasource:
+                preload_poi_data()
+            else:
+                logger.debug("...same datasource as before ")    
+            if preloaded == False:
+                preload_poi_data()
+                
+            if datasource == "local":
+                container = obj.payload.settings.get("container")
+                poi = obj.payload.settings.get("poi")
+                #logger.debug(f"start:" + str(container) + " - " + str(poi))
+                
+                Destination = Database["Containers"][container]["POI"][poi]
+                
+                
             
-            
-        
-        if datasource == 'starmap' :
-            container = obj.payload.settings.get("container")
-            x = obj.payload.settings.get("x")
-            y = obj.payload.settings.get("y")
-            z = obj.payload.settings.get("z")
-            
+            if datasource == 'starmap' :
+                container = obj.payload.settings.get("container")
+                x = obj.payload.settings.get("x")
+                y = obj.payload.settings.get("y")
+                z = obj.payload.settings.get("z")
+                
 
-            #logger.debug(f"start:" + str(container) + " - " + str(x) + " - " + str(y) + " - " + str(z) + ".")
-            Destination = {
-                    'Name': 'Predefined POI from Starmap', 
-                    'Container': container,
-                    'X': float(x), 
-                    'Y': float(y), 
-                    'Z': float(z), 
-                    "QTMarker": "FALSE"
-                }
-        
-        if watch_clipboard_active == False:
-            mother=self
-            NaviThread.start()
-            self.set_state(obj.context, 1)
+                #logger.debug(f"start:" + str(container) + " - " + str(x) + " - " + str(y) + " - " + str(z) + ".")
+                Destination = {
+                        'Name': 'Predefined POI from Starmap', 
+                        'Container': container,
+                        'X': float(x), 
+                        'Y': float(y), 
+                        'Z': float(z), 
+                        "QTMarker": "FALSE"
+                    }
+            
+            if watch_clipboard_active == False:
+                mother=self
+                NaviThread.start()
+                self.set_state(obj.context, 1)
 
-        else:
-            stop_navithread = True
-            try:
-                NaviThread.join()
-            except:
-                logger.debug("Cannot join thread")
+            else:
+                stop_navithread = True
+                try:
+                    NaviThread.join()
+                except:
+                    logger.debug("Cannot join thread")
+                    watch_clipboard_active = False
+                stop_navithread = False
+                NaviThread=threading.Thread(target=watch_clipboard) #Prepare a new thread
+                logger.debug(f"...stopped")
+                reset_buttons()
                 watch_clipboard_active = False
-            stop_navithread = False
-            NaviThread=threading.Thread(target=watch_clipboard) #Prepare a new thread
-            logger.debug(f"...stopped")
-            reset_buttons()
-            watch_clipboard_active = False
-            #NaviThread.start()
-            self.set_state(obj.context, 0)
-            #logger.debug(f"...and restarted")
+                #NaviThread.start()
+                self.set_state(obj.context, 0)
+                #logger.debug(f"...and restarted")
 
 class Sandcavestour(Action):
     UUID = "com.doabigcheese.scnav.sandcavestour"
@@ -1618,20 +1667,27 @@ class Sandcavestour(Action):
                 Destination_queue.pop(0) #remove 1st element from destinationlist
                 #re_sort the queue:
                 reorder_Destination_queue(knownPlayerX,knownPlayerY,knownPlayerZ,Destination_queue)
+                logger.debug(str(Destination_queue))
                 Destination = Destination_queue[0]
                 logger.debug("s2")
                 tourlenght = len(Destination_queue)
                 logger.debug("Destination set to: " + str(Destination))
+                if Destination['Distance'] < Destination['nextQTMarkerDistance']:
+                    next_hint = "(fly "+str(int(Destination['Distance']))+")"
+                else:
+                    next_hint = "(QT "+str(int(Destination['nextQTMarkerDistance'])) +")"
                 message_tour = json.dumps({"event": "setTitle",
                                     "context": sandcavestour_button_context,
                                     "payload": {
-                                        "title": linebreak_title("NEXT ("+str(tourlenght)+")\n" + str(Destination['Name'])),
+                                        "title": linebreak_title("NEXT ("+str(tourlenght)+")" + next_hint  + "\n" + str(Destination['Name'])),
                                         "target": 0,
                                     }
                                 })
                 self.ws.send(message_tour)
                 self.set_state(obj.context, 1)
-                updatecoordinates()
+                #updatecoordinates()
+                
+                
                 #stop_navithread = True
                 #NaviThread.join()
                 #stop_navithread = False
