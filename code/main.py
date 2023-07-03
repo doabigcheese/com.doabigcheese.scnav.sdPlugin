@@ -238,6 +238,7 @@ def get_sandcaves_sorted(X : float, Y : float, Z : float, Container:dict):
     
         
 def reorder_Destination_queue(X : float, Y : float, Z : float, queue:dict): 
+    global Destination_queue
     Distances_to_POIs = []
     logger.debug("rdq_1")
     #logger.debug(str(Container))
@@ -258,7 +259,7 @@ def reorder_Destination_queue(X : float, Y : float, Z : float, queue:dict):
         Nearest_POI_to_singleCaveDistance = POI["nextQTMarkerDistance"]
         #logger.debug("Nearest QTmarker to Cave:"+str(Nearest_POI_to_singleCave))
         logger.debug("append next")
-        Distances_to_POIs.append({"Name" : POI, "Distance" : Distance_POI, "nextQTMarkerDistance" : Nearest_POI_to_singleCaveDistance, "X": POI["X"], "Y": POI["Y"], "Z": POI["Z"], "Container": POI['Container'], "QTMarker": POI['QTMarker'] })
+        Distances_to_POIs.append({"Name" : POI["Name"], "Distance" : Distance_POI, "nextQTMarkerDistance" : Nearest_POI_to_singleCaveDistance, "X": POI["X"], "Y": POI["Y"], "Z": POI["Z"], "Container": POI['Container'], "QTMarker": POI['QTMarker'] })
         logger.debug("append done")
     
     Player_to_Sandcaves_sorted= sorted(Distances_to_POIs, key=lambda k: k['Distance'])
@@ -269,10 +270,10 @@ def reorder_Destination_queue(X : float, Y : float, Z : float, queue:dict):
     
     if Player_to_Sandcaves_sorted[0]["Distance"] > Sandcaves_to_QTMarker_sorted[0]["nextQTMarkerDistance"]:
         logger.debug("QTMarker Sandcave is next: " + str(Player_to_Sandcaves_sorted[0]["Distance"]) + " vs "+str(Sandcaves_to_QTMarker_sorted[0]["nextQTMarkerDistance"]))
-        return Sandcaves_to_QTMarker_sorted
+        Destination_queue = Sandcaves_to_QTMarker_sorted
     else:
         logger.debug("Sandcave without QT is next: " + str(Player_to_Sandcaves_sorted[0]["Distance"]) + " vs "+str(Sandcaves_to_QTMarker_sorted[0]["nextQTMarkerDistance"]))
-        return Player_to_Sandcaves_sorted
+        Destination_queue =  Player_to_Sandcaves_sorted
       
     
     
