@@ -1578,9 +1578,10 @@ class StartNaviToKnownPOI(Action):
         end_time = time.time()
         time_lapsed = end_time - start_time
         logger.debug("longpresstimer: " + str(time_lapsed))
-        if time_lapsed > 2:
+        if time_lapsed > 2: #longpress
             
             logger.debug("Longpress detected")
+            logger.debug("info:"+ str(self.info))
             if datasource == 'starmap' :
                 container = obj.payload.settings.get("container")
                 x = obj.payload.settings.get("x")
@@ -1588,7 +1589,8 @@ class StartNaviToKnownPOI(Action):
                 z = obj.payload.settings.get("z")
                 open_verseguideinfo(x,y,z,container)
             else:
-                logger.debug("open verseguide works only with starmap as datasource...")    
+                logger.debug("open verseguide works only with starmap as datasource...") 
+                self.show_alert(obj.context)   
             
         else:    
             logger.debug("Datasource from button: "+str(datasource))
