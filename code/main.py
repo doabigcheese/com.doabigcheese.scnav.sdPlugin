@@ -1316,7 +1316,11 @@ class StartNavi(Action):
         # For Debuggin, generate kind of random Coordinates
 
         #pyperclip.copy("Coordinates: x:12792704755.989153 y:-74801598.619366 z:50267." + str(random.randint(0,50))) #Magda
-        pyperclip.copy("Coordinates: x:-18930612193.865963 y:-2609992498.331003 z:-232631." + str(random.randint(0,50))) #Daymar
+        #pyperclip.copy("Coordinates: x:-18930612193.865963 y:-2609992498.331003 z:-232631." + str(random.randint(0,50))) #Daymar
+        #94.7,-48.9,275.5 soll start sein
+        #81.7,162,-232.6
+        pyperclip.copy("Coordinates: x:-18930612188.865963 y:-2609992608.331003 z:-232124." + str(random.randint(0,50))) #Daymar nähe Sandcave 2.1
+        
         mother=self
         if(message_pois != ""):
             logger.debug("Sending: " + str(message_pois))
@@ -1509,9 +1513,9 @@ class StartNaviToSavedPOI(Action):
         if preloaded == False:
             preload_poi_data()
         container = obj.payload.settings.get("container")
-        x = obj.payload.settings.get("x")
-        y = obj.payload.settings.get("y")
-        z = obj.payload.settings.get("z")
+        x = float(obj.payload.settings.get("x"))
+        y = float(obj.payload.settings.get("y"))
+        z = float(obj.payload.settings.get("z"))
         
 
         #logger.debug(f"start:" + str(container) + " - " + str(x) + " - " + str(y) + " - " + str(z) + ".")
@@ -1667,11 +1671,14 @@ class Sandcavestour(Action):
         if time_lapsed > 2:
             logger.debug("Longpress detected")
             if sandcavetour_active == True:
+                #Destination_tmp = Destination 
                 Destination_queue.pop(0) #remove 1st element from destinationlist
                 #re_sort the queue:
+                #reorder_Destination_queue(Destination_tmp["X"],Destination_tmp["Y"],Destination_tmp["Z"],Destination_queue)
                 reorder_Destination_queue(knownPlayerX,knownPlayerY,knownPlayerZ,Destination_queue)
                 logger.debug(str(Destination_queue))
                 Destination = Destination_queue[0]
+                
                 logger.debug("s2")
                 tourlenght = len(Destination_queue)
                 logger.debug("Destination set to: " + str(Destination))
@@ -1679,6 +1686,8 @@ class Sandcavestour(Action):
                     next_hint = "(fly "+str(int(Destination['Distance']))+")"
                 else:
                     next_hint = "(QT "+str(int(Destination['nextQTMarkerDistance'])) +")"
+                #with open("sandcavetour.txt","a") as file:
+                #    file.write(next_hint + "  " + str(Destination) + "\n")
                 message_tour = json.dumps({"event": "setTitle",
                                     "context": sandcavestour_button_context,
                                     "payload": {
@@ -1745,9 +1754,9 @@ class StartNaviToCustomPOI(Action):
         if preloaded == False:
             preload_poi_data()
         container = obj.payload.settings.get("container")
-        x = obj.payload.settings.get("x")
-        y = obj.payload.settings.get("y")
-        z = obj.payload.settings.get("z")
+        x = float(obj.payload.settings.get("x"))
+        y = float(obj.payload.settings.get("y"))
+        z = float(obj.payload.settings.get("z"))
         
 
         #logger.debug(f"start:" + str(container) + " - " + str(x) + " - " + str(y) + " - " + str(z) + ".")
@@ -1759,6 +1768,7 @@ class StartNaviToCustomPOI(Action):
                 'Z': z, 
                 "QTMarker": "FALSE"
             }
+        logger.debug("Custom Destination set to: "+str(Destination))
         if watch_clipboard_active == False:
             mother=self
             NaviThread.start()
