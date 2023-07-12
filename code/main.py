@@ -1208,9 +1208,11 @@ def preload_poi_data():
             response = requests.get(url)
             if response.status_code == 200:  # Erfolgreiche Anfrage
                 data = response.json()  # JSON-Daten aus der Antwort extrahieren
-                logger.debug(str(data))
-                tdata=str(data).replace("\'s","s").replace("\'","\"").replace("None","0")
+                logger.debug("0")
+                tdata=str(data).replace("\'s ","s ").replace("\'s\"","s\"").replace("\'","\"").replace("None","0")
                 #logger.debug("tdata: "+str(tdata))
+                logger.debug("00")
+                logger.debug(tdata[3105:3115])
 
                 tmpdata = json.loads(tdata) #lets convert to internal layout
                 #logger.debug("tmpdata: " + str(tmpdata))
@@ -1218,16 +1220,22 @@ def preload_poi_data():
                 
 
                 for entry in tmpdata:
+                    logger.debug(str(entry))
                     entry['Name'] = entry.pop('PoiName')
+                    logger.debug("1")
                     entry['Container'] = entry.pop('Planet')
+                    logger.debug("1")
                     entry['X'] = entry.pop('XCoord')
+                    logger.debug("1")
                     entry['Y'] = entry.pop('YCoord')
+                    logger.debug("1")
                     entry['Z'] = entry.pop('ZCoord')
+                    logger.debug("1")
                     if entry['QTMarker'] == 1:
                         entry['QTMarker'] = "TRUE"
                     else:
                         entry['QTMarker'] = "FALSE" 
-                    logger.debug("entry: "+str(entry))
+                    logger.debug("done entry")
                     
                     if entry['Container'] != "" and entry['Container'] in Container_list:
                         Database['Containers'][entry['Container']]['POI'][entry['Name']] = entry
@@ -1319,8 +1327,8 @@ class StartNavi(Action):
         #pyperclip.copy("Coordinates: x:-18930612193.865963 y:-2609992498.331003 z:-232631." + str(random.randint(0,50))) #Daymar
         #94.7,-48.9,275.5 soll start sein
         #81.7,162,-232.6
-        pyperclip.copy("Coordinates: x:-18930612188.865963 y:-2609992608.331003 z:-232124." + str(random.randint(0,50))) #Daymar nähe Sandcave 2.1
-        
+        #pyperclip.copy("Coordinates: x:-18930612188.865963 y:-2609992608.331003 z:-232124." + str(random.randint(0,50))) #Daymar nähe Sandcave 2.1
+        pyperclip.copy("Coordinates: x:12850214070.308863 y:5692.311180 z:1243548." + str(random.randint(0,50))) #Hurston
         mother=self
         if(message_pois != ""):
             logger.debug("Sending: " + str(message_pois))
