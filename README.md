@@ -22,7 +22,9 @@ If the POI Button is defined with a POI from starmap.tk, then a longpress on it 
 Sandcave Tours button can help you exploring Sand Caves to find rare ores... just start it with a single press when you are e.g. on Daymar, then hit the update location button and it will indicate where to go \
 It will show you the amount of caves on this moon, and if you should do a quantumdrive first or fly directly \
 Longpress (> 2 sec) on this button will delete the current sandcave destination and move on to the next in queue (all are sorted for minimal fly time) \
-shortpress will deactivate Sandcave Tours again
+shortpress will deactivate Sandcave Tours again \
+Save button will save your current location to a custom list \
+With the custom poi button you can then select one of your saved locations to be set as new destination.
 
 
 ![alt text](https://github.com/doabigcheese/com.doabigcheese.scnav.sdplugin/blob/master/Screenshot1.jpg?raw=true)
