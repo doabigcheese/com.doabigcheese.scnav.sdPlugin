@@ -11,6 +11,7 @@ async def parse_website(xpath_list,url,type,step):
 
     # Website öffnen
     await page.goto(url)
+    await page.setViewport({"width": 1920, "height": 1080})
 
     # Warten auf das Laden der Website (optional)
     # Ändern Sie den Wert von sleep, um die Ladezeit anzupassen
@@ -39,8 +40,14 @@ async def parse_website(xpath_list,url,type,step):
             print("5")
             await page.screenshot(path='screenshot6.png') #optional
             print("6")
-        except:
+            page_source = await page.content()
+            #with open("page_src.html","a") as file:
+            #        file.write(str(page_source))
+            #print("7")
+            
+        except Exception as e:
             await page.screenshot(path='error_screenshot.png') #optional
+            print("Error: "+str(e))
     
     # Elemente auswählen
     links = []
@@ -76,7 +83,7 @@ xpath_test_poi = ["/html/body/div/div/div/div/div[2]/div[2]/div/div/div/div/div/
 links_to_moons = asyncio.get_event_loop().run_until_complete(parse_website(xpath_list,"https://verseguide.com/location/STANTON","element.href",1))
 print(str(len(links_to_moons)))
 counter_moons = 0
-done_moons = 0 #if you need to start in the middle or so
+done_moons = 1 #if you need to start in the middle or so
 for element in links_to_moons:                                                  #/html/body/div/div/div/div/div[2]/div[2]/div/div/div/div/div/div/form/div/div[4]/div/div/div/div/div/div/div[1]/div/div[2]/div[2]/div/div[1]/a
     counter_moons = counter_moons + 1 
     if counter_moons > done_moons:

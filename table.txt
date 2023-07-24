@@ -247,3 +247,5 @@
 14.51,211.27,25.89,Devlin Scrap & Salvage,https://verseguide.com/location/STANTON/4C/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdOY0bz8WQw00CP47pkPIvNjICZQOKI5gDlYuSNpD2z8rElS,Euterpe
 -42.10,198.14,66.61,Icebreaker,https://verseguide.com/location/STANTON/4C/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONq9IT2f9RmGQE74QyWlkRrRG2R5ZAk5ipVcntq26ByFTosi6,Euterpe
 50.17,-172.26,115.27,Bud's Growery,https://verseguide.com/location/STANTON/4C/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqH2MQMhQ2aRJOo813fBOqEGHJgaYy6NWyTrExOysPEYdks1,Euterpe
+252.52,62.92,13.87,Security Post Criska,https://verseguide.com/location/STANTON/2A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONctvTb2K1qFwv4v4S3P45f0FJVtT7CPn3RNsmSbaY6GrHsBT,Cellin
+-111.53,-56.30,-228.95,Julep Ravine Aid Shelter,https://verseguide.com/location/STANTON/2A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcXqJFCsO0PWzPcYmLEbPh2eRgxNKlBIGQ9FSbAPbtjjgZd9,Cellin

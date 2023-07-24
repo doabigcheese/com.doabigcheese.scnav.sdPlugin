@@ -14,6 +14,8 @@
 #   -long press opens up verseguide poi page or starmap.tk database view
 #   - deactivate activated buttons when selecting new poi
 #   - button state when switching pages?
+#   - cstone poi details on longpress as well? (parse cstone + calculate xyz from om-distances in matching table )
+#   - target OM distances on output button
 #########################################################################
 import random
 import requests
@@ -64,6 +66,7 @@ daytime_button_context = ""
 around_button_context = ""
 coords_button_context = ""
 save_button_context = ""
+oms_button_context = ""
 sandcavestour_button_context = ""
 startnavitoknownpoi_button_context = ""
 startnavitosavedpoi_button_context = ""
@@ -104,12 +107,21 @@ def linebreak_title(newtitle):
 
 def updatecoordinates():
     #logger.debug(f"Update entered.")
+    global mother,oms_button_context
     ahk.send_input('{Enter}')
     time.sleep(0.5)
     ahk.send_input("/showlocation")
     time.sleep(0.2)
     ahk.send_input('{Enter}')
-
+    message_oms = json.dumps({"event": "setTitle",
+                                            "context": oms_button_context,
+                                            "payload": {
+                                                "title": get_om_distances(),
+                                                "target": 0,
+                                            }
+                                        })   
+    mother.ws.send(message_oms)
+    
 def save_poi():
     global save_triggered,watch_clipboard_active,mother
     
@@ -296,7 +308,7 @@ def get_closest_POI(X : float, Y : float, Z : float, Container : dict, Quantum_m
         #logger.debug("Quantum_marker POI: " + str(Container["POI"][POI]["QTMarker"]))
 
         if Quantum_marker and Container["POI"][POI]["QTMarker"] == "TRUE" or not Quantum_marker:
-            Distances_to_POIs.append({"Name" : POI, "Distance" : Distance_POI})
+            Distances_to_POIs.append({"Name" : POI, "Distance" : Distance_POI, "X" : Container["POI"][POI]["X"], "Y" : Container["POI"][POI]["Y"], "Z" : Container["POI"][POI]["Z"]})
             #logger.debug("Added to closest POI list: "+str(POI)+" with "+str(Distance_POI))
     #logger.debug("final:"+str(Distances_to_POIs))
     Target_to_POIs_Distances_Sorted = sorted(Distances_to_POIs, key=lambda k: k['Distance'])
@@ -304,6 +316,54 @@ def get_closest_POI(X : float, Y : float, Z : float, Container : dict, Quantum_m
     return Target_to_POIs_Distances_Sorted
 
 
+    
+def get_om_distances():
+    global Database,Destination
+    
+    current_container = Destination["Container"]
+    X = Destination["X"]
+    Y = Destination["Y"]
+    Z = Destination["Z"]
+    Vector_POI = {
+        "X": abs(X - 0),
+        "Y": abs(Y - 0),
+        "Z": abs(Z - Database["Containers"][current_container]["OM Radius"])
+    }
+    Distance_OM_1 = vector_norm(Vector_POI)
+    Vector_POI = {
+        "X": abs(X - 0),
+        "Y": abs(Y - 0),
+        "Z": abs(Z - (-1 * Database["Containers"][current_container]["OM Radius"]))
+    }
+    Distance_OM_2 = vector_norm(Vector_POI)
+    
+    Vector_POI = {
+        "X": abs(X - 0),
+        "Y": abs(Y - Database["Containers"][current_container]["OM Radius"]),
+        "Z": abs(Z - 0)
+    }
+    Distance_OM_3 = vector_norm(Vector_POI)
+    Vector_POI = {
+        "X": abs(X - 0),
+        "Y": abs(Y - (-1 * Database["Containers"][current_container]["OM Radius"])),
+        "Z": abs(Z - 0)
+    }
+    Distance_OM_4 = vector_norm(Vector_POI)
+    Vector_POI = {
+        "X": abs(X - Database["Containers"][current_container]["OM Radius"]),
+        "Y": abs(Y - 0),
+        "Z": abs(Z - 0)
+    }
+    Distance_OM_5 = vector_norm(Vector_POI)
+    Vector_POI = {
+        "X": abs(X - (-1 * Database["Containers"][current_container]["OM Radius"])),
+        "Y": abs(Y - 0),
+        "Z": abs(Z - 0)
+    }
+    Distance_OM_6 = vector_norm(Vector_POI)
+    return f"OM1: {round(Distance_OM_1,1)}\nOM2: {round(Distance_OM_2,1)}\nOM3: {round(Distance_OM_3,1)}\nOM4: {round(Distance_OM_4,1)}\nOM5: {round(Distance_OM_5,1)}\nOM6: {round(Distance_OM_6,1)}"
+
+    #return "OM1: n/a\nOM2: n/a\nOM3: n/a\nOM4: n/a\nOM5: n/a\nOM6: n/a"
 
 def get_closest_oms(X : float, Y : float, Z : float, Container : dict):
     Closest_OM = {}
@@ -877,6 +937,16 @@ def watch_clipboard():
                         Flat_angle_color = "#ffd000"
                     else:
                         Flat_angle_color = "#ff3700"
+                        
+                    logger.debug("1:"+str(Target["X"]))
+                    logger.debug("2:"+str(Target["Y"]))
+                    logger.debug("3:"+str(Target["Z"]))
+                    logger.debug("4:"+str(target_Latitude))
+                    logger.debug("5:"+str(target_Longitude))
+                    logger.debug("6:"+str(target_Height))
+                    logger.debug("4:"+str(player_Latitude))
+                    logger.debug("5:"+str(player_Longitude))
+                    logger.debug("6:"+str(player_Height))
 
 
 
@@ -889,12 +959,7 @@ def watch_clipboard():
                     Bearing = (degrees(atan2(bearingX, bearingY)) + 360) % 360
 
                     logger.debug("28_1")
-                    logger.debug("1:"+str(Target["X"]))
-                    logger.debug("2:"+str(Target["Y"]))
-                    logger.debug("3:"+str(Target["Z"]))
-                    logger.debug("4:"+str(target_Latitude))
-                    logger.debug("5:"+str(target_Longitude))
-                    logger.debug("6:"+str(target_Height))
+                    
                     #logger.debug("7:"+str(Database["Containers"][Target["Container"]]))
                     logger.debug("8:"+str(Database["Containers"]["Stanton"]))
                     logger.debug("9:"+str(Time_passed_since_reference_in_seconds))
@@ -977,6 +1042,11 @@ def watch_clipboard():
                     logger.debug(f"{round(Bearing, 0)}°")
                     logger.debug(f"{round(New_Distance_to_POI_Total, 1)} km")
                     
+                    logger.debug("xyz qtmarker: " + str(Target_to_POIs_Distances_Sorted[0]))
+                    qtmarker_Latitude, qtmarker_Longitude, qtmarker_Height = get_lat_long_height(Target_to_POIs_Distances_Sorted[0]["X"], Target_to_POIs_Distances_Sorted[0]["Y"], Target_to_POIs_Distances_Sorted[0]["Z"], Actual_Container)
+                    bearingX_qtmarker = cos(radians(target_Latitude)) * sin(radians(target_Longitude) - radians(qtmarker_Longitude))
+                    bearingY_qtmarker = cos(radians(qtmarker_Latitude)) * sin(radians(target_Latitude)) - sin(radians(qtmarker_Latitude)) * cos(radians(target_Latitude)) * cos(radians(target_Longitude) - radians(qtmarker_Longitude))
+                    Bearing_qtmaker = (degrees(atan2(bearingX_qtmarker, bearingY_qtmarker)) + 360) % 360
                     
                     message_bearing = json.dumps({"event": "setTitle",
                                             "context": bearing_button_context,
@@ -993,11 +1063,19 @@ def watch_clipboard():
                         next_poi_distance = Target_to_POIs_Distances_Sorted[0]['Distance']
                     else:
                         next_poi_name = "n/a"
-                        next_poi_distance = 0     
+                        next_poi_distance = 0
+                    
+                    message_oms = json.dumps({"event": "setTitle",
+                                            "context": oms_button_context,
+                                            "payload": {
+                                                "title": get_om_distances(),
+                                                "target": 0,
+                                            }
+                                        })   
                     message_nearest = json.dumps({"event": "setTitle",
                                             "context": nearest_button_context,
                                             "payload": {
-                                                "title": "NEXT\n" + linebreak_title(next_poi_name) + f"\n{round(next_poi_distance, 1)} km",
+                                                "title": "NEXT\n" + linebreak_title(next_poi_name) + f"\n{round(next_poi_distance, 1)} km\n{round(Bearing_qtmaker, 0)}°",
                                                 "target": 0,
                                             }
                                         })
@@ -1035,6 +1113,7 @@ def watch_clipboard():
                                             }
                                         })
                     logger.debug("35")
+                    mother.ws.send(message_oms)
                     mother.ws.send(message_bearing)
                     #logger.debug("send bearing: " + message_bearing)
                     mother.ws.send(message_nearest)
@@ -1208,11 +1287,11 @@ def preload_poi_data():
             response = requests.get(url)
             if response.status_code == 200:  # Erfolgreiche Anfrage
                 data = response.json()  # JSON-Daten aus der Antwort extrahieren
-                logger.debug("0")
+                #logger.debug("0")
                 tdata=str(data).replace("\'s ","s ").replace("\'s\"","s\"").replace("\'","\"").replace("None","0")
                 #logger.debug("tdata: "+str(tdata))
-                logger.debug("00")
-                logger.debug(tdata[3105:3115])
+                #logger.debug("00")
+                #logger.debug(tdata[3105:3115])
 
                 tmpdata = json.loads(tdata) #lets convert to internal layout
                 #logger.debug("tmpdata: " + str(tmpdata))
@@ -1222,24 +1301,43 @@ def preload_poi_data():
                 for entry in tmpdata:
                     logger.debug(str(entry))
                     entry['Name'] = entry.pop('PoiName')
-                    logger.debug("1")
+                    #logger.debug("1")
                     entry['Container'] = entry.pop('Planet')
-                    logger.debug("1")
+                    #logger.debug("1")
                     entry['X'] = entry.pop('XCoord')
-                    logger.debug("1")
+                    #logger.debug("1")
                     entry['Y'] = entry.pop('YCoord')
-                    logger.debug("1")
+                    #logger.debug("1")
                     entry['Z'] = entry.pop('ZCoord')
-                    logger.debug("1")
+                    #logger.debug("1")
                     if entry['QTMarker'] == 1:
                         entry['QTMarker'] = "TRUE"
                     else:
                         entry['QTMarker'] = "FALSE" 
-                    logger.debug("done entry")
+                    #logger.debug("done entry")
                     
                     if entry['Container'] != "" and entry['Container'] in Container_list:
                         Database['Containers'][entry['Container']]['POI'][entry['Name']] = entry
-                    
+                
+                #logger.debug("Database: "+str(Database['Containers'])) 
+                #add OM Markerss
+                #for planet in Database['Containers']:
+                #    logger.debug("adding om marker for: " + str(planet['Name']))
+                #    oms={"OM-1": {
+                #            "Name": "OM-1",
+                #            "Container": planet['Name'],
+                #            "X": 0.0,
+                #            "Y": 0.0,
+                #            "Z": float(Database['Containers'][planet['Name']]['OM Radius']),
+                #            "qw": 0.0,
+                #            "qx": 0.0,
+                #            "qy": 0.0,
+                #            "qz": 0.0,
+                #            "QTMarker": "TRUE"
+                #        }}
+                #    logger.debug(str(oms))
+                #    Database['Containers'][planet['Name']]['POI'].append(oms)
+                   #Database['Containers'][container_name]["OM Radius"] 
                 #logger.debug("tmpdata_after convert: " + str(tmpdata))
                 
             #logger.debug("Database: "+str(Database))    
@@ -1275,7 +1373,7 @@ def open_verseguideinfo(X:float, Y:float, Z:float, Containername):
     
     
 def reset_buttons():
-    global mother
+    global mother,bearing_button_context,nearest_button_context,daytime_button_context,coords_button_context,oms_button_context
     message_bearing = json.dumps({"event": "setTitle",
                                         "context": bearing_button_context,
                                         "payload": {
@@ -1304,7 +1402,13 @@ def reset_buttons():
                                 "target": 0,
                             }
                         })
-    
+    message_oms = json.dumps({"event": "setTitle",
+                                        "context": oms_button_context,
+                                        "payload": {
+                                            "title": "OM1: ---\nOM2: ---\nOM3: ---\nOM4: ---\nOM5: ---\nOM6: ---",
+                                            "target": 0,
+                                        }
+                                    })
     mother.ws.send(message_bearing)
     
     mother.ws.send(message_nearest)
@@ -1312,6 +1416,8 @@ def reset_buttons():
     mother.ws.send(message_daytime)
     
     mother.ws.send(message_coords)
+    
+    mother.ws.send(message_oms)
     
        
 
@@ -1321,6 +1427,14 @@ class StartNavi(Action):
 
 
     def on_key_up(self, obj: events_received_objs.KeyUp):
+        global Destination, Database
+        current_container = Destination["Container"]
+        logger.debug(str(Database["Containers"][current_container]))
+        
+        body_radius = Database["Containers"][current_container]["Body Radius"] * 1000
+        x = Database["Containers"][current_container]["X"] * 1000 +body_radius/2 + 50
+        y = Database["Containers"][current_container]["Y"] * 1000 +body_radius/2 +50
+        z = Database["Containers"][current_container]["Z"] * 1000 + body_radius/2 + 10
         # For Debuggin, generate kind of random Coordinates
 
         #pyperclip.copy("Coordinates: x:12792704755.989153 y:-74801598.619366 z:50267." + str(random.randint(0,50))) #Magda
@@ -1328,7 +1442,10 @@ class StartNavi(Action):
         #94.7,-48.9,275.5 soll start sein
         #81.7,162,-232.6
         #pyperclip.copy("Coordinates: x:-18930612188.865963 y:-2609992608.331003 z:-232124." + str(random.randint(0,50))) #Daymar nähe Sandcave 2.1
-        pyperclip.copy("Coordinates: x:12850214070.308863 y:5692.311180 z:1243548." + str(random.randint(0,50))) #Hurston
+        #pyperclip.copy("Coordinates: x:12850214070.308863 y:5692.311180 z:1243548." + str(random.randint(0,50))) #Hurston
+        coordinaten="Coordinates: x:"+str(x)+" y:"+str(y)+" z:"+str(z)+ str(random.randint(0,50))
+        pyperclip.copy(coordinaten)
+        logger.debug("Sending to clipboard: "+ coordinaten)
         mother=self
         if(message_pois != ""):
             logger.debug("Sending: " + str(message_pois))
@@ -1359,8 +1476,13 @@ class Calibrate(Action):
             
                     
          
-  
-             
+class OMs(Action):
+    UUID = "com.doabigcheese.scnav.oms"  
+    def on_will_appear(self, obj:events_received_objs.WillAppear):
+        #logger.debug(f"willapear_debug: " + str(obj.context))
+        global oms_button_context
+        oms_button_context = obj.context
+                 
 class Bearing(Action):
     UUID = "com.doabigcheese.scnav.bearing"
     
@@ -1813,6 +1935,7 @@ if __name__ == '__main__':
             Coords(),
             Calibrate(),
             Sandcavestour(),
+            OMs(),
             
         ],
         log_file=settings.LOG_FILE_PATH,

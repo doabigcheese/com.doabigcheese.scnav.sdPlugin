@@ -11,3 +11,5 @@ websocket-client==1.5.1
 ahk
 pyperclip
 ntplib
+pyppeteer
+beautifulsoup4

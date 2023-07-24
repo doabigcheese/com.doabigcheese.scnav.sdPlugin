@@ -112,7 +112,7 @@
           "Image": "assets/keys/bearing",
           "Title": "nearest\nOutpost\n(-- km)",
           "TitleAlignment": "middle",
-          "FontSize": "10",
+          "FontSize": "8",
           "ShowTitle": true
         }
       ],
@@ -120,6 +120,23 @@
       "Tooltip": "Next QT Marker to Target",
       "PropertyInspectorPath": "property_inspector/nearest_pi.html",
       "UUID": "com.doabigcheese.scnav.nearest"
+    },
+    {
+      "Icon": "assets/actions/bearing",
+      "Name": "Destination OM Marker Distances",
+      "States": [
+        {
+          "Image": "assets/keys/bearing",
+          "Title": "OM1: ---\nOM2: ---\nOM3: ---\nOM4: ---\nOM5: ---\nOM6: ---",
+          "TitleAlignment": "left",
+          "FontSize": "7",
+          "ShowTitle": true
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Destination OM Marker Distances",
+      "PropertyInspectorPath": "property_inspector/oms_pi.html",
+      "UUID": "com.doabigcheese.scnav.oms"
     },
     {
       "Icon": "assets/actions/bearing",
