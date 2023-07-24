@@ -23,6 +23,7 @@ import ahk
 import time
 import re
 import webbrowser
+import winsound
 
 from math import sqrt, degrees, radians, cos, acos, sin, asin, tan ,atan2, copysign, pi
 import pyperclip
@@ -82,6 +83,8 @@ knownPlayerX=0
 knownPlayerY=0
 knownPlayerZ=0
 knownPlayerContainername=""
+stop_coordinatetimeout = False
+CoordinateTimeoutThread = ""
 
 
 def linebreak_title(newtitle):
@@ -105,9 +108,23 @@ def linebreak_title(newtitle):
     #logger.debug(tmp_1)
     return tmp_1 + tmp_2 + tmp_3
 
+def coordinatetimeout():
+    global stop_coordinatetimeout
+    logger.debug("coordinatetimeout_start")
+    time.sleep(5)
+    if stop_coordinatetimeout == False:
+        winsound.PlaySound("SystemHand", winsound.SND_ALIAS)
+        logger.debug("Timeout fired")
+    else:
+        logger.debug("no timeout")
+        
+    
 def updatecoordinates():
     #logger.debug(f"Update entered.")
-    global mother,oms_button_context
+    global mother,oms_button_context,stop_coordinatetimeout,CoordinateTimeoutThread
+    CoordinateTimeoutThread=threading.Thread(target=coordinatetimeout) #Prepare a new thread
+    stop_coordinatetimeout = False
+    CoordinateTimeoutThread.start()
     ahk.send_input('{Enter}')
     time.sleep(0.5)
     ahk.send_input("/showlocation")
@@ -121,6 +138,7 @@ def updatecoordinates():
                                             }
                                         })   
     mother.ws.send(message_oms)
+    
     
 def save_poi():
     global save_triggered,watch_clipboard_active,mother
@@ -588,7 +606,7 @@ def get_current_container(X : float, Y : float, Z : float):
 
 def watch_clipboard():
     logger.debug(f"Watch Clipboard entered.")
-    global save_button_context,save_triggered,Database,Container_list,Space_POI_list,Planetary_POI_list,watch_clipboard_active,Destination,stop_navithread,bearing_button_context,daytime_button_context,nearest_button_context,around_button_context,mother,coords_button_context,calibrate_active,daytime_toggle,sandcavetour_active,sandcavestour_button_context,sandcavetour_init_done,Destination_queue,knownPlayerX,knownPlayerY,knownPlayerZ,knownPlayerContainername
+    global save_button_context,save_triggered,Database,Container_list,Space_POI_list,Planetary_POI_list,watch_clipboard_active,Destination,stop_navithread,bearing_button_context,daytime_button_context,nearest_button_context,around_button_context,mother,coords_button_context,calibrate_active,daytime_toggle,sandcavetour_active,sandcavestour_button_context,sandcavetour_init_done,Destination_queue,knownPlayerX,knownPlayerY,knownPlayerZ,knownPlayerContainername,stop_coordinatetimeout,CoordinateTimeoutThread
     watch_clipboard_active = True
     #mother=threading.main_thread()
 
@@ -662,6 +680,8 @@ def watch_clipboard():
 
         #If clipboard content has changed
         else :
+            stop_coordinatetimeout = True
+            CoordinateTimeoutThread.join()
             Old_clipboard = new_clipboard
             #logger.debug(new_clipboard)
             New_time = time.time() + time_offset
@@ -1429,7 +1449,7 @@ class StartNavi(Action):
     def on_key_up(self, obj: events_received_objs.KeyUp):
         global Destination, Database
         current_container = Destination["Container"]
-        logger.debug(str(Database["Containers"][current_container]))
+        #logger.debug(str(Database["Containers"][current_container]))
         
         body_radius = Database["Containers"][current_container]["Body Radius"] * 1000
         x = Database["Containers"][current_container]["X"] * 1000 +body_radius/2 + 50
@@ -1439,8 +1459,6 @@ class StartNavi(Action):
 
         #pyperclip.copy("Coordinates: x:12792704755.989153 y:-74801598.619366 z:50267." + str(random.randint(0,50))) #Magda
         #pyperclip.copy("Coordinates: x:-18930612193.865963 y:-2609992498.331003 z:-232631." + str(random.randint(0,50))) #Daymar
-        #94.7,-48.9,275.5 soll start sein
-        #81.7,162,-232.6
         #pyperclip.copy("Coordinates: x:-18930612188.865963 y:-2609992608.331003 z:-232124." + str(random.randint(0,50))) #Daymar nähe Sandcave 2.1
         #pyperclip.copy("Coordinates: x:12850214070.308863 y:5692.311180 z:1243548." + str(random.randint(0,50))) #Hurston
         coordinaten="Coordinates: x:"+str(x)+" y:"+str(y)+" z:"+str(z)+ str(random.randint(0,50))
