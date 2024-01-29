@@ -222,12 +222,14 @@
         //document.title = "test1"; //poi_el.value
         //document.querySelector('title').textContent = "newTitle";
         console.log('collecting xyz');
-        fetch('https://starmap.tk/api/v1/pois')
+        fetch('https://starmap.tk/api/v2/pois')
             .then((res) => {return res.json();})
             .then((out) => { 
                 for (var key in out) {
                     if (out.hasOwnProperty(key)) {
+                        console.log('collecting xyz try');
                         if (out[key].PoiName == poi_el.value) {
+                            console.log('collecting xyz found');
                             x_el.value = out[key].XCoord;
                             y_el.value = out[key].YCoord;
                             z_el.value = out[key].ZCoord;
@@ -10357,17 +10359,17 @@
         var Container_list = [];
         var planetary_container_select = document.getElementById("planetary_container_select");
         planetary_container_select.options.length = 0;
-        fetch('https://starmap.tk/api/v1/oc')
+        fetch('https://starmap.tk/api/v2/oc')
             .then((res) => {return res.json();})
             .then((out) => {
                 console.log("oc out: ", out)
                 for (var key in out) {
                     if (out.hasOwnProperty(key)) {
                         if (out[key].System == "Stanton" && out[key].Type == "Planet") {
-                            console.log(out[key].Planet);
-                            Container_list.push(out[key].Planet);
+                            console.log(out[key].ObjectContainer);
+                            Container_list.push(out[key].ObjectContainer);
                             planetary_container_select.appendChild(
-                                new Option(out[key].Planet, out[key].Planet)
+                                new Option(out[key].ObjectContainer, out[key].ObjectContainer)
                             );
                         }
                     }
@@ -10382,7 +10384,7 @@
         var planetary_target_select = document.getElementById("planetary_target_select");
         planetary_target_select.options.length = 0;
 
-        fetch('https://starmap.tk/api/v1/pois')
+        fetch('https://starmap.tk/api/v2/pois')
             .then((res) => {return res.json();})
             .then((out) => {
                 console.log("pois out: ", out)
@@ -10424,9 +10426,9 @@
         }, false);
     }
     } // end function
-
-    load_data();
     clearSelected();
+    load_data();
+    
         
     function clearSelected(){
         console.log("clearSelected aufgerufen")

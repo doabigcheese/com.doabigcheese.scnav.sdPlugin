@@ -24,6 +24,8 @@ import time
 import re
 import webbrowser
 import winsound
+#import win32com.client
+#from playsound import playsound
 
 from math import sqrt, degrees, radians, cos, acos, sin, asin, tan ,atan2, copysign, pi
 import pyperclip
@@ -33,6 +35,7 @@ import os
 import csv
 import sys
 import threading
+from queue import Queue
 import json
 import asyncio
 from bs4 import BeautifulSoup
@@ -51,6 +54,8 @@ from streamdeck_sdk import (
 )
 from streamdeck_sdk.sd_objs import events_received_objs
 import settings
+
+queue = Queue()
 
 Container_list = []
 Space_POI_list = []
@@ -86,6 +91,11 @@ knownPlayerContainername=""
 stop_coordinatetimeout = False
 CoordinateTimeoutThread = ""
 
+def check_queue(event):
+    logger.debug("check queue entered")
+    msg = queue.get()
+    logger.debug(msg)
+    mother.ws.send(msg)
 
 def linebreak_title(newtitle):
     i = 9
@@ -604,7 +614,7 @@ def get_current_container(X : float, Y : float, Z : float):
             Actual_Container = Database["Containers"][i]
     return Actual_Container
 
-def watch_clipboard():
+def watch_clipboard(queue):
     logger.debug(f"Watch Clipboard entered.")
     global save_button_context,save_triggered,Database,Container_list,Space_POI_list,Planetary_POI_list,watch_clipboard_active,Destination,stop_navithread,bearing_button_context,daytime_button_context,nearest_button_context,around_button_context,mother,coords_button_context,calibrate_active,daytime_toggle,sandcavetour_active,sandcavestour_button_context,sandcavetour_init_done,Destination_queue,knownPlayerX,knownPlayerY,knownPlayerZ,knownPlayerContainername,stop_coordinatetimeout,CoordinateTimeoutThread
     watch_clipboard_active = True
@@ -669,6 +679,7 @@ def watch_clipboard():
 
         #Get the new clipboard content
         new_clipboard = pyperclip.paste()
+        #logger.debug("c: " + str(new_clipboard))
 
 
         #If clipboard content hasn't changed
@@ -683,7 +694,7 @@ def watch_clipboard():
             stop_coordinatetimeout = True
             CoordinateTimeoutThread.join()
             Old_clipboard = new_clipboard
-            #logger.debug(new_clipboard)
+            logger.debug("New clipboard: " + str(new_clipboard))
             New_time = time.time() + time_offset
 
             #If it contains some coordinates
@@ -700,7 +711,7 @@ def watch_clipboard():
                 #search in the Databse to see if the player is ina Container
                 Actual_Container = get_current_container(New_Player_Global_coordinates["X"], New_Player_Global_coordinates["Y"], New_Player_Global_coordinates["Z"])
                 knownPlayerContainername=Actual_Container['Name']
-                #logger.debug("Actual Container: " +str(Actual_Container))
+                logger.debug("Actual Container: " +str(Actual_Container))
                       
                 if calibrate_active:
                     logger.debug("Calibrate active")
@@ -1133,18 +1144,26 @@ def watch_clipboard():
                                             }
                                         })
                     logger.debug("35")
+                    #speaker = win32com.client.Dispatch("SAPI.SpVoice")
+                    #speaker.Speak(str(round(Bearing, 0))+" Degree and "+str(round(New_Distance_to_POI_Total, 1))+"Kilometer to go")
                     mother.ws.send(message_oms)
+                    mother.send(message_oms)
                     mother.ws.send(message_bearing)
-                    #logger.debug("send bearing: " + message_bearing)
+                    logger.debug("send bearing: " + message_bearing)
                     mother.ws.send(message_nearest)
-                    #logger.debug("send nearest: " + message_nearest)
+                    logger.debug("send nearest: " + message_nearest)
                     mother.ws.send(message_daytime)
-                    #logger.debug("send daytime: " + message_daytime)
+                    logger.debug("send daytime: " + message_daytime)
                     mother.ws.send(message_around)
-                    #logger.debug("send around: " + message_around)
+                    logger.debug("send around: " + message_around)
                     mother.ws.send(message_coords)
-                    #logger.debug("send coords: " + message_coords)
-
+                    logger.debug("send coords: " + message_coords)
+                    logger.debug("mother:")
+                    logger.debug(mother)
+                    #queue.put(message_bearing)
+                    #mother.event_generate("<<check_queue>>")
+                    
+    
                     #logger.debug("send data: " + message)
                     
                     if calibrate_active:
@@ -1196,8 +1215,9 @@ def watch_clipboard():
                     Old_time = New_time
 
                     #-------------------------------------------------------------------------------------------------------------------------------------------
+                    #winsound.PlaySound("SystemHand", winsound.SND_ALIAS)
                 
-NaviThread=threading.Thread(target=watch_clipboard)
+NaviThread=threading.Thread(target=watch_clipboard,args=(queue,))
 
 
 
@@ -1232,16 +1252,16 @@ def preload_poi_data():
     if datasource == "starmap":
         try:
             logger.debug("Starmap.tk as datasource...")
-            url = "https://starmap.tk/api/v1/oc/index.php?system=Stanton"
+            url = "https://starmap.tk/api/v2/oc/index.php?system=Stanton"
             response = requests.get(url)
             ##logger.debug("Response: " + str(response.status_code))
             if response.status_code == 200:  # Erfolgreiche Anfrage
-                #logger.debug(str(response.text))
+                logger.debug(str(response.text))
                 #cleanresponse = re.findall('[{.*}]', response.text)
                 data = response.json()  # JSON-Daten aus der Antwort extrahieren
                 # Mit den erhaltenen Daten arbeiten
                 #logger.debug("data:" + str(data))
-                #logger.debug('00')
+                logger.debug('00')
                 tdata=str(data).replace("\'","\"").replace("None","0")
                 counter = 0
                 new_tdata = ""
@@ -1250,15 +1270,16 @@ def preload_poi_data():
                     if letter == "{":
                         letter = "\"oc_" + str(counter) + "\":{"
                     new_tdata = new_tdata + letter
-                tdata=new_tdata.replace("[","{\"Containers\":{").replace("]","}}").replace("Microtech","microTech").replace("Stanton Star","Stanton")
-                #logger.debug('01')
+                tdata=new_tdata.replace("[","{\"Containers\":{").replace("]","}}").replace("Stanton Star","Stanton")
+                logger.debug('01')
                 #logger.debug(str(tdata))
                 tmpdata = json.loads(tdata) #lets convert to internal layout
                 #tmpdata=data
-                #logger.debug('0')
-                #logger.debug(str(tmpdata))
+                logger.debug('0')
+                logger.debug(str(tmpdata))
                 for container_name in tmpdata['Containers']:
-                    tmpdata['Containers'][container_name]['Name'] = tmpdata['Containers'][container_name].pop('Planet')
+                    logger.debug(container_name)
+                    tmpdata['Containers'][container_name]['Name'] = tmpdata['Containers'][container_name].pop('ObjectContainer')
                     tmpdata['Containers'][container_name]["X"] = tmpdata['Containers'][container_name].pop("XCoord")
                     tmpdata['Containers'][container_name]["X"] = tmpdata['Containers'][container_name]["X"] * 0.001
                     tmpdata['Containers'][container_name]["Y"] = tmpdata['Containers'][container_name].pop("YCoord")
@@ -1277,14 +1298,21 @@ def preload_poi_data():
                     tmpdata['Containers'][container_name]["qy"] = tmpdata['Containers'][container_name].pop("RotQuatY")
                     tmpdata['Containers'][container_name]["qz"] = tmpdata['Containers'][container_name].pop("RotQuatZ")
                     tmpdata['Containers'][container_name]['POI'] = {}
-                for old_container_name in tmpdata['Containers']:
-                    if old_container_name.startswith("oc_"): 
-                        new_name = tmpdata['Containers'][old_container_name]['Name']
-                        logger.debug("old : "+ str(old_container_name) + " - new_name: " + str(new_name))
-                        tmpdata['Containers'][new_name] = tmpdata['Containers'].pop(old_container_name)
+                logger.debug(tmpdata['Containers'])
+                
+                modified_data = {v['Name']: v for k, v in tmpdata['Containers'].items()}
+                logger.debug(modified_data)
+                tmpdata['Containers'] = modified_data
+                
+                #for old_container_name in tmpdata['Containers']:
+                    
+                #    if old_container_name.startswith("oc_"): 
+                #        new_name = tmpdata['Containers'][old_container_name]['Name']
+                #        logger.debug("old : "+ str(old_container_name) + " - new_name: " + str(new_name))
+                #        tmpdata['Containers'][new_name] = tmpdata['Containers'].pop(old_container_name)
                 
                 
-                #logger.debug('1')
+                logger.debug('1_')
                 #logger.debug(str(tmpdata))
                 #logger.debug('2')
                 #data = json.loads(str(tmpdata))
@@ -1295,7 +1323,7 @@ def preload_poi_data():
                 Database = tmpdata
                 #logger.debug(str(Database["Containers"]))
                 for i in Database["Containers"]:
-                    #logger.debug(i)
+                    logger.debug(i)
                     Container_list.append(Database["Containers"][i]["Name"])
                 #logger.debug(str(Container_list))    
                
@@ -1303,7 +1331,7 @@ def preload_poi_data():
                 print("Fehler beim Abrufen der Daten. Statuscode:", response.status_code)
             
             logger.debug("getting POIs for merge from starmap...")
-            url = "https://starmap.tk/api/v1/pois"
+            url = "https://starmap.tk/api/v2/pois"
             response = requests.get(url)
             if response.status_code == 200:  # Erfolgreiche Anfrage
                 data = response.json()  # JSON-Daten aus der Antwort extrahieren
@@ -1320,24 +1348,29 @@ def preload_poi_data():
 
                 for entry in tmpdata:
                     logger.debug(str(entry))
-                    entry['Name'] = entry.pop('PoiName')
-                    #logger.debug("1")
-                    entry['Container'] = entry.pop('Planet')
-                    #logger.debug("1")
-                    entry['X'] = entry.pop('XCoord')
-                    #logger.debug("1")
-                    entry['Y'] = entry.pop('YCoord')
-                    #logger.debug("1")
-                    entry['Z'] = entry.pop('ZCoord')
-                    #logger.debug("1")
-                    if entry['QTMarker'] == 1:
-                        entry['QTMarker'] = "TRUE"
+                    if entry['System'] == "Stanton":
+                        entry['Name'] = entry.pop('PoiName')
+                        #logger.debug(entry['Name'])
+                        entry['Container'] = entry.pop('Planet')
+                        #logger.debug("1")
+                        entry['X'] = entry.pop('XCoord')
+                        #logger.debug("1")
+                        entry['Y'] = entry.pop('YCoord')
+                        #logger.debug("1")
+                        entry['Z'] = entry.pop('ZCoord')
+                        #logger.debug("1")
+                        if entry['QTMarker'] == 1:
+                            entry['QTMarker'] = "TRUE"
+                        else:
+                            entry['QTMarker'] = "FALSE" 
+                        #logger.debug("done entry")
+                        
+                        if entry['Container'] != "" and entry['Container'] in Container_list:
+                            Database['Containers'][entry['Container']]['POI'][entry['Name']] = entry
+                        else:
+                            logger.debug("Also not added: " + str(entry))
                     else:
-                        entry['QTMarker'] = "FALSE" 
-                    #logger.debug("done entry")
-                    
-                    if entry['Container'] != "" and entry['Container'] in Container_list:
-                        Database['Containers'][entry['Container']]['POI'][entry['Name']] = entry
+                        logger.debug("entry not added as not Stanton System: " + str(entry))    
                 
                 #logger.debug("Database: "+str(Database['Containers'])) 
                 #add OM Markerss
@@ -1438,7 +1471,7 @@ def reset_buttons():
     mother.ws.send(message_coords)
     
     mother.ws.send(message_oms)
-    
+
        
 
 class StartNavi(Action):
@@ -1447,7 +1480,10 @@ class StartNavi(Action):
 
 
     def on_key_up(self, obj: events_received_objs.KeyUp):
-        global Destination, Database
+        global Destination, Database,CoordinateTimeoutThread,stop_coordinatetimeout
+        CoordinateTimeoutThread=threading.Thread(target=coordinatetimeout) #Prepare a new thread
+        stop_coordinatetimeout = False
+        CoordinateTimeoutThread.start()
         current_container = Destination["Container"]
         #logger.debug(str(Database["Containers"][current_container]))
         
@@ -1486,7 +1522,7 @@ class Calibrate(Action):
             NaviThread.join()
             stop_navithread = False
             calibrate_active = False
-            NaviThread=threading.Thread(target=watch_clipboard) #Prepare a new thread
+            NaviThread=threading.Thread(target=watch_clipboard,args=(queue,)) #Prepare a new thread
             logger.debug(f"...stopped")
             reset_buttons()
             watch_clipboard_active = False
@@ -1605,6 +1641,7 @@ class StartNaviToSavedPOI(Action):
         global message_pois,Database,Container_list,Space_POI_list,Planetary_POI_list,preloaded,mother,pi_context,startnavitosavedpoi_button_context
         startnavitosavedpoi_button_context = obj.context
         mother=self
+        mother.bind("<<check_queue>>",check_queue)
         if preloaded == False:
             preload_poi_data()
         try:
@@ -1684,7 +1721,7 @@ class StartNaviToSavedPOI(Action):
             stop_navithread = True
             NaviThread.join()
             stop_navithread = False
-            NaviThread=threading.Thread(target=watch_clipboard) #Prepare a new thread
+            NaviThread=threading.Thread(target=watch_clipboard,args=(queue,)) #Prepare a new thread
             logger.debug(f"...stopped")
             reset_buttons()
             watch_clipboard_active = False
@@ -1793,7 +1830,7 @@ class StartNaviToKnownPOI(Action):
                     logger.debug("Cannot join thread")
                     watch_clipboard_active = False
                 stop_navithread = False
-                NaviThread=threading.Thread(target=watch_clipboard) #Prepare a new thread
+                NaviThread=threading.Thread(target=watch_clipboard,args=(queue,)) #Prepare a new thread
                 logger.debug(f"...stopped")
                 reset_buttons()
                 watch_clipboard_active = False
@@ -1889,7 +1926,7 @@ class Sandcavestour(Action):
                 sandcavetour_active = False
                 Destination_queue = []
                 sandcavetour_init_done = False
-                NaviThread=threading.Thread(target=watch_clipboard) #Prepare a new thread
+                NaviThread=threading.Thread(target=watch_clipboard,args=(queue,)) #Prepare a new thread
                 logger.debug(f"...stopped")
                 reset_buttons()
                 self.set_state(obj.context, 0)
@@ -1919,6 +1956,7 @@ class StartNaviToCustomPOI(Action):
         logger.debug("Custom Destination set to: "+str(Destination))
         if watch_clipboard_active == False:
             mother=self
+            logger.debug(mother)
             NaviThread.start()
             self.set_state(obj.context, 1)
 
@@ -1926,18 +1964,20 @@ class StartNaviToCustomPOI(Action):
             stop_navithread = True
             NaviThread.join()
             stop_navithread = False
-            NaviThread=threading.Thread(target=watch_clipboard) #Prepare a new thread
+            NaviThread=threading.Thread(target=watch_clipboard,args=(queue,)) #Prepare a new thread
             logger.debug(f"...stopped")
             reset_buttons()
             watch_clipboard_active = False
             #NaviThread.start()
             self.set_state(obj.context, 0)
             #logger.debug(f"...and restarted")
+            
 
 
 
 
 if __name__ == '__main__':
+    #StreamDeck.bind("<<check_queue>>",check_queue)
     StreamDeck(
         actions=[
             UpdateCurrentLocation(),

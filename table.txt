@@ -1,87 +1,85 @@
-5965.00,-472.14,5667.01,Port Olisar,https://verseguide.com/location/STANTON/II/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdejRrltITC1Ff6NHt2bzYd0jcIGEW7yM1NHsJMZ58Kld8rk,Crusader
-5295.52,-863.19,5282.24,Orison,https://verseguide.com/location/STANTON/II/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONe5wTIyF3tQJP26u21NGBEkSDHppXu8VEMvSSI99oSK087U8,Crusader
-5333.06,-778.50,5253.85,Floating Island Cluster,https://verseguide.com/location/STANTON/II/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONejhVHDHVT9KeTvUHvWhRV9iLDyhROH3jf7pADUCe22zJRCD,Crusader
-252.52,62.92,13.87,Security Post Criska,https://verseguide.com/location/STANTON/2A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONctvTb2K1qFwv4v4S3P45f0FJVtT7CPn3RNsmSbaY6GrHsBT,Cellin
+197.59,57.56,-160.06,UGF SP Dipur,https://verseguide.com/location/STANTON/2A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcH45bsMlJI4yDwU7OmaaOSwWt22mKfUK9p5bCLh5H47RKVG,Cellin
 -111.53,-56.30,-228.95,Julep Ravine Aid Shelter,https://verseguide.com/location/STANTON/2A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcXqJFCsO0PWzPcYmLEbPh2eRgxNKlBIGQ9FSbAPbtjjgZd9,Cellin
 97.75,-173.76,167.08,PRIVATE PROPERTY,https://verseguide.com/location/STANTON/2A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcXuNi1F4PLgBL9GHe7nEPJdffKazyKZzcgZlxM4QXISelEM,Cellin
--214.32,-149.14,3.97,Security Post Lespin,https://verseguide.com/location/STANTON/2A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcXzBVcCn5S1ydgf2ar6Hj9athB62t4RSBpHiwInY0fYSQmf,Cellin
 -194.28,151.72,85.00,Flanagan's Ravine Aid Shelter,https://verseguide.com/location/STANTON/2A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdy4QEwsYuOf32vhmyJqT6Vk1sIaFJBjxNEMPc2369TGettJ,Cellin
-197.70,57.54,-159.95,Security Post Dipur,https://verseguide.com/location/STANTON/2A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdy5yUQ6FnFvDOkRjc6geAGtdGL5Sz5m9CkfuminmgrLWWrN,Cellin
 100.14,27.70,239.02,Terra Mills HydroFarm,https://verseguide.com/location/STANTON/2A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdy9GhlJmPHh6puafaBucaph6PCQEKTtVSPEuafssOsuU6pv,Cellin
-146.83,135.25,167.47,NT-999-XV,https://verseguide.com/location/STANTON/2A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONezBiJILdPMI229R5Uw7bjYqHxEz4WG6SliNr3ecC070mWfV,Cellin
+252.52,62.92,13.99,UGF SP Criska,https://verseguide.com/location/STANTON/2A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONe5tz6ZkTRlotQLbG2BKbfeTQWJ7H8McgoOYQAWSgduHTISG,Cellin
+146.85,135.26,167.45,UGF NT 999 XV,https://verseguide.com/location/STANTON/2A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpCg8hjtsA7C4PuJBpi9pZsrUZtgwYLnfvA5F4ECoXCWABh4,Cellin
 -198.66,50.79,160.87,Mogote Aid Shelter,https://verseguide.com/location/STANTON/2A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpFx3OPHvQqey3Kmvxuy7NAEq5cIkj8SVH0ehBZI7QzuP8zT,Cellin
 -89.47,106.72,220.04,Gallete Family Farms,https://verseguide.com/location/STANTON/2A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpFx3P4wSqoouRX2Tman8IVwnPMtlDCDhDN6EJL3IDM5uM1o,Cellin
+-214.29,-149.18,4.12,UGF SP Lespin,https://verseguide.com/location/STANTON/2A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpSX7TmXjCS7Btr0rXXBcLmj8GTQyUOOtxWteByCPFMZ70t5,Cellin
 3.27,13.09,-260.32,Hickes Research Outpost,https://verseguide.com/location/STANTON/2A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpVXOTpSKlJpOBAC7iXZxpvNdCqY2njOv1WNnVToT1RCXLRE,Cellin
 -241.16,2.40,-98.70,Tram & Myers Mining,https://verseguide.com/location/STANTON/2A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqqgZplzYGctqI65wyI3Yzx1i4jdncPHB4TYaXIKsUBSsdq2,Cellin
 3.02,-257.94,-37.13,Ashburn Channel Aid Shelter,https://verseguide.com/location/STANTON/2A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqqBeNuZMGPATBDjQWefRqnifcbYDvu0N3CPfjCDI8H2JwDq,Cellin
--259.27,-68.98,-122.78,Cave S24,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONc9xZEcXuc6fvRO0YwPFCDHoun25WSb4FiFrOGVAwyW56Vge,Daymar
--272.65,102.06,48.64,Cave N09,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONccC2oZXlE9QsonP4D9zOr1wvDFj8JZ1bYUgKe7oqE5MrVfC,Daymar
--283.73,54.10,-60.17,Cave 11,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONccCLqgMSu2BkXox4elgxisg7tOX5rASzZ5Xij3JelaOuFmW,Daymar
-130.92,-259.37,52.01,Cave 7,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcH8QStwctlgY6TARbKVWUQP54miGLEpRap2EAvqMqxglLQA,Daymar
-22.75,-203.78,212.30,Cave 30,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcJWDi6pP8224wgEVLldjs5Zsph1oZTZ9ADupITCBH6bfTaQ,Daymar
--120.90,206.52,-172.84,Cave 4,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcK83YJKJeCYAac7GUwMsHN8y9jZTWv6NDafQwt865iFzd2d,Daymar
+-259.27,-68.98,-122.78,Cave 03J,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONc9xZEcXuc6fvRO0YwPFCDHoun25WSb4FiFrOGVAwyW56Vge,Daymar
+-272.65,102.06,48.64,Cave 57P,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONccC2oZXlE9QsonP4D9zOr1wvDFj8JZ1bYUgKe7oqE5MrVfC,Daymar
+-283.73,54.10,-60.17,Cave 59L,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONccCLqgMSu2BkXox4elgxisg7tOX5rASzZ5Xij3JelaOuFmW,Daymar
+-223.89,65.62,180.75,UGF SP Prashad,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcH40syNOH1CtG1VIkg3orStSj2sE8hDQdWzMVFXESLxHrPp,Daymar
+130.92,-259.37,52.01,Cave 20P,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcH8QStwctlgY6TARbKVWUQP54miGLEpRap2EAvqMqxglLQA,Daymar
+22.75,-203.78,212.30,Cave 17T,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcJWDi6pP8224wgEVLldjs5Zsph1oZTZ9ADupITCBH6bfTaQ,Daymar
+-120.90,206.52,-172.84,Cave 51H,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcK83YJKJeCYAac7GUwMsHN8y9jZTWv6NDafQwt865iFzd2d,Daymar
 -18.94,293.34,25.48,Nuen Waste Management,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcXqMCdqPepiqzEGZwYquGWfs1wMubThAcWFbXLIN7JOt8tV,Daymar
-254.47,-117.37,-92.82,Cave 6,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcXOYDuBBitVbbApg6qn2IPM7FZdfTvJh6JuYc3lxOTTfSlN,Daymar
-58.66,231.24,-173.75,Cave 12,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcXPMJbUc2Gj1Awu5z1P6YJTacwq782GJG0HJF0YnvWpOO1K,Daymar
+254.47,-117.37,-92.82,Cave 26K,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcXOYDuBBitVbbApg6qn2IPM7FZdfTvJh6JuYc3lxOTTfSlN,Daymar
+58.66,231.24,-173.75,Cave 43H,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcXPMJbUc2Gj1Awu5z1P6YJTacwq782GJG0HJF0YnvWpOO1K,Daymar
+37.25,203.88,-209.98,UGF TPF,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONd0GWlDWzi9B9RgGlrEETsokfH9ilUb5Jqmo44WR0ckJDyIt,Daymar
+188.86,33.75,-224.16,UGF SP Moluto,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONd0GXjSdLb4TXRtavFPD2Ppu4JHZfM2v3e8Q13PA1mUKK1rP,Daymar
 146.62,-177.09,-184.86,Kudre Ore,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONd0PJHEa4liU1U8vCA2PveolO3htqZlXLnvLtbV6CtgQvp5j,Daymar
-193.90,150.95,-163.82,Cave 1,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONd0TPjh4i34gnje9B5brv0AYE0jTNUIt78PpMEo2h822r6LP,Daymar
--6.48,-90.41,281.12,Security Post Thaquray,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdefSGnwrDT9dvCQ4nmf9LH195StghtksqtoonMxFLKKogv2,Daymar
-251.05,153.85,-23.80,NT-999-XVI,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdevYfm8d1kpnnRwERfYVfqzEIlzdFHBA6zZ9kkfURy0jiTL,Daymar
--18.60,289.50,-56.77,Cave 16,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdew0nRDqdJypSsjZ72nrYlxvzEYqwrTK5lJmvWK9EU59w0G,Daymar
--256.00,-142.17,36.21,Cave 10,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdhsDUNuqQx2pQRe3BfSD4Eb5VlADrrVJCwjIeURAecuOsHb,Daymar
+193.90,150.95,-163.82,Cave 37H,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONd0TPjh4i34gnje9B5brv0AYE0jTNUIt78PpMEo2h822r6LP,Daymar
+250.90,154.06,-24.26,UGF NT 999 XVI,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdenWQdr934ZTOS0mW7wItBQMxZSc8pCSvAMgjucwjR32brY,Daymar
+-18.60,289.50,-56.77,Cave 46L,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdew0nRDqdJypSsjZ72nrYlxvzEYqwrTK5lJmvWK9EU59w0G,Daymar
+80.44,242.72,-147.63,JumpTown,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdeAPYNvcoOSYh26ITQf1OydtKTwApX0qljHwr4IM6FcM1HE,Daymar
+-256.00,-142.17,36.21,Cave 05N,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdhsDUNuqQx2pQRe3BfSD4Eb5VlADrrVJCwjIeURAecuOsHb,Daymar
 -138.11,-24.46,-259.85,Tamdon Plains Aid Shelter,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdv1xXMdpqj88Ogw6T93CufM1nJAeuLDvBYUvVPOgaBHCMdu,Daymar
-38.49,203.59,-210.03,TPF,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdvhIzLjkcrRvfDrnYchWjI91x0dpXkaEtHsvVuWXYxCiP1E,Daymar
--283.24,53.89,62.89,Cave 29,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdvpO2T43MnXRkHuYZrTi2PzLyQR7ApJ9TaS8xMGpaGgwIQK,Daymar
-94.70,-48.92,275.46,Cave 0,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdy0RVJnsHglwcnqSuVGObg5Zy1UshL1p77DqwvX8IUtdpe6,Daymar
--11.29,95.31,279.13,Cave 23,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdy4TMuNb4BZKDKIiP6c3DdnxrtPFUsfdRThNvzaG7V32N6Z,Daymar
+-283.24,53.89,62.89,Cave 59P,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdvpO2T43MnXRkHuYZrTi2PzLyQR7ApJ9TaS8xMGpaGgwIQK,Daymar
+94.70,-48.92,275.46,Cave 26W-1,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdy0RVJnsHglwcnqSuVGObg5Zy1UshL1p77DqwvX8IUtdpe6,Daymar
+-11.29,95.31,279.13,Cave 47W,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdy4TMuNb4BZKDKIiP6c3DdnxrtPFUsfdRThNvzaG7V32N6Z,Daymar
 -18.17,180.36,-232.76,ArcCorp Mining Area 141,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdycWXFrfVWoinZ31X3y5KcxtIk6eio5NJTwOJOoshKE6v8E,Daymar
-108.06,250.30,113.12,Cave N24,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdLvFzcKgzRVj1xJUmVPhBPPstWLXs0rVLwgsJdfrAz75t9C,Daymar
--218.45,191.80,50.70,Cave 24,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdOIxENjb39CAUQIkY3F5s1k7IuDsl3jloSYaY2wso1907Yv,Daymar
+108.06,250.30,113.12,Cave 42Q,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdLvFzcKgzRVj1xJUmVPhBPPstWLXs0rVLwgsJdfrAz75t9C,Daymar
+-6.98,-89.67,281.36,UGF SP Thaquray,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdLEsX6AyvgzZZ0GVdpQpa5F15AficBSfB5OnKDSEKLcRWYh,Daymar
+-218.45,191.80,50.70,Cave 54P,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdOIxENjb39CAUQIkY3F5s1k7IuDsl3jloSYaY2wso1907Yv,Daymar
 -51.85,280.93,75.33,Dunlow Ridge Aid Shelter,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdOLKpOxfUrfElTuVHjXA2SnKrMlKmXlBcafIeIcoUW0lakw,Daymar
 -4.42,279.07,95.73,Wolf Point Aid Shelter,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONe2gBXCPXwZUUje9L83lg1dm1FFMzw4KhWW9TiuAHx9U8G6Y,Daymar
-110.43,-9.16,-273.40,Cave 14,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONej6qTOqcviQ7NQetgPsVBnfOlSaho3qJWwNTOM4v06oeDw9,Daymar
--17.53,-235.61,-176.99,Cave 20,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONem9HEOewSiqTkoRxHxNGvBDB4uj8uBpces0FeRU6Qr746G5,Daymar
--24.45,190.72,223.88,Cave 21,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONezBgAVttX0CG54BphsPv8goNzKSsDVGNcU8PU33BXqitDGS,Daymar
+110.43,-9.16,-273.40,Cave 30D,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONej6qTOqcviQ7NQetgPsVBnfOlSaho3qJWwNTOM4v06oeDw9,Daymar
+-17.53,-235.61,-176.99,Cave 15H,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONem9HEOewSiqTkoRxHxNGvBDB4uj8uBpces0FeRU6Qr746G5,Daymar
+-24.45,190.72,223.88,Cave 47U,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONezBgAVttX0CG54BphsPv8goNzKSsDVGNcU8PU33BXqitDGS,Daymar
 200.55,-104.92,190.10,Eager Flats Aid Shelter,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONezRw6Pvugw8jwZb10XB36ctGo2I0AgICV9QT7dj6rviPV0n,Daymar
 -176.68,-161.26,173.85,Brio's Breaker Yard,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONeA3D7a34GpwvnLhuwvoRlnPsOWgF7kPnWZsKxyVuiMyUHbI,Daymar
-61.88,-249.12,-145.43,Cave S29,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONeCMDEYXNWVPEVTFiwGBK9wUYAPK5J11M6R5Ovga1SysuAhz,Daymar
--213.40,53.82,-196.77,Cave 25,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONeD3Cd8SWbmUEOVDwnDnxEiMi3NMDnX01g2FV72mopymM6hr,Daymar
-146.36,-177.11,-185.07,Cave S38,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONplLjz8VFj8LFfHUwhaXNvfzU0KWdkLB7lxLjbBHqiqglzKr,Daymar
--56.56,132.21,257.68,Cave 18,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONplUbEf4YqYumrBL7JFBLpaPqXJFVLVDzIlNNc28LTl5A2P4,Daymar
-203.58,80.58,198.17,Cave 19,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpov74humCcrX2Z5cxIOxiGkGoozxi6tfsqiinea5Y7OmLHH,Daymar
-189.06,33.69,-224.00,Security Post Moluto,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpoLlBL1q7MXQXRrwIPOlri5Wl7TsmCwHR55KIzeX1oczN50,Daymar
+61.88,-249.12,-145.43,Cave 18J,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONeCMDEYXNWVPEVTFiwGBK9wUYAPK5J11M6R5Ovga1SysuAhz,Daymar
+-213.40,53.82,-196.77,Cave 58G,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONeD3Cd8SWbmUEOVDwnDnxEiMi3NMDnX01g2FV72mopymM6hr,Daymar
+146.36,-177.11,-185.07,Cave 22H,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONplLjz8VFj8LFfHUwhaXNvfzU0KWdkLB7lxLjbBHqiqglzKr,Daymar
+-56.56,132.21,257.68,Cave 49V,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONplUbEf4YqYumrBL7JFBLpaPqXJFVLVDzIlNNc28LTl5A2P4,Daymar
+203.58,80.58,198.17,Cave 34T,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpov74humCcrX2Z5cxIOxiGkGoozxi6tfsqiinea5Y7OmLHH,Daymar
 126.03,-149.58,221.25,Shubin Mining Facility SCD-1,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpC04wvfydv9NNc8ikRLQJDoF11XdXsJsugY2oYFSn9XCS9Y,Daymar
 57.55,-92.27,-274.25,Bountiful Harvest Hydroponics,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpCAspt9t6GiDIPnjuPyJzMKMzdqye3jalWLkW5g5hpvYhPo,Daymar
--175.41,146.97,186.27,The Garden,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpFc4zfhUXCfrt8wGYe6yAu7CCjZzRGlGmNX9LxgRdFnluTP,Daymar
--137.60,-155.59,-210.13,Cave 27,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpFcQwP9TrgBFwsvDKvh5VCKgyJQc5VCw0V6cumsqlNU96No,Daymar
-223.89,183.63,-59.68,Cave 13,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpFt18iaKq2bvqrVI6pE5SzMfFHLzksrI6JbxRxazMqOJok1,Daymar
--260.86,-43.31,-131.05,Cave 9,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpSTS0Rd333tvX36kzXtbC2Dn8Gw6C2NvKBi5bGPXFT54Reu,Daymar
+-137.60,-155.59,-210.13,Cave 09G,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpFcQwP9TrgBFwsvDKvh5VCKgyJQc5VCw0V6cumsqlNU96No,Daymar
+223.89,183.63,-59.68,Cave 37L,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpFt18iaKq2bvqrVI6pE5SzMfFHLzksrI6JbxRxazMqOJok1,Daymar
+-260.86,-43.31,-131.05,Cave 02J,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpSTS0Rd333tvX36kzXtbC2Dn8Gw6C2NvKBi5bGPXFT54Reu,Daymar
 81.01,-280.68,43.65,Kudre Ore Mine (Closed),https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpW5b8HTVWZvR1aMCSu6pWfXj5nXFy5GEYKlse4oRAO0Lzta,Daymar
--201.79,-45.28,-210.86,Cave 15,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpWddwvCU5Ch4lHGhNN1Ti05ykB7HyhZiSDiRukTnBb3LG1U,Daymar
--223.51,65.90,181.09,Security Post Prashad,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONq9rYni7n4TdCzBpSogr4UnvQaAHGlnlsaUyg8mHZaFEiq8e,Daymar
--26.99,-62.41,287.80,Cave 22,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqcAJTpCgIQCCORvr2dP11qoLuRVucnF6rYs0vsntO0oCA6e,Daymar
-123.52,254.32,86.14,Cave 17,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqcE3vQk9fPCZ1yWOdY8JHKEtuLWAyeO88iH3cLpSccU7FAl,Daymar
-270.00,-37.16,-114.39,Cave 5,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqq9FgFXJwQDRFlAyZYFJEZ4QtqWFk7sP0G53509RMtJ0RMi,Daymar
--128.79,-265.68,-7.49,Cave 8,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqHaa60EePU7s5gI8XNV9NnzSrobSCRQJZvxVahl6C5Fbcl6,Daymar
--135.06,-105.57,240.68,Cave 2,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqJY1efVt4IvhN7Njxh91EtfTvqVt90oQMWcyNUoiNONpf6Z,Daymar
-104.78,-54.62,270.34,Cave 3,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqK5Zw37kqLemgdqLMKkL1wKFrufN718MCopQBHiAKP4KbgY,Daymar
--141.22,-73.40,-248.56,Cave 26,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqKePNVVcGZ4zlWTti1owICJbkjCCDgcuCBnxtQV6fxmR43m,Daymar
+-201.79,-45.28,-210.86,Cave 03G,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpWddwvCU5Ch4lHGhNN1Ti05ykB7HyhZiSDiRukTnBb3LG1U,Daymar
+-26.99,-62.41,287.80,Cave 12X,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqcAJTpCgIQCCORvr2dP11qoLuRVucnF6rYs0vsntO0oCA6e,Daymar
+123.52,254.32,86.14,Cave 41Q,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqcE3vQk9fPCZ1yWOdY8JHKEtuLWAyeO88iH3cLpSccU7FAl,Daymar
+270.00,-37.16,-114.39,Cave 29K,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqq9FgFXJwQDRFlAyZYFJEZ4QtqWFk7sP0G53509RMtJ0RMi,Daymar
+-175.97,146.72,186.03,UGF TheGarden,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqH66hMKigAjC1Qvc45vEE83bjuRqOJIDgNnMZ2IQcU6YbQy,Daymar
+-128.79,-265.68,-7.49,Cave 11M,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqHaa60EePU7s5gI8XNV9NnzSrobSCRQJZvxVahl6C5Fbcl6,Daymar
+-135.06,-105.57,240.68,Cave 07U,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqJY1efVt4IvhN7Njxh91EtfTvqVt90oQMWcyNUoiNONpf6Z,Daymar
+104.78,-54.62,270.34,Cave 26W-2,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqK5Zw37kqLemgdqLMKkL1wKFrufN718MCopQBHiAKP4KbgY,Daymar
+-141.22,-73.40,-248.56,Cave 05E,https://verseguide.com/location/STANTON/2B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqKePNVVcGZ4zlWTti1owICJbkjCCDgcuCBnxtQV6fxmR43m,Daymar
 231.59,-210.28,13.28,Deakins Research Outpost,https://verseguide.com/location/STANTON/2C/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcK00CHwk39U01c5tZK3IIEoiZh8DVV3fD38gH5ECM6UGla4,Yela
 -21.22,310.79,30.93,Talarine Divide Aid Shelter,https://verseguide.com/location/STANTON/2C/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcK84aSdg2YtQ4fMBlfxNeDgqvwPi6RcUWpsTtDSqR4lwNme,Yela
 207.94,24.05,-232.78,Aston Ridge Aid Shelter,https://verseguide.com/location/STANTON/2C/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcXL12C2LnokXe7G4XJ0H7x4ZdQ9phmRNmvY3yqq9waRZTrG,Yela
-0.11,-0.42,-313.11,Utopia,https://verseguide.com/location/STANTON/2C/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONd0XSVcQUYFRdaUqxrNkIeT0qbO5gR5Vnt4O7Fbpnh0YC8gm,Yela
+241.07,96.29,-175.02,UGF SP Opal,https://verseguide.com/location/STANTON/2C/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONde8xeBCCVI2U2FxnZ0Sv1L6IUNwGWtvjTqkZlpPLS2rT3Ue,Yela
 49.00,-275.61,-140.14,Benson Mining Outpost,https://verseguide.com/location/STANTON/2C/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdeoFRL5VMNZxaHZAvmAbHBI6HB4g9aI9gkRsama6G5KXRf8,Yela
--208.49,53.18,-227.35,Security Post Wan,https://verseguide.com/location/STANTON/2C/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONduTsOZQx6g5Vuz6eAtv24KRIPiAYUDdVmztcbeINyyWNVPz,Yela
+-139.77,-254.31,118.13,UGF Connors,https://verseguide.com/location/STANTON/2C/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONduXviswWODZa2NJB03VidOICYGbaFnBR7ZlaTESg1MjxF9H,Yela
 6.02,222.36,220.31,ArcCorp Mining Area 157,https://verseguide.com/location/STANTON/2C/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdy1wfZSUG8WfMVDH5ohXBxME3JOJ6bGwmoQzOmifzXpgfcw,Yela
+-254.26,-153.39,99.06,UGF Afterlife,https://verseguide.com/location/STANTON/2C/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdLPUO6ycy9uYuEj3fEdUVPsgVph2QfjMevQNYhcXsOcpeYU,Yela
 -31.29,-118.13,288.31,Kosso Basin Aid Shelter,https://verseguide.com/location/STANTON/2C/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONej5LXBRDRY4z6r9FDbHUqfd9YiSxVudiLoTdzP3N5pX2TcO,Yela
 -568.66,383.57,-2.04,Grim HEX,https://verseguide.com/location/STANTON/2C/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONej6r5tLmdvHeZMu1u4cBpWFpkQgYkjAV77XpQ6VivPqtdg7,Yela
+-0.17,-1.85,-313.08,UGF Utopia,https://verseguide.com/location/STANTON/2C/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONejuJY7puvE1q5eUj19IszsGV3r3tHapUJefoteB8sZRS84o,Yela
 -205.66,-73.99,224.32,NT-999-XX,https://verseguide.com/location/STANTON/2C/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONemlOG5Zaqy22dDjO0OnqXNoGMVfbHni0oGT4VDb47Mt3TJE,Yela
-54.79,55.83,-303.33,NT-999-XXII,https://verseguide.com/location/STANTON/2C/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONezADrq2kSqLuKQlL674W2tCL2FC0QPg7Ezf6xgM1Ywz4Qwg,Yela
 -488.75,518.90,4.33,Miner's Lament,https://verseguide.com/location/STANTON/2C/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpln2uqhVfQPSs4Y969sKneTnijSdYJjv6yOSdEhl1Q1OukA,Yela
--254.07,-153.32,99.65,Afterlife,https://verseguide.com/location/STANTON/2C/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpSHIgM9kuPoO7LpVxoQavcuCdmesBNIIsnJj60ppDIQzxUR,Yela
--139.10,-254.34,119.07,Connor's,https://verseguide.com/location/STANTON/2C/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpT19oNfw4aepqvXO7wkVHOUwUMNYsOg45j1Wz3A4Bd0bMdR,Yela
+54.56,55.94,-303.34,UGF NT 999 XXII,https://verseguide.com/location/STANTON/2C/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpFcTsvCbLEkUUzBj0LyzLs6xIYuq8M3NoQrMl5FJ7BYc9lF,Yela
 -275.72,124.07,81.72,Nakamura Valley Aid Shelter,https://verseguide.com/location/STANTON/2C/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqcQauUwo7XFUapyUNnAepy1NJyRqEk0OoaRZwPY2mbmXJ08,Yela
-241.09,96.62,-174.89,Security Post Opal,https://verseguide.com/location/STANTON/2C/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqqdLFeTpaCqyym4ndZZO5hZlY7SVW8hUHMuoweNSEud2blz,Yela
+-208.37,53.17,-227.45,UGF SP Wan,https://verseguide.com/location/STANTON/2C/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqqFekBZWFcQQqFJoQyxsk6LhLmPNkY3MIH2sZBuqtE3ZBKA,Yela
 -321.11,-602.97,-415.86,Area 17,https://verseguide.com/location/STANTON/III/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONc9qFwL5T3bLywjoQpxgFT8G4gTxycYB8dpVRtVFqzPD5K3r,ArcCorp
 -747.73,-104.34,264.60,Area 06,https://verseguide.com/location/STANTON/III/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONc9tW0F0uXIyyPrXN63UvNXqUCCx4AW57lhBbWMtCKFaQ0Bd,ArcCorp
 504.20,393.22,480.79,Area 11,https://verseguide.com/location/STANTON/III/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcq2TfR9Y3kVNQDhjpuXgvCDabxZbrhKKCn4lPElVYNhGlUM,ArcCorp
@@ -90,156 +88,171 @@
 -746.27,-155.44,-245.26,The Sky Scraper,https://verseguide.com/location/STANTON/III/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONemdOqyZ31KnIYDKBQH9XGxSWCX101yO2cabgA8LfDJVQhi9,ArcCorp
 -771.96,-321.35,-359.51,Baijini Point,https://verseguide.com/location/STANTON/III/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpCgT5Nimr57cOhK2BXBs0CZAnztWyMFZzwH8Wn1x3HRZBKU,ArcCorp
 -747.41,-116.73,-262.09,Area18,https://verseguide.com/location/STANTON/III/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpSL1HAF7LS9i2IdQSbOHy4Zx8Nf9dv3pTkH8Rh7FaUpypLt,ArcCorp
+-173.50,124.81,66.78,UGF SPAL 12,https://verseguide.com/location/STANTON/3A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcGNOERSmUbAThp41bPiD5eIqtSoWmcaG3pdnj0RiEzLckMn,Lyria
+-194.04,-68.00,-89.48,UGF Buckets,https://verseguide.com/location/STANTON/3A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcGODBs8FckRYh9yRDsSdeHbjXNa9xzEZCzqkomgigOaiiSR,Lyria
 -91.99,92.48,182.18,The Orphanage,https://verseguide.com/location/STANTON/3A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcHgcakptevCH6D6i5K5XIfoTSDznBbJKOxrHFuu4JGOaz3w,Lyria
-207.81,-67.76,-49.79,Elsewhere,https://verseguide.com/location/STANTON/3A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcKgddILSIHcgkysrZEsqAEVN09w4kjDJccGNMcOmUfk6LhJ,Lyria
+-53.37,-209.90,-57.12,UGF Wheelers,https://verseguide.com/location/STANTON/3A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcHkbT0OMn9T9rBVwcTVFljlSeUoh5tKcXrgXkB1CLAdyTul,Lyria
+95.43,160.94,-122.85,UGF TeddysPlayhouse,https://verseguide.com/location/STANTON/3A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcJWGdHH25KEv7ASjXamkG3KUnkW9R3GIMpYfoyUswgrREjv,Lyria
 5.31,-193.82,-112.54,Humboldt Mines,https://verseguide.com/location/STANTON/3A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcXqKPeFPttPm3JXTwwWtfnbSvph8bfQ9VA8N8LTcLMjWog6,Lyria
--194.00,-67.97,-89.59,Buckets,https://verseguide.com/location/STANTON/3A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcXzDUsWQwKkG50gTY3SEm974nQxW6Tj2VbDKDLQtHgvqkDk,Lyria
-38.02,-125.93,181.51,Shubin Processing Facility SPAL-7,https://verseguide.com/location/STANTON/3A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcXCRO9pbEKhpPI1g60Yu2qZc4qE5abySvpshgbSSIKmNyn4,Lyria
--147.58,-17.20,167.63,Operations Depot Lyria,https://verseguide.com/location/STANTON/3A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcY1fnKX2tODi7v342d2ioZMX8WpUe0pdRoXicNawZoSXQYi,Lyria
+207.83,-67.34,-50.27,UGF Elsewhere,https://verseguide.com/location/STANTON/3A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdefTuHjbbtU87vkBLXzEPeOrj16KB5S72NWMdtFaDamlD1v,Lyria
 150.64,-53.62,156.67,Shubin Mining Facility SAL-2,https://verseguide.com/location/STANTON/3A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdezYW4IbFlOyB46lB0OWlcgkoD0ks1oy2TF8AacZtAPA7VH,Lyria
-96.03,159.44,-123.93,Teddy's Playhouse,https://verseguide.com/location/STANTON/3A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdhkyoPu3wX2Nes3gXKo7a6RxEmvFoyWHMLb5jB0C2kB9jJH,Lyria
--39.94,-66.32,209.90,Shubin Processing Facility SPAL-16,https://verseguide.com/location/STANTON/3A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONduSPEP3Ef7TjvQi6MuURBApjACBxG411J52wPctpxwUJ0va,Lyria
--180.64,104.24,81.10,Ruins,https://verseguide.com/location/STANTON/3A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONe2gH3up1Ai05oxxC48Z1TWD2JzX5zQVzUXXHLn452s8El9y,Lyria
-146.84,-168.91,8.17,Shubin Processing Facility SPAL-9,https://verseguide.com/location/STANTON/3A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONemlTxXMx5DhkVEFeOKn2mrjHu53tzwACrcqYbrPZC1zkL8p,Lyria
--208.11,11.14,-82.14,Shubin Processing Facility SPAL-3,https://verseguide.com/location/STANTON/3A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONeCYQx2bGsYyv8kRcCxMa6KxOu256Ca7byz7PBlZ5ZZVpsoh,Lyria
+-180.64,104.24,81.10,Ruins 56Q,https://verseguide.com/location/STANTON/3A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONe2gH3up1Ai05oxxC48Z1TWD2JzX5zQVzUXXHLn452s8El9y,Lyria
+-213.84,-65.16,16.51,UGF LaunchPad,https://verseguide.com/location/STANTON/3A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONe5wMF3617LT8Rnyu4K1FfD5pT9K8BRJPmKRgAWRyglR7qT3,Lyria
+37.91,-126.14,181.39,UGF SPAL 7,https://verseguide.com/location/STANTON/3A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONemdIxFjTNwfD8N3DQoGi1e3ZdEBIxIw6kM8XBYZ58QwDJol,Lyria
+-208.40,11.28,-81.32,UGF SPAL 3,https://verseguide.com/location/STANTON/3A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONeCUHYOFYI0yIdQiO1Mx4WTFfUjAsdnSPk4G3pKpQOHWvaD1,Lyria
 181.80,128.17,24.94,Loveridge Mineral Reserve,https://verseguide.com/location/STANTON/3A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONplDY5tKnYfI9mPuRKNpOcVUWLC8teK3Z0hBe7HRPTVJbwFG,Lyria
--213.82,-65.23,16.65,Launch Pad,https://verseguide.com/location/STANTON/3A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpC00BGeqxyGcOyIXWhcT6TRvq9MTNGYkoxu3xGtQWKSgvy9,Lyria
-59.23,68.20,204.93,The Pit,https://verseguide.com/location/STANTON/3A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpCc4EXnl7GdddxlBwDeiJXpjSQjUjMFlkj0epmzOuXz8W5b,Lyria
--52.96,-209.88,-57.55,Wheeler's,https://verseguide.com/location/STANTON/3A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpThj2KcexY2NZ8bjertowTRmnEmV37qmFg1HIglJWQXhUfe,Lyria
--173.53,124.41,67.44,Shubin Processing Facility SPAL-12,https://verseguide.com/location/STANTON/3A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONq9Z6B1bb9934VBGvhaQwX0MKssWBixZBp5Ar6RYCCcCb80a,Lyria
+146.68,-169.04,8.34,UGF SPAL 9,https://verseguide.com/location/STANTON/3A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpC8RSKiWh0Uh63mgoYp1xTLQWXqGlAbSpyJ1nlswowg72qp,Lyria
+-40.10,-66.26,209.89,UGF SPAL 16,https://verseguide.com/location/STANTON/3A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpTe2lyUUuPLZvJuGDjzTdfCwPhXQ1EW9DUkj03h9MvMEDL8,Lyria
+-19.53,13.46,222.72,UGF SPAL 21,https://verseguide.com/location/STANTON/3A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpW1cpRUZR4lfG9pU7S56NamrlLj5hQqFTXOpGkTnJgzCv0B,Lyria
+-147.80,-17.45,167.34,UGF OldSecDep,https://verseguide.com/location/STANTON/3A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqcMVMhEgyLsx8kUeyaZpkGqn4G8LALm6QHZeWshGdYMuDMJ,Lyria
+59.09,68.12,205.00,UGF ThePit,https://verseguide.com/location/STANTON/3A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqtpN2skV4jJVC4AiwJhcbgfLN0bU9Z4HBYGpNwNilIfPHYo,Lyria
 98.07,78.36,185.82,Shubin Mining Facility SAL-5,https://verseguide.com/location/STANTON/3A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqGQCJ2hkADc99Jyoe9njD8IIA9LrKcIulZZp2yozg6MREM9,Lyria
--18.30,13.91,222.81,Shubin Processing Facility SPAL-21,https://verseguide.com/location/STANTON/3A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqK24Hz2ZxVvAkdu73nhnVSCwrj1hB5ZFqobpw9YaBz4mn1G,Lyria
 -178.19,97.76,-196.34,ArcCorp Mining Area 048,https://verseguide.com/location/STANTON/3B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONc9q1cDZPB34aI8EPJYbThXRUovDYEzKqhdzk4MQvoP311We,Wala
 -20.62,268.99,87.53,Shady Glen Farms,https://verseguide.com/location/STANTON/3B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcqaYKs3oBzJWia3cOxmesXwFFTVd6ZWN1Xs7e5V9wV5YKQg,Wala
--113.21,179.69,187.25,Good Times Temple,https://verseguide.com/location/STANTON/3B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONd0DAVKNkpCcaqqupzw8csxdX6xbXdCjAJmq2TzIwxlHcosw,Wala
+-113.30,179.51,187.37,UGF GoodTimesTemple,https://verseguide.com/location/STANTON/3B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcHgTdFEJBhuR2KkehPsmCVtPAB96EbBEQApcxunoUhbnHfj,Wala
+-277.36,50.11,27.88,UGF ACPC 115,https://verseguide.com/location/STANTON/3B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdes2Cmi8LJ0K462UeMqtX3BKR1hkOMD9PSEFCZwKqY2j4Yp,Wala
 -42.55,279.06,19.44,Samson & Son's Salvage Center,https://verseguide.com/location/STANTON/3B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdvd2UQIcJqVlURWIFtv588TLk8vlQ9TI5INaSqvoOYlIdW3,Wala
-130.42,-247.61,43.16,ArcCorp Processing Center 123,https://verseguide.com/location/STANTON/3B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdLDNPeNZ50Zcym4U4NXui97btMUlK74saszKVsy9rxzYrqc,Wala
 -282.80,14.11,10.62,ArcCorp Mining Area 045,https://verseguide.com/location/STANTON/3B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdLHMKa8saApJWt2QHHcP96X12yd7obSdw6zXOFptFfbJ90l,Wala
-62.31,114.55,251.52,Lost and Found,https://verseguide.com/location/STANTON/3B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONe2kMt3N10ZAvnFOrfJXJVDNE3LKY22NiYxeUb7kq0h2wDDz,Wala
--277.35,50.04,28.04,ArcCorp Processing Center 115,https://verseguide.com/location/STANTON/3B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONejavwiSf1mSPtlSJSmwKM6rssfOrd0hdekjwRAPp1Msqsxj,Wala
+62.56,114.33,251.56,UGF LostAndFound,https://verseguide.com/location/STANTON/3B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONezYNFIMIlrSCEzoLZ36TddwdysnfEvgU9jGfYCXwVaPmLWu,Wala
 -21.04,-247.55,-132.57,ArcCorp Mining Area 061,https://verseguide.com/location/STANTON/3B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpSH1Z3kmvNFELidhmch02lJj3PrwLDrwu5xIIBfZ6UIQ9Rm,Wala
 116.55,-50.15,253.15,ArcCorp Mining Area 056,https://verseguide.com/location/STANTON/3B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqqx92luiM1xj14ZOSX1lEaX5pLJSA0f2fzKh4nB61WqanLB,Wala
--942.48,-317.03,122.75,HDSF-Hiram,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONc9lWAomqC05vAdGEFCVsiVI23igy5XInxIuazhz3MaNH250,Hurston
-33.03,-87.21,-996.45,Cave 23,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONc9K5En9dIudZQAarxxMoMTsIBp45cWluIUTz7dF2A6fzbFP,Hurston
--266.17,-159.48,952.33,HDSF-Ishmael,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONccG7YJlZ9cRoAqwcaplhgU4XYXHOXQGphpJ6OyPtDFnhIqQ,Hurston
+130.62,-247.52,43.13,UGF ACPC 123,https://verseguide.com/location/STANTON/3B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqHmcXLyqAHS5vPKzCq1itYqJNMlA9nsuCedBguR8XtU8RWy,Wala
+33.03,-87.21,-996.45,Cave AZN-1,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONc9K5En9dIudZQAarxxMoMTsIBp45cWluIUTz7dF2A6fzbFP,Hurston
+449.31,838.69,310.72,UGF HDSF Elbridge,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONccKaOWSiuZf0LyXuh4YSRrrKuuO6O7BnJr2LJ8C8YZKbdBu,Hurston
 -556.13,-72.59,-828.07,HDMS-Oparei,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcq7C0kgiHYYD9gBdzLoe61Nor0fyOzF9nHqbEgvo7Ga7f9j,Hurston
-87.84,-43.82,-996.02,Cave 36,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcqaXL2k9mN7gEkGSj5fpmKprPJqLpx3tuNkzBeDZpUVMYa5,Hurston
--6.55,62.51,-998.50,Cave 34,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcqnNC9V8Q8hggNbjzcVQoDeOwYlm8syWhYACVaB07ieW926,Hurston
-249.57,398.57,-884.80,HDSF-Zacharias,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONctj10pots9sMPnpuBuiO2XqWMAvhjLxiwFQjuqnf5ABhWlO,Hurston
+87.84,-43.82,-996.02,Cave AZN-2,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcqaXL2k9mN7gEkGSj5fpmKprPJqLpx3tuNkzBeDZpUVMYa5,Hurston
+-6.55,62.51,-998.50,Cave BAM,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcqnNC9V8Q8hggNbjzcVQoDeOwYlm8syWhYACVaB07ieW926,Hurston
 1.14,-794.28,607.65,Reclamation & Disposal Orinth,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcGNTA6inhVHJ6l55FSwNMKNNGdxmNNdirXWvevcff7q9SM5,Hurston
--406.40,437.57,805.36,Cave 3,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcGRStz3Ev7vyqoYEs54wGOdFNlb3t0TdGzzVwH1vubseIMB,Hurston
--236.85,-810.89,537.74,HDSF-Adlai,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcHgWbrBNiXKvqwDLDxAEIsDZrF2noWLmiaNkmzhhrzIxNIN,Hurston
+-406.40,437.57,805.36,Cave 53U-1,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcGRStz3Ev7vyqoYEs54wGOdFNlb3t0TdGzzVwH1vubseIMB,Hurston
 -328.99,-752.43,572.12,Lorville,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcHkbRlYfphjNWTzVcbJhKMPs2ZmnhDLoC8JIgihZjxuUX53,Hurston
-113.79,-189.12,-975.77,Cave 22,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcHkdOi2ZHf6dmsVmSNU9ZJRsl22zH9X2hZWCxbEGzlcSFmY,Hurston
+113.79,-189.12,-975.77,Cave 21C,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcHkdOi2ZHf6dmsVmSNU9ZJRsl22zH9X2hZWCxbEGzlcSFmY,Hurston
+-878.67,-467.86,111.09,Ludlow (Garage Town),https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcJVXZhNv9OjePTZfVuwfXojF72dUgLE4GFMhjn71yC9oO6m,Hurston
 985.56,90.03,149.90,HDMS-Pinewood,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcKc5QMdg4G6qQuqCGIERtfMFyRQsYvjoWHWvUEJHqEnRkhH,Hurston
-536.06,28.14,846.22,Cave 18,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcKgbfSiIgNvFXjq5njf8fCnt6dW427H1M3E0ruyIYSr6D3y,Hurston
--366.14,458.66,812.63,Cave 4,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcKgQy833zanwxDMoFXQXLyk0szrYdZf9sqaI3uOgEVY9HOp,Hurston
+536.06,28.14,846.22,Cave 31V,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcKgbfSiIgNvFXjq5njf8fCnt6dW427H1M3E0ruyIYSr6D3y,Hurston
+-366.14,458.66,812.63,Cave 52U,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcKgQy833zanwxDMoFXQXLyk0szrYdZf9sqaI3uOgEVY9HOp,Hurston
+108.16,-133.66,986.69,Zephyr (Windmill),https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcXqOytS9ZZt4U8bwwq1H6oIdgjyyTya218p1BprbgavHVno,Hurston
+766.53,-74.21,-640.27,HDSF Palomar,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcXyOaQ64G2EGDnJkoOgPfyPwizBmxgNedxmymf1gTCxVECm,Hurston
 -284.48,-730.50,620.92,HDMS-Edmond,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcXCTzTyj2BNmNYY4IyUgZQSWLnFumCo85lmLtKVcJKjE1F1,Hurston
--514.42,-161.13,-843.35,Cave 21,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcXXS2oGDfJlLoIz7W4ZPEQSgRMBTATiX3iCQWYfKc45HREQ,Hurston
+-514.42,-161.13,-843.35,Cave 03E,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcXXS2oGDfJlLoIz7W4ZPEQSgRMBTATiX3iCQWYfKc45HREQ,Hurston
 626.17,-583.97,-518.49,HDMS-Hadley,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcY1TyCxEiWBVvnmpCzt7KrbOE6tVliEknu18aRUjtTTv93H,Hurston
-100.20,8.48,-995.84,Cave 35,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONd0GVx8kgClnxLtuLpzRUxl2A6HmWBg06de0YR8M3UeQ1e8k,Hurston
--68.34,-78.16,-996.64,Cave 27,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONd0KZY092RejlOg8aQm8DDaZlGi70d9vh24U3HTOocIWKhhu,Hurston
--869.99,336.53,-360.43,Cave S21,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdefPyVmRWHib5CUtK4f419SxjPJCb4VkXEwLvmK9BKewqZH,Hurston
--265.78,-62.21,963.27,Cave 11,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdefQzujsIIbznYooxArOLTiRQP7YLoUKg2alWm4YvaihPz3,Hurston
--557.60,680.53,-477.82,HDSF-Breckinridge,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdezYVjXLkDJAJLKGLAcyqz14RZokhrceJDepR9ADMBp4Fqy,Hurston
--64.79,11.53,-998.43,HDSF-Rufus,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdhjTsLLUjt6WCiENxGCQlPI9Ixl1gAeodIVOc7LdCcXlytx,Hurston
--87.60,293.72,952.97,Cave 9,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdhkAykBeHG2B591hwSDiA2kp3zMTsBl3WZP6wxDRz9FkRGC,Hurston
--78.78,188.73,980.01,Cave 1,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONduOFWFRWNbSNtRpnjMywfaQc0YANk8WHPL6YnlMKwZnUaRH,Hurston
--396.85,413.03,823.48,Cave 5,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONduXvigHow0QsfhC2bm1fbMHCOtIBYA2QC3pf8Z7Ao1n0Pl2,Hurston
--79.94,189.23,979.79,Cave 0,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONduXyoLMnzRsB2EPoPBMF07RvAd8hzAKYIuNPtzLGlvmRHqA,Hurston
--28.93,-339.18,941.98,Cave 12,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdv8Vb94CaaOKTnBBb3VoSNyAKPzlQM7Rs1SB4pdTpFMiS5k,Hurston
--441.72,371.46,820.41,Cave 2,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdvdI3FijqqdCEOPYtpqMRBehvPBeCkriCKnMxEg9vPRm7Yg,Hurston
-177.79,-197.56,-964.30,Cave 25,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdOIyBQ1eVkDDL3b5rGvQ4htG3AT4F7h92vtS2vJIaOyEJqn,Hurston
-899.38,-406.06,168.52,HDSF-Sherman,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdOPV5a2oVbOLTTpbdi0qZZB1SuOhTFHiYbUVvbv0ySuB4YD,Hurston
--9.46,241.67,971.78,Cave 6,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONe2cH8tmZNYbXD4ys7b0sj1DxPR177Eq5hrYizGzLHd4K37Q,Hurston
--555.73,-85.99,-827.05,Cave 20,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONe2sKVOcdClopJtzXqnVY1KN5EC3fuenJqVNTFlLP6lBicg9,Hurston
--532.08,-12.08,-847.18,Cave 19,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONe5IVC087N7KVk7ze4HoJM9K2o45rft90snKk3oeh6DJd43g,Hurston
-153.30,-86.87,-985.51,Cave 31,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONeiTB3Dm8NuCiNE5e7I0DLE8AHNff6js8jwC0PockWd1xBVs,Hurston
+100.20,8.48,-995.84,Cave BAN,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONd0GVx8kgClnxLtuLpzRUxl2A6HmWBg06de0YR8M3UeQ1e8k,Hurston
+-68.34,-78.16,-996.64,Cave AZM,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONd0KZY092RejlOg8aQm8DDaZlGi70d9vh24U3HTOocIWKhhu,Hurston
+-869.99,336.53,-360.43,Cave 47K,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdefPyVmRWHib5CUtK4f419SxjPJCb4VkXEwLvmK9BKewqZH,Hurston
+-265.78,-62.21,963.27,Cave 03X,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdefQzujsIIbznYooxArOLTiRQP7YLoUKg2alWm4YvaihPz3,Hurston
+-87.60,293.72,952.97,Cave 48X,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdhkAykBeHG2B591hwSDiA2kp3zMTsBl3WZP6wxDRz9FkRGC,Hurston
+-455.12,-200.50,867.56,Cutter's Rig (Ocean Forge),https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdhvWnzDo3lCkmC2a6J5t2C6f65blQPpyJG53kZaZcEAPzE2,Hurston
+-196.59,-197.87,962.00,Finn's Folly (Hydrona Farm),https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdhE7yizQ4RlPQdeWCjdCPpwJNq1AFVr0jQucnLcT267CUEy,Hurston
+-78.78,188.73,980.01,Cave 49X-1,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONduOFWFRWNbSNtRpnjMywfaQc0YANk8WHPL6YnlMKwZnUaRH,Hurston
+-396.85,413.03,823.48,Cave 53U-2,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONduXvigHow0QsfhC2bm1fbMHCOtIBYA2QC3pf8Z7Ao1n0Pl2,Hurston
+-79.94,189.23,979.79,Cave 49X-2,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONduXyoLMnzRsB2EPoPBMF07RvAd8hzAKYIuNPtzLGlvmRHqA,Hurston
+249.46,398.48,-884.88,UGF HDSF Zacharias,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdv5ABUc9RHzxL1voOJlLyvfXHHF8dFSL3RzZJjOSSRa56w9,Hurston
+-28.93,-339.18,941.98,Cave 15W,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdv8Vb94CaaOKTnBBb3VoSNyAKPzlQM7Rs1SB4pdTpFMiS5k,Hurston
+-441.72,371.46,820.41,Cave 54U,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdvdI3FijqqdCEOPYtpqMRBehvPBeCkriCKnMxEg9vPRm7Yg,Hurston
+177.79,-197.56,-964.30,Cave 22C,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdOIyBQ1eVkDDL3b5rGvQ4htG3AT4F7h92vtS2vJIaOyEJqn,Hurston
+-9.46,241.67,971.78,Cave 46X,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONe2cH8tmZNYbXD4ys7b0sj1DxPR177Eq5hrYizGzLHd4K37Q,Hurston
+-555.73,-85.99,-827.05,Cave 02F,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONe2sKVOcdClopJtzXqnVY1KN5EC3fuenJqVNTFlLP6lBicg9,Hurston
+-492.33,768.28,410.87,UGF HDSF Hobart,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONe2FER04TvXzqHGO8qx6BU7QkKdtMdRhio1c9I7IO69PNMHQ,Hurston
+-532.08,-12.08,-847.18,Cave 01E,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONe5IVC087N7KVk7ze4HoJM9K2o45rft90snKk3oeh6DJd43g,Hurston
+-266.78,-158.62,952.32,UGF HDSF Ishmael,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONeiTx8RgBgNlSCn5XyPhLXpXQlNgmHwI2T7ZCcR47ZjLEPCB,Hurston
+153.30,-86.87,-985.51,Cave 26C,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONeiTB3Dm8NuCiNE5e7I0DLE8AHNff6js8jwC0PockWd1xBVs,Hurston
 443.32,891.52,101.51,HDMS-Thedus,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONejezaklsdNUYAYxM3f65F96sOmlCpa2Tv23Nk8fRylMqv4K,Hurston
-9.33,-38.80,-999.70,Cave 33,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONejtW1r4baVK4Pe5x3Z1FIAvrnQiRQcjkBjlRDOZI28aaolu,Hurston
--354.40,230.59,-907.32,Cave 29,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONemdLuVD1ZtRIlFOpt6SnJejWNpNm34133sCIcJysy9kp6Tv,Hurston
-121.12,-810.96,-573.53,HDSF-Tamar,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONemhO93yRj08Gpvw9y0cz7vQogARif0fC7KKuSZsgreZEZMh,Hurston
-16.62,-3.80,1000.35,Cave 14,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONezExs44mN81fIonCPMCjThWMJtg6MoBz24qdz4umHba8ssW,Hurston
--928.27,318.89,-203.47,Cave S11,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONezEAevgb1BnDd8dtt7mSVylP2P766umQSsdSJDFdSyOwtFw,Hurston
--360.87,201.30,-912.25,Cave 28,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONezJm6qwFKovuKMcjBTZG8mISrYvaUpFUlyBJfDPqcyfiVxM,Hurston
-36.13,218.32,-976.07,Cave 26,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONezMIrTcafC3LJ4BH0fef6TXLdQip1RMgDZeW49lErU3xKn4,Hurston
-902.27,383.79,-203.76,HDSF-Colfax,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONezQIcvhjR2m9H0CvXFHUuMot8Ntt3LNgAhpE6c0YfEbVDoz,Hurston
-68.70,-207.76,-976.38,Cave 37,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONezQL6uwsjtM6OKG3HGFmPBdT5SJdp2u9Hc9bgL4m7jwP99v,Hurston
--898.69,420.10,-141.75,HDSF-Damaris,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONeCNpDAKLyVsPAJUnkGZLdYGJbnS67gYxYdgjQtWwrDSnRwm,Hurston
-56.01,-419.68,-906.07,Cave 24,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONeD6WMOsnmXp4vy6d4LAER1kZJ78TzKNzM2mBxe2geB0wTag,Hurston
--303.62,-801.39,518.05,Cave N31,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONplDY5ZJDhWwdHJQb25fwhj1XS4SDyKBZAHbWEcXnocIImPB,Hurston
-120.34,238.56,965.22,Cave 8,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONplPn0SBnnWaOufJ1tAmyKSfsKozZ9tDt7fny4DI6VLu0Tpb,Hurston
-63.56,-969.07,-242.52,HDSF-Hendricks,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONplU8TMXMHd5mdUbLRyXDPaqUKck7FMbwhS4zSXYCC04Zywm,Hurston
--895.86,365.59,-252.55,HDSF-Barnabas,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpCcUmcYASq8rcrbCVRA2tx8t5YMjyNek6HToKxDQ1aIuqNr,Hurston
+-942.50,-317.02,122.60,UGF HDSF Hiram,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONejlUreqzucBQmH7quAF454uCRZTirfTVFJ6bjNsviidL6Jx,Hurston
+-895.94,365.60,-252.26,UGF HDSF Barnabas,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONejqJ57bZeKKbdiE3rSZPf84KXxq2TyJtaZfHoQEnHECTklm,Hurston
+9.33,-38.80,-999.70,Cave AZN-3,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONejtW1r4baVK4Pe5x3Z1FIAvrnQiRQcjkBjlRDOZI28aaolu,Hurston
+-354.40,230.59,-907.32,Cave 55D,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONemdLuVD1ZtRIlFOpt6SnJejWNpNm34133sCIcJysy9kp6Tv,Hurston
+16.62,-3.80,1000.35,Cave YZG,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONezExs44mN81fIonCPMCjThWMJtg6MoBz24qdz4umHba8ssW,Hurston
+-928.27,318.89,-203.47,Cave 57L,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONezEAevgb1BnDd8dtt7mSVylP2P766umQSsdSJDFdSyOwtFw,Hurston
+-360.87,201.30,-912.25,Cave 56D,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONezJm6qwFKovuKMcjBTZG8mISrYvaUpFUlyBJfDPqcyfiVxM,Hurston
+36.13,218.32,-976.07,Cave 44C,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONezMIrTcafC3LJ4BH0fef6TXLdQip1RMgDZeW49lErU3xKn4,Hurston
+68.70,-207.76,-976.38,Cave 19C,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONezQL6uwsjtM6OKG3HGFmPBdT5SJdp2u9Hc9bgL4m7jwP99v,Hurston
+63.63,-969.03,-242.67,UGF HDSF Hendricks,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONeA3AkXFXajKCxmsvqwqz292fBgHFodLhKTpxXiLJHSTdlup,Hurston
+-557.69,680.56,-477.69,UGF HDSF Breckinridge,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONeCMATzOORuJoqzGurAsONWD9tLwgmsherzH7HnulES6zkwt,Hurston
+-64.68,11.41,-998.44,UGF HDSF Rufus,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONeCUNRL9JHGoARHCUw7dShmQu1zSiWJb71aTVrqmvBfCuYVA,Hurston
+902.22,383.91,-203.81,UGF HDSF Colfax,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONeD3Co2IVn4zHFMuYltyq0oVzsN10T1PMTrNfVcy6gBVgiaf,Hurston
+56.01,-419.68,-906.07,Cave 17D,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONeD6WMOsnmXp4vy6d4LAER1kZJ78TzKNzM2mBxe2geB0wTag,Hurston
+-303.62,-801.39,518.05,Cave 12R,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONplDY5ZJDhWwdHJQb25fwhj1XS4SDyKBZAHbWEcXnocIImPB,Hurston
+-455.40,-202.82,866.88,Weeping Cove (Calypso Island),https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONplHhTwQCHAQWLnR9U0BccZdjJFiLlbPM8He92VWfbUxoE97,Hurston
+120.34,238.56,965.22,Cave 41X,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONplPn0SBnnWaOufJ1tAmyKSfsKozZ9tDt7fny4DI6VLu0Tpb,Hurston
+-237.09,-810.78,537.79,UGF HDSF Adlai,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONplTnHPS94CVkTWcK4oJIn9CtmkDB2Mdv023KsZgGo51oAJc,Hurston
 -507.74,-903.46,496.49,Everus Harbor,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpCgT5Nimr57cOhK2BXBs0CZAnztWyMFZzwH8Wn1x3HRZBKU,Hurston
--357.90,-743.79,565.64,Cave N34,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpCgW1RVJ9soYcpv9RhWtmGqizz1bt9JBpAlztQsRjRTz0tQ,Hurston
--287.10,123.93,951.13,Cave 10,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpFcPyDfh1ap3viYDDalCNo81osCBwyT7lJZFLB8ieMJmudC,Hurston
-766.60,-74.22,-640.18,HDOF-Palomar,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpSTP5urTxVmqxWh8GntxKwMBZy846EEo5nMAPCwVclDQENR,Hurston
-348.14,109.40,931.30,Cave 17,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpT1UosPeqhyvHHfJUGaKfuo0SFCpVNebVjRm8Us2M3GczME,Hurston
-3.40,-20.29,-1000.29,Cave 32,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpVTOm8mAdNQDhBslvLr3fCTyzCL9ad6yIjVH3bufvYTrmrD,Hurston
-70.55,293.57,954.97,Cave 7,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpW9eYA0xE99V8psATLYAtjNEDqi3YYTujJvXuxfr2bPEypd,Hurston
--160.05,-65.46,985.63,Cave N80,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONq9sLlhhI9qd1d0sfhRY9fejs7TS6hlT8Ifgm8zcV5MBVPKJ,Hurston
-386.88,-171.17,906.75,Cave 15,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONq9IcUfIBVi3m5KR67TDYfwzD1z8mya9wGlHOuqbkF7EKwOG,Hurston
--119.64,293.53,-949.42,Cave 30,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONq9MgKmL2u57JB3i2vuVBx4byemEa6gGMQMVOJVfLXL5XdxJ,Hurston
--492.22,768.37,410.82,HDSF-Hobart,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqq9F6fbubTglpV9OKS9UgStirhkXPnftsusBmHUFchRKgIa,Hurston
-82.11,-199.09,977.41,Cave 13,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqql23u2veSUe1a6NOl9Ssk2Et1jlGtHnue6behQeCZHtSny,Hurston
+-357.90,-743.79,565.64,Cave 11S,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpCgW1RVJ9soYcpv9RhWtmGqizz1bt9JBpAlztQsRjRTz0tQ,Hurston
+374.82,724.63,579.69,UGF HDSF Tompkins,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpCsj0LsGBlttDfeVhyTBGO4ly8iDEXWbAVedSib5h2q9kC8,Hurston
+-847.55,517.45,127.62,UGF HDSF Millerand,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpCwqyTv3PflFTtIlOVffuxxBauk4xlXIiFe9zQsxwuLBbqR,Hurston
+-287.10,123.93,951.13,Cave 57W,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpFcPyDfh1ap3viYDDalCNo81osCBwyT7lJZFLB8ieMJmudC,Hurston
+-679.77,262.27,-686.08,Picker's Field (Trash Town),https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpFg7dzppxHjkbjEDhOuaoROAZiHxgwcJA4Ec0NI1Gmf5JQi,Hurston
+-154.01,128.32,979.77,Maker's Point (Wire City),https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpSHG7vyivwNn4slnzRJ073wMijQYvoKfWQb0ZtTiP3004QM,Hurston
+348.14,109.40,931.30,Cave 33W,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpT1UosPeqhyvHHfJUGaKfuo0SFCpVNebVjRm8Us2M3GczME,Hurston
+3.40,-20.29,-1000.29,Cave AZN-4,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpVTOm8mAdNQDhBslvLr3fCTyzCL9ad6yIjVH3bufvYTrmrD,Hurston
+70.55,293.57,954.97,Cave 43X,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpW9eYA0xE99V8psATLYAtjNEDqi3YYTujJvXuxfr2bPEypd,Hurston
+-160.05,-65.46,985.63,Cave YZJ,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONq9sLlhhI9qd1d0sfhRY9fejs7TS6hlT8Ifgm8zcV5MBVPKJ,Hurston
+386.88,-171.17,906.75,Cave 27W-1,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONq9IcUfIBVi3m5KR67TDYfwzD1z8mya9wGlHOuqbkF7EKwOG,Hurston
+-119.64,293.53,-949.42,Cave 49D,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONq9MgKmL2u57JB3i2vuVBx4byemEa6gGMQMVOJVfLXL5XdxJ,Hurston
+352.95,-661.89,663.89,Rappel (Buried Deep),https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqcA6TFy3IZ1RbYnV00QnCIt20nnMEqLARs7tFTgt8kkWiuV,Hurston
+121.29,-810.95,-573.51,UGF HDSF Tamar,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqcMaKZFIRhoRnHiC0HkKdUd4J71NIr0wnITfNi2DF31iY9X,Hurston
+82.11,-199.09,977.41,Cave 19X,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqql23u2veSUe1a6NOl9Ssk2Et1jlGtHnue6behQeCZHtSny,Hurston
+-898.57,420.34,-142.01,UGF HDSF Damaris,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqqtViUoj11nG9fYrcFtV2FlbB0UWXQc7T4LHoL2NGXao0UF,Hurston
+899.44,-406.04,168.24,UGF HDSF Sherman,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqqBcFW9kM9QMjFESCiX1KRgKcKhrlTEHz9SLjpTNFaLpVfP,Hurston
 -648.61,198.31,735.12,HDMS-Stanhope,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqqG4pnY5oRCIaAFuVvhK31Okmq5FbAWyegf5BDHJQhH2QCJ,Hurston
 -203.38,-806.58,557.78,HDMO-Calthrope (NA),https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqttPvcGAlNCsoMClSQp4YkFOk3OllyWz4UFTHVP9rr6zjgg,Hurston
--847.55,517.60,126.80,HDSF-Millerand,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqtxfaGPUpfUQCTkmithYzYjOULk3b4CWGWzGe0nNnfFRZsQ,Hurston
-329.14,-119.74,937.29,Cave 16,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqGXW3os8tXCD4ksq9RUYEteVQ3O5ltHIOfC1eogKYvsFMk4,Hurston
-449.41,838.67,310.62,HDMS-Elbridge,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqHeTFdpN9co06uqWhZMaLEcTh1lmHQRPe5wuhxYkfnF08V7,Hurston
-374.76,724.55,579.82,HDSF-Tompkins,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqHibjLsqbVcP7IbViygHDONdbR0NBgMYOXykxyadL5IXUIC,Hurston
+329.14,-119.74,937.29,Cave 27W-2,https://verseguide.com/location/STANTON/I/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqGXW3os8tXCD4ksq9RUYEteVQ3O5ltHIOfC1eogKYvsFMk4,Hurston
 339.19,33.69,55.84,HDMS-Lathan,https://verseguide.com/location/STANTON/1A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcqveWSo4z5UMyUuAdxhtHQrJhI6ozX7aC5gpqm5R70KcYnA,Arial
 26.74,-234.70,251.51,HDMS-Bezdek,https://verseguide.com/location/STANTON/1A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONeju1TTKwynNS5SzNwiDMyQwuhATpAa13fTp2U8Kfity7H5f,Arial
-230.51,-109.04,-103.95,Cave S22,https://verseguide.com/location/STANTON/1B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcqeXk2c8ZN03sXiHVPKpcE3EYb1pSZ3pQcp3QsIp9zx1g77,Aberdeen
+230.51,-109.04,-103.95,Cave 26K,https://verseguide.com/location/STANTON/1B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcqeXk2c8ZN03sXiHVPKpcE3EYb1pSZ3pQcp3QsIp9zx1g77,Aberdeen
 -141.57,195.32,132.10,HDMS-Norgaard,https://verseguide.com/location/STANTON/1B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONctzVEgFpVZQ9GJetHWlk4oa1g5tP113dmePJqojkuVYg3ey,Aberdeen
-175.93,-151.29,-146.45,Cave S32,https://verseguide.com/location/STANTON/1B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONe2lsKiNhRTeSqmR6ggIhpiS0CPJSAsiCZV4mx1FKQsuzKWD,Aberdeen
--177.48,203.52,-53.40,Cave S11,https://verseguide.com/location/STANTON/1B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONe2sOOJfK8Ujb3XzyIDfSU93OEfE9GOLnkCWVrZy3YB6xb3o,Aberdeen
-56.81,-124.61,238.53,Cave N60,https://verseguide.com/location/STANTON/1B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpTa2Estr0RsuwWgznSXhktSoFkVgz8xJMA2kbGblZwreXOG,Aberdeen
+175.93,-151.29,-146.45,Cave 24H,https://verseguide.com/location/STANTON/1B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONe2lsKiNhRTeSqmR6ggIhpiS0CPJSAsiCZV4mx1FKQsuzKWD,Aberdeen
+-177.48,203.52,-53.40,Cave 52L,https://verseguide.com/location/STANTON/1B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONe2sOOJfK8Ujb3XzyIDfSU93OEfE9GOLnkCWVrZy3YB6xb3o,Aberdeen
+56.81,-124.61,238.53,Cave 20V,https://verseguide.com/location/STANTON/1B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpTa2Estr0RsuwWgznSXhktSoFkVgz8xJMA2kbGblZwreXOG,Aberdeen
 54.34,217.12,-159.88,Barton Flats Aid Shelter,https://verseguide.com/location/STANTON/1B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpVT5k9J4EUgKyqhh8JKurD6ebCHeEaSbSKi4U5zukLYCWzx,Aberdeen
 44.98,221.56,-156.58,Klescher Rehabilitation Facility,https://verseguide.com/location/STANTON/1B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpW9Y0NmjZXb0hJjMxE9ghhUIpQS0XDnpTZL5hpcT6grdWsX,Aberdeen
-77.25,19.43,263.11,Cave N73,https://verseguide.com/location/STANTON/1B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONq9ANJgXRZr7P6lt0gyyg3vf7eUuVuzD1L57UdnwkvdP05jV,Aberdeen
+77.25,19.43,263.11,Cave 33X,https://verseguide.com/location/STANTON/1B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONq9ANJgXRZr7P6lt0gyyg3vf7eUuVuzD1L57UdnwkvdP05jV,Aberdeen
 270.58,47.40,-11.40,HDMO-Dobbs (NA),https://verseguide.com/location/STANTON/1B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqcMS1HH2N09ZsbBYz2pwLNSonpr7KTb2UEOg1OXseBf2Gbv,Aberdeen
 -26.95,180.22,206.88,HDMS-Anderson,https://verseguide.com/location/STANTON/1B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqqtViFz0V1XfgeisoevvngbPxidoTqShtd8oqsCjdlmSvgV,Aberdeen
 -140.70,287.92,-116.69,HDMS-Perlman,https://verseguide.com/location/STANTON/1C/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONe2oJeIYXWsskYpnP74bUUxK6IVSDinNQOJHr7i5Tx6jvlAy,Magda
 -147.38,-292.22,95.25,HDMS-Hahn,https://verseguide.com/location/STANTON/1C/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONej5MM4SkUtpMUapUyHdNVekKIzeuphA49JeOpBq52Uzr3Zd,Magda
 -175.87,-263.38,73.71,HDMS-Ryder,https://verseguide.com/location/STANTON/1D/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONduOH7eqymEBiaZMd8LvZyywfXqnE6fPaXvnXGwHT34U0kzF,Ita
 114.79,219.66,210.47,HDMS-Woodruff,https://verseguide.com/location/STANTON/1D/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqq9FgcnZzGkTkcGV1IbFa2zzvee3VpEDKmU7GgdSHbeeox8,Ita
-201.18,308.98,-929.67,MT DataCenter D79-ECG-R,https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONccSfVSj0b7EwduvvdkhVblFRrVBkJf00ZamwexgYzl0K3DU,microTech
+-735.89,678.30,11.15,Donboro (Megaton),https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONc9uH1WK5McphlyjbPiwUr4bEuf3X8EkMTVC6sdZzHu4gOBX,microTech
+907.00,139.91,-397.66,UGF MTDC 2UB RB9 5,https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONccyJVeEYJ0rKemY2DRl8MP9PavoQf6WuEFU0AB2yluhX9Cw,microTech
+-665.09,726.92,178.06,Moreland Hills,https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONccOSAtmvDayjhPZ7wvHDgZb3OTQJ8GktlGgWo1RYROlKalo,microTech
 520.72,419.36,743.65,New Babbage,https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONctr8iGzZLu0cBhMqKcUZYcbuF8tT86fE0HRzIsnfgjNKJQI,microTech
+733.94,-674.65,101.88,Bloodshot Ridge,https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONctrPnuWIl4q1tB26BqfhvQpVlQQDXESkmB29OJBuDgurYqJ,microTech
 750.61,-207.85,-627.23,Nuiqsut Emergency Shelter,https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONctzUR8suXyqxKRF9tV85br1H1PmHZNCi1KzVcEy8qQq7RFc,microTech
 -172.82,-981.31,97.77,Shubin Mining Facility SM0-13,https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcGWEXKDyQHsvkuneEWbWsvNYOIGaDbwCL4FYnF854DvYLgm,microTech
+916.83,187.16,-354.14,UGF MTDC E2Q NSG Y,https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcHgf51tqw2D1pZm4xElAjw4BIIAzaTgc6OLQKSjnUIDRd5M,microTech
 24.30,-822.59,568.17,Shubin Mining Facility SM0-22,https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcXuQqeYC9q46XnHqpd2pCmYiz47ymEy9ugGq4x5od0EzWrt,microTech
--247.57,892.65,-380.11,MT DataCenter QVX-J88-J,https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONde7HkgHbaHAfRSHWbemm2ms2VpRCVsmsc31XlzU7UyxHlwJ,microTech
+22.40,2.90,-1000.72,UGF MTDC 8FK Q2X K,https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcXCWw10aCHPuOcpZpKwrFOtnGkynj4VnuiVWeiVJGs3Hnev,microTech
+-666.07,726.22,179.52,Razor's Edge,https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcXDDBzIZBe8RIIL0zcIdugerx0A3MFLQ7YnWucPBLTr1yo5,microTech
+200.93,308.74,-929.82,UGF MTDC D79 ECG R,https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcXL221WQ31HVcHipEGl0W63pw92LYwDcpEzTgTXrKyFAwnw,microTech
+-100.84,962.41,-255.72,UGF MTDC 4HJ LVE A,https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONd0T0oPdGhxZoP8275L3l1LfVb5JZOvtYDpJ9q05OjYcIiWY,microTech
+-86.56,218.56,-972.07,UGF MTDC L8P JUC 8,https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONd0XP134ko57Uq18GsjQmfFxm1Yx0bVks5yPkWTPSriTyfyb,microTech
 -693.91,-648.30,316.68,Rayari Deltana Research Outpost,https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdhjQxEafSRBqxlR9IEgPV6BLED98ftNmwSJQaE1Z159bx9E,microTech
-22.27,2.97,-1000.72,MT DataCenter 8FK-Q2X-K,https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONduSLJIDGBzGunC8AzCbjFWeSyQ7o2YNE9GFzr6J3N5seCyx,microTech
-959.83,40.20,-279.23,MT DataCenter 5WQ-R2V-C,https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdv8VckKUoCow3WMuXrNm5TGS962EkPCSew3sU40ekYKdsMK,microTech
 920.21,-389.54,43.84,Shubin Mining Facility SM0-18,https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdycZ5Kij0aqtPDBHWkmHVH6uTmhdVGAT5544yjxLjF0KGcB,microTech
--468.80,801.49,-375.46,MT DataCenter KH3-AAE-L,https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdOUEDbM2pDvYGDyWoFcQ4Y903V37RXuUuZYFPLWrCaAybcJ,microTech
+-468.93,801.47,-375.32,UGF MTDC KH3 AAE L,https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdLHNyG1fsilxFyDgXblzpzvvVvtXPQ782IXwqc8euSiYhko,microTech
 85.48,-950.86,298.80,Shubin Mining Facility SM0-10,https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONe2tA0dsWQhPh6nhw6IfYONBiQZhMugMipmAf67NkGZMSoV4,microTech
+68.36,64.28,-996.49,MT OpCenter TLI-4,https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONe2AYenW0FlbDghLAg3rvjtDw1iNsfm3qIfJx0GoyBoCktrX,microTech
+-687.37,716.61,128.23,Harper's Point,https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONe2MZaA6FQl5ED6gWNnlRqP4y1rJ3yIEVWjKPkiFeRfY4FeJ,microTech
 -127.19,982.00,149.15,Ghost Hollow - Reclaimer,https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONe5wTwHBpyOjUzTlMUZs4xazmtFurmGuZXv09DkXVrLeSQbG,microTech
-68.52,64.21,-996.49,MT OpCenter LTI-4,https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONe5EV6TCwYUPHf6uTWOXr2o5iMXmbPbvAYakCLRFAyIiuVJV,microTech
 938.12,-347.82,31.71,Calhoun Pass Emergency Shelter,https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONe5IZIUT7eUPv8QIdtBBIIKm5MeY11sJNefI1ZO99vylU02G,microTech
 113.57,14.48,-994.36,Outpost 54,https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONej1J9w8YQxEhzL64LcfXmp0HW9Zj87Ct3Ogv2Hq7Ouokrjg,microTech
-916.82,187.36,-354.08,MT DataCenter E2Q-NSG-Y,https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONejawvhUtkGhzveumIEOpqugmDnmTJW9TQZT1tlooHlOubVs,microTech
-808.97,416.80,415.70,Derelict Outpost,https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONemlUIIkBVPC58fupx9TX0jBKcYlVuK3QscahgvzkKQoJM9H,microTech
+959.88,40.29,-279.07,UGF MTDC 5WQ R2V C,https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONejhRO0F31JCIXJvNn3viYfu9pwYZ35Kz7dXXPZcdyHUGXeo,microTech
 63.64,-162.09,985.65,The Necropolis,https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONezZyG3wN6GEBxT9xp0kCoLDOKg0H0IO8qKbD7FxCPK2eHfW,microTech
--160.90,62.28,986.02,MT DataCenter TMG-XEV-2,https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONplTrDQoTqVKYUMHRv1XhOIMTeURfZscTpS5PxtxEJiseEiq,microTech
+-810.22,577.88,-101.43,Astor's Clearing (Ewok Village),https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpln6oM15CobVPTiAn2ddjOHU6GnUbk8WuvrrDN31brCcUHa,microTech
 561.47,545.85,808.83,Port Tressler,https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpCgT5Nimr57cOhK2BXBs0CZAnztWyMFZzwH8Wn1x3HRZBKU,microTech
-907.10,139.92,-397.43,MT DataCenter 2UB-RB9-5,https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpCkaKM6ewkbYZMmUh32entZMynKOvjU7KShF7qeuZ7jAsqW,microTech
--101.56,962.73,-254.44,ugf lta a frost 002,https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONq9sKlRmWctO5zMRKtaKoV9o8zZJ1secKisgQ2szVoltML1b,microTech
--86.39,218.65,-972.08,MT DataCenter L8P-JUC-8 (Offline),https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONq9QcnanZD5Dygn4aMLU0gBBIIedtCnEhWa75l4sMKzIxltQ,microTech
+539.62,762.34,-361.45,Frostbite (Windy Cove),https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpSGUaavISc7vfxj31Jdb3xwAjM4fSlwLuTmafdxLRs4TN2E,microTech
+-665.06,726.94,178.07,Moreland Hills,https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpWdfEADZVe6j8I6F3IkOqjJ9UrzLXhGQeLHyJlKuH6ARMRT,microTech
+-247.94,892.70,-379.68,UGF MTDC QVX J88 J,https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONq9ESjRvTkiRLycEsBBReVgIte9Qn8vP94pNd9NOfZY7Wjcv,microTech
+-160.99,62.44,986.00,UGF MTDC TMG XEV 2,https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqcA2Z2Lnf6ydxkvQzs0N0cV1wIM3kPBfFLrlt2O6BfJcchr,microTech
 -609.56,-688.36,393.20,Clear View Emergency Shelter,https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqcISiYzIE2pjDQpxgIdrA7Bgxm1wCJDswaZWruli2IGXcmn,microTech
+355.90,-75.59,932.65,Raven's Roost,https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqcQavbVTM5FVwds4a2EBaaVDebdEuUO0taEkhpE5gqjPlRL,microTech
 -627.44,-485.26,611.73,Point Wain Emergency Shelter,https://verseguide.com/location/STANTON/IV/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqGUJjSClXXT9L76Ho7aEDSukCEpDOPH4g9wGfrMylMo8cqQ,microTech
 -184.63,-127.79,84.72,Rayari Anvik Research Outpost,https://verseguide.com/location/STANTON/4A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcqaUPohkKo5DkKJHhp4Vvgsrn9MiWqhzwDKhl3A4Vxryzsz,Calliope
-72.39,-187.93,130.92,Shubin Processing Facility SPMC-11,https://verseguide.com/location/STANTON/4A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONctjIh76D3NFGV6NFJIrDj6AuCatBFr65Gz4eULyBEXGrWyE,Calliope
+-222.95,-74.16,-48.95,UGF SPMC 10,https://verseguide.com/location/STANTON/4A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcqj6P972R0jGk0i5UVnH0wN7OTok4TpStbHz9nZzMYKoh45,Calliope
+72.65,-187.77,131.02,UGF SPMC 11,https://verseguide.com/location/STANTON/4A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcXzB9iQ1Vvmm0dKvn8jNhDYna6saXCmK6Nc4qu5MRFrP3ks,Calliope
 205.27,6.26,-124.49,Rayari Kaltag Research Outpost,https://verseguide.com/location/STANTON/4A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcXKVYbdAk4MRh3RXFtiFSZBgqGKU4ukxbQaRCQVW8PVt2W5,Calliope
-231.08,-34.37,-55.89,Shubin Processing Facility SPMC-1,https://verseguide.com/location/STANTON/4A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONeiXCKu9EH3h8TYQnrcrlOh1Bk87ugz6aD2D7h4UwzkHirH1,Calliope
+-230.05,66.60,19.44,UGF SPMC 5,https://verseguide.com/location/STANTON/4A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdM63saiOKdjwh4djf3cggvjt5q2u7CfHCCAIjjDzEBoDUps,Calliope
 160.17,168.99,-58.40,Shubin Mining Facility SMCa-8,https://verseguide.com/location/STANTON/4A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONemmDKvjqxmJ2vxdzjad5JXRNGxWjl4uIxLlkBkGKZzoiJ2V,Calliope
-239.60,-11.46,8.68,Shubin Processing Facility SPMC-3,https://verseguide.com/location/STANTON/4A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONeA3E4VdNwSCc4axuBlgjj6gI5KRBLkK9ULudrqgKtjvECgN,Calliope
--222.73,-74.37,-49.72,Shubin Processing Facility SPMC-10,https://verseguide.com/location/STANTON/4A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpCgWdfp0jNhcYch3SSzsMbfMnrr1xqA0iNJZBOKHFYiTw54,Calliope
-228.59,-21.22,71.20,Shubin Processing Facility SPMC-14,https://verseguide.com/location/STANTON/4A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpVT93aGllBSec61cSnqgXkYRdJl6Vpt7mn5KXg7KfH7ak2n,Calliope
--229.99,66.81,19.27,Shubin Processing Facility SPMC-5,https://verseguide.com/location/STANTON/4A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONq9A5FO6WAMXal3HIFFbnOMNzMUdbzoJBGGdXowlW1lwRvrT,Calliope
+228.65,-21.17,71.03,UGF SPMC 14,https://verseguide.com/location/STANTON/4A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONeD2LjRhTHvna3Jlef6DpqWGmCA05qlu7tRtr8yrXumsmN1i,Calliope
+239.60,-11.47,8.83,UGF SPMC 3,https://verseguide.com/location/STANTON/4A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONpoLhHEaplLxdkpHuJXwfjeFFtqz2qzCqIyCJj41k2gUVzTq,Calliope
 50.07,233.44,24.94,Shubin Mining Facility SMCa-6,https://verseguide.com/location/STANTON/4A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqqh2lvyqB8dTnBG5vNvyn8JzjJ9JIrFCPr85jvVFs11TTUk,Calliope
 -217.17,215.28,142.84,Rayari Cantwell Research Outpost,https://verseguide.com/location/STANTON/4B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdOMzvBgfl8zn7mmMq2HGnIdyWv5ugsFWbt8FCNvheQVoryX,Clio
 -327.83,-78.89,-13.66,Snake Pit,https://verseguide.com/location/STANTON/4B/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqcE9mQWFHelUF0uHfdwXDZTSSREmqCVqgj7eLcLRakKYT7B,Clio
@@ -247,5 +260,3 @@
 14.51,211.27,25.89,Devlin Scrap & Salvage,https://verseguide.com/location/STANTON/4C/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONdOY0bz8WQw00CP47pkPIvNjICZQOKI5gDlYuSNpD2z8rElS,Euterpe
 -42.10,198.14,66.61,Icebreaker,https://verseguide.com/location/STANTON/4C/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONq9IT2f9RmGQE74QyWlkRrRG2R5ZAk5ipVcntq26ByFTosi6,Euterpe
 50.17,-172.26,115.27,Bud's Growery,https://verseguide.com/location/STANTON/4C/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONqH2MQMhQ2aRJOo813fBOqEGHJgaYy6NWyTrExOysPEYdks1,Euterpe
-252.52,62.92,13.87,Security Post Criska,https://verseguide.com/location/STANTON/2A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONctvTb2K1qFwv4v4S3P45f0FJVtT7CPn3RNsmSbaY6GrHsBT,Cellin
--111.53,-56.30,-228.95,Julep Ravine Aid Shelter,https://verseguide.com/location/STANTON/2A/779syls06EI6X3THjEEJJoH6k5mQqk8sKlLrLkRFONcXqJFCsO0PWzPcYmLEbPh2eRgxNKlBIGQ9FSbAPbtjjgZd9,Cellin
