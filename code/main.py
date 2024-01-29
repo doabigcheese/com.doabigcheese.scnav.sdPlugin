@@ -426,15 +426,21 @@ def get_sunset_sunrise_predictions(X : float, Y : float, Z : float, Latitude : f
         rotation_speed = Container["Rotation Speed"]
         logger.debug("27.2")        
         # Container qw/qx/qy/qz quaternion rotation 
-        qw, qx, qy, qz = Container["qw"], Container["qx"], Container["qy"], Container["qz"]
+        qw, qx, qy, qz = float(Container["qw"]), float(Container["qx"]), float(Container["qy"]), float(Container["qz"])
+        logger.debug(Container)
         logger.debug("27.3")        
         # Stanton X Y Z coordinates in refrence of the center of the container
         bsx = ((1-(2*qy**2)-(2*qz**2))*(sx-bx))+(((2*qx*qy)-(2*qz*qw))*(sy-by))+(((2*qx*qz)+(2*qy*qw))*(sz-bz))
+        logger.debug("27.3_1") 
         bsy = (((2*qx*qy)+(2*qz*qw))*(sx-bx))+((1-(2*qx**2)-(2*qz**2))*(sy-by))+(((2*qy*qz)-(2*qx*qw))*(sz-bz))
+        logger.debug("27.3_2") 
         bsz = (((2*qx*qz)-(2*qy*qw))*(sx-bx))+(((2*qy*qz)+(2*qx*qw))*(sy-by))+((1-(2*qx**2)-(2*qy**2))*(sz-bz))
-        
+        logger.debug("27.3_3") 
         # Solar Declination of Stanton
         Solar_declination = degrees(acos((((sqrt(bsx**2+bsy**2+bsz**2))**2)+((sqrt(bsx**2+bsy**2))**2)-(bsz**2))/(2*(sqrt(bsx**2+bsy**2+bsz**2))*(sqrt(bsx**2+bsy**2)))))*copysign(1,bsz)
+        logger.debug("27.3_4") 
+        logger.debug(f"sunrise/sunset calculations: \nValues were:\n-X : {X}\n-Y : {Y}\n-Z : {Z}\n-Latitude : {Latitude}\n-Longitude : {Longitude}\n-Height : {Height}\n-Container : {Container['Name']}\n-Star : {Star['Name']}")
+       
         logger.debug("27.4")        
         # Radius of Stanton
         StarRadius = Star["Body Radius"] # OK
@@ -588,7 +594,7 @@ def get_sunset_sunrise_predictions(X : float, Y : float, Z : float, Latitude : f
         return [state_of_the_day, next_event, next_event_time]
     
     except Exception as e:
-        #logger.debug(f"Error in sunrise/sunset calculations: \n{e}\nValues were:\n-X : {X}\n-Y : {Y}\n-Z : {Z}\n-Latitude : {Latitude}\n-Longitude : {Longitude}\n-Height : {Height}\n-Container : {Container['Name']}\n-Star : {Star['Name']}")
+        logger.debug(f"Error in sunrise/sunset calculations: \n{e}\nValues were:\n-X : {X}\n-Y : {Y}\n-Z : {Z}\n-Latitude : {Latitude}\n-Longitude : {Longitude}\n-Height : {Height}\n-Container : {Container['Name']}\n-Star : {Star['Name']}")
         #sys.stdout.flush()
         return ["Unknown", "Unknown", 0]
 
