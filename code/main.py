@@ -215,7 +215,10 @@ def get_local_rotated_coordinates(Time_passed : float, X : float, Y : float, Z :
 
 def get_lat_long_height(X : float, Y : float, Z : float, Container : dict):
     Radius = Container["Body Radius"]
-    
+    logger.debug(X)
+    logger.debug(Y)
+    logger.debug(Z)
+    logger.debug(Container)
     Radial_Distance = sqrt(X**2 + Y**2 + Z**2)
     
     Height = Radial_Distance - Radius
@@ -881,7 +884,10 @@ def watch_clipboard(queue):
                         logger.debug("11.7")
                         Target_to_POIs_Distances_Sorted = [{
                             "Name" : "POI itself",
-                            "Distance" : 0
+                            "Distance" : 0,
+                            "X" : Target["X"],
+                            "Y" : Target["Y"],
+                            "Z" : Target["Z"]
                         }]
                         logger.debug("11.8")
 
@@ -1080,11 +1086,18 @@ def watch_clipboard(queue):
                     logger.debug(f"{round(New_Distance_to_POI_Total, 1)} km")
                     
                     logger.debug("xyz qtmarker: " + str(Target_to_POIs_Distances_Sorted[0]))
+                    logger.debug(Target_to_POIs_Distances_Sorted[0]["X"])
+                    logger.debug(Target_to_POIs_Distances_Sorted[0]["Y"])
+                    logger.debug(Target_to_POIs_Distances_Sorted[0]["Z"])
+                    logger.debug(Actual_Container)
                     qtmarker_Latitude, qtmarker_Longitude, qtmarker_Height = get_lat_long_height(Target_to_POIs_Distances_Sorted[0]["X"], Target_to_POIs_Distances_Sorted[0]["Y"], Target_to_POIs_Distances_Sorted[0]["Z"], Actual_Container)
+                    logger.debug("30_1")
                     bearingX_qtmarker = cos(radians(target_Latitude)) * sin(radians(target_Longitude) - radians(qtmarker_Longitude))
+                    logger.debug("30_2")
                     bearingY_qtmarker = cos(radians(qtmarker_Latitude)) * sin(radians(target_Latitude)) - sin(radians(qtmarker_Latitude)) * cos(radians(target_Latitude)) * cos(radians(target_Longitude) - radians(qtmarker_Longitude))
+                    logger.debug("30_3")
                     Bearing_qtmaker = (degrees(atan2(bearingX_qtmarker, bearingY_qtmarker)) + 360) % 360
-                    
+                    logger.debug("30_4")
                     message_bearing = json.dumps({"event": "setTitle",
                                             "context": bearing_button_context,
                                             "payload": {
@@ -1164,8 +1177,8 @@ def watch_clipboard(queue):
                     logger.debug("send around: " + message_around)
                     mother.ws.send(message_coords)
                     logger.debug("send coords: " + message_coords)
-                    logger.debug("mother:")
-                    logger.debug(mother)
+                    #logger.debug("mother:")
+                    #logger.debug(mother)
                     #queue.put(message_bearing)
                     #mother.event_generate("<<check_queue>>")
                     
@@ -1187,9 +1200,12 @@ def watch_clipboard(queue):
                         logger.debug("FinalRotationAdjustment: "+str(FinalRotationAdjustment))
                         #WRITE CHANGES TO OBJECT CONTAINER
                         #(Get-Content $OcCsvPath).replace(($CurrentDetectedOCADX -replace(",",".")), $FinalRotationAdjustment) | Set-Content $OcCsvPath
-                        logger.debug("Rotation for "+str(Actual_Container['Name'])+" calibrated from "+str(Database["Containers"][Target["Container"]]["Rotation Adjust"])+"° to "+str(FinalRotationAdjustment)+"° by "+str(RotationSpeedAdjustment)+". Please replace the value manually in the Database.json")
+                        calmessage="Rotation for "+str(Actual_Container['Name'])+" calibrated from "+str(Database["Containers"][Target["Container"]]["Rotation Adjust"])+"° to "+str(FinalRotationAdjustment)+"° by "+str(RotationSpeedAdjustment)+". Please replace the value manually in the Database.json"
+                        logger.debug(calmessage)
                         with open("calibrationdata.txt", "a") as myfile:
                                 myfile.write(str(Actual_Container['Name']) + ": "+str(FinalRotationAdjustment))
+                                myfile.write("\n")
+                                myfile.write(calmessage)
                                 myfile.write("\n")
                                 
                     if save_triggered == True:
@@ -1515,9 +1531,10 @@ class Calibrate(Action):
     UUID = "com.doabigcheese.scnav.calibrate"
 
     def on_key_up(self, obj: events_received_objs.KeyUp):
-        global preloaded,mother,NaviThread,calibrate_active,watch_clipboard_active,stop_navithread
-        if preloaded == False:
-            preload_poi_data()
+        global preloaded,mother,NaviThread,calibrate_active,watch_clipboard_active,stop_navithread,datasource
+        datasource = "local"
+        preloaded = False
+        preload_poi_data()
         if watch_clipboard_active == False:
             mother=self
             calibrate_active = True
