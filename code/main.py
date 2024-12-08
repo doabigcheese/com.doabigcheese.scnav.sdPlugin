@@ -1,17 +1,17 @@
 #todo
 # - compare calibration calculation with Tool Jericho to find error
-# - get navi data from starmap.tk rest api (eg setting in predefined_poi button)
-#       OC: https://starmap.tk/api/v1/oc/
-#       POI:https://starmap.tk/api/v1/pois/
+# - get navi data from starmap.space rest api (eg setting in predefined_poi button)
+#       OC: https://starmap.space/api/v1/oc/
+#       POI:https://starmap.space/api/v1/pois/
 #       query e.g. 
-#           https://starmap.tk/api/v1/oc/index.php?system=Stanton
-#           https://starmap.tk/api/v1/pois/index.php?planet=Daymar
+#           https://starmap.space/api/v1/oc/index.php?system=Stanton
+#           https://starmap.space/api/v1/pois/index.php?planet=Daymar
 # 
 #
 # *** debug: http://localhost:23654/
 #todo:
 #   -automatic title on button based on poi / planet
-#   -long press opens up verseguide poi page or starmap.tk database view
+#   -long press opens up verseguide poi page or starmap.space database view
 #   - deactivate activated buttons when selecting new poi
 #   - button state when switching pages?
 #   - cstone poi details on longpress as well? (parse cstone + calculate xyz from om-distances in matching table )
@@ -78,7 +78,7 @@ startnavitoknownpoi_button_context = ""
 startnavitosavedpoi_button_context = ""
 pi_context = ""
 message_pois = ""
-datasource = "starmap" # local or starmap
+datasource = "local" # local or starmap
 daytime_toggle = "target"
 sandcavetour_active = False
 sandcavetour_init_done = False
@@ -137,7 +137,9 @@ def updatecoordinates():
     CoordinateTimeoutThread.start()
     ahk.send_input('{Enter}')
     time.sleep(0.5)
-    ahk.send_input("/showlocation")
+    ahk.send_input("/")
+    time.sleep(0.2)
+    ahk.send_input("showlocation")
     time.sleep(0.2)
     ahk.send_input('{Enter}')
     message_oms = json.dumps({"event": "setTitle",
@@ -645,8 +647,8 @@ def watch_clipboard(queue):
         server_time = response.tx_time
         
         time_offset = response.offset
-    except:
-        logger.debug("Error: Could not get time from NTP server")
+    except Exception as e:
+        logger.debug("Error: Could not get time from NTP server:" + str(e))
         sys.stdout.flush()
         time_offset = 0
 
@@ -1000,7 +1002,17 @@ def watch_clipboard(queue):
                     bearingY = cos(radians(player_Latitude)) * sin(radians(target_Latitude)) - sin(radians(player_Latitude)) * cos(radians(target_Latitude)) * cos(radians(target_Longitude) - radians(player_Longitude))
 
                     Bearing = (degrees(atan2(bearingX, bearingY)) + 360) % 360
-
+                    Bearing0 = (degrees(atan2(bearingX, bearingY)) +0) % 360
+                    Bearing90 = (degrees(atan2(bearingX, bearingY)) +90) % 360
+                    Bearing180 = (degrees(atan2(bearingX, bearingY)) +180) % 360
+                    Bearing270 = (degrees(atan2(bearingX, bearingY)) +270) % 360
+                    Bearing214 = (degrees(atan2(bearingX, bearingY)) +214) % 360
+                    logger.debug("Bearing0: "+str(Bearing0))
+                    logger.debug("Bearing90: "+str(Bearing90))
+                    logger.debug("Bearing180: "+str(Bearing180))
+                    logger.debug("Bearing270: "+str(Bearing270))
+                    logger.debug("Bearing214: "+str(Bearing214))
+                    Bearing = Bearing214
                     logger.debug("28_1")
                     
                     #logger.debug("7:"+str(Database["Containers"][Target["Container"]]))
@@ -1238,6 +1250,8 @@ def watch_clipboard(queue):
 
                     #-------------------------------------------------------------------------------------------------------------------------------------------
                     #winsound.PlaySound("SystemHand", winsound.SND_ALIAS)
+                else:
+                    logger.debug("Destination was empty :(")
                 
 NaviThread=threading.Thread(target=watch_clipboard,args=(queue,))
 
@@ -1273,8 +1287,8 @@ def preload_poi_data():
                 
     if datasource == "starmap":
         try:
-            logger.debug("Starmap.tk as datasource...")
-            url = "https://starmap.tk/api/v2/oc/index.php?system=Stanton"
+            logger.debug("starmap.space as datasource...")
+            url = "https://starmap.space/api/v2/oc/index.php?system=Stanton"
             response = requests.get(url)
             ##logger.debug("Response: " + str(response.status_code))
             if response.status_code == 200:  # Erfolgreiche Anfrage
@@ -1350,10 +1364,10 @@ def preload_poi_data():
                 #logger.debug(str(Container_list))    
                
             else:
-                print("Fehler beim Abrufen der Daten. Statuscode:", response.status_code)
+                logger.debug("Fehler beim Abrufen der Daten. Statuscode:", response.status_code)
             
             logger.debug("getting POIs for merge from starmap...")
-            url = "https://starmap.tk/api/v2/pois"
+            url = "https://starmap.space/api/v2/pois"
             response = requests.get(url)
             if response.status_code == 200:  # Erfolgreiche Anfrage
                 data = response.json()  # JSON-Daten aus der Antwort extrahieren
@@ -1735,6 +1749,7 @@ class StartNaviToSavedPOI(Action):
                 'Z': z, 
                 "QTMarker": "FALSE"
             }
+        logger.debug("Destination set: " + str(Destination))
         if watch_clipboard_active == False:
             mother=self
             NaviThread.start()
@@ -1788,6 +1803,9 @@ class StartNaviToKnownPOI(Action):
         global Destination,Database,preloaded,NaviThread,watch_clipboard_active,stop_navithread,mother,datasource,start_time
         tmpdatasource = datasource
         datasource = obj.payload.settings.get("datasource")
+        if datasource == None:
+            datasource = tmpdatasource
+            
         end_time = time.time()
         time_lapsed = end_time - start_time
         logger.debug("longpresstimer: " + str(time_lapsed))
@@ -1820,6 +1838,7 @@ class StartNaviToKnownPOI(Action):
                 #logger.debug(f"start:" + str(container) + " - " + str(poi))
                 
                 Destination = Database["Containers"][container]["POI"][poi]
+                logger.debug("Destination set to: "+ str(Destination))
                 
                 
             
@@ -1830,7 +1849,7 @@ class StartNaviToKnownPOI(Action):
                 z = obj.payload.settings.get("z")
                 
 
-                #logger.debug(f"start:" + str(container) + " - " + str(x) + " - " + str(y) + " - " + str(z) + ".")
+                logger.debug(f"start:" + str(container) + " - " + str(x) + " - " + str(y) + " - " + str(z) + ".")
                 Destination = {
                         'Name': 'Predefined POI from Starmap', 
                         'Container': container,
