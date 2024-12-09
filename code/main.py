@@ -41,7 +41,7 @@ import asyncio
 from bs4 import BeautifulSoup
 from pyppeteer import launch
 
-
+northpole_is_om3 = True
 
 from streamdeck_sdk import (
     StreamDeck,
@@ -73,6 +73,7 @@ around_button_context = ""
 coords_button_context = ""
 save_button_context = ""
 oms_button_context = ""
+camdir_button_context = ""
 sandcavestour_button_context = ""
 startnavitoknownpoi_button_context = ""
 startnavitosavedpoi_button_context = ""
@@ -99,7 +100,7 @@ def check_queue(event):
 
 def linebreak_title(newtitle):
     i = 9
-    #logger.debug(newtitle)
+    #old#logger.debug(newtitle)
     tmp_1=""
     tmp_2=""
     tmp_3=""
@@ -115,7 +116,7 @@ def linebreak_title(newtitle):
             tmp_2 =  newtitle[i:]      
     else:
         tmp_1 = newtitle            
-    #logger.debug(tmp_1)
+    #old#logger.debug(tmp_1)
     return tmp_1 + tmp_2 + tmp_3
 
 def coordinatetimeout():
@@ -130,7 +131,7 @@ def coordinatetimeout():
         
     
 def updatecoordinates():
-    #logger.debug(f"Update entered.")
+    #old#logger.debug(f"Update entered.")
     global mother,oms_button_context,stop_coordinatetimeout,CoordinateTimeoutThread
     CoordinateTimeoutThread=threading.Thread(target=coordinatetimeout) #Prepare a new thread
     stop_coordinatetimeout = False
@@ -155,7 +156,7 @@ def updatecoordinates():
 def save_poi():
     global save_triggered,watch_clipboard_active,mother
     
-    #logger.debug(f"Save entered.")
+    #old#logger.debug(f"Save entered.")
     if watch_clipboard_active == True:
         save_triggered = True
         updatecoordinates()
@@ -211,11 +212,71 @@ def get_local_rotated_coordinates(Time_passed : float, X : float, Y : float, Z :
     }
     
     local_rotated_coordinates = rotate_point_2D(local_unrotated_coordinates, radians(-1*Rotation_state_in_degrees))
-    
+    logger.debug("rotate: " + str(X))
+    logger.debug("rotate: " + str(Y))
+    logger.debug("rotate: " + str(Z))
+    logger.debug(local_rotated_coordinates)
     return local_rotated_coordinates
 
+def calc_eulerangels_planet(Time_passed : float, X : float, Y : float, Z : float, dest_X : float, dest_Y : float, dest_Z : float, Actual_Container : dict):
+    deltaX = dest_X - X
+    deltaY = dest_Y - Y
+    deltaZ = dest_Z - Z
+    #current cycle in degrees
+
+    try:
+        Rotation_speed_in_degrees_per_second = 0.1 * (1/Actual_Container["Rotation Speed"])
+    except ZeroDivisionError:
+        Rotation_speed_in_degrees_per_second = 0
+    
+    OCCurrentCycleDegLive = ((Rotation_speed_in_degrees_per_second * Time_passed) + Actual_Container["Rotation Adjust"]) % 360
+
+    
+    logger.debug(X)
+    logger.debug(Y)
+    logger.debug(Z)
+    logger.debug(dest_X)
+    logger.debug(dest_Y)
+    logger.debug(dest_Z)
+    logger.debug(Actual_Container["Rotation Adjust"])
+
+    #yaw
+    yaw = degrees(atan2(deltaY,deltaX))
+    logger.debug("Yaw: " + str(yaw))
+    if yaw > 90 :
+        final_yaw = yaw - 270
+    else:
+        final_yaw = yaw + 90
+    #pitch
+    distanceXY = sqrt(deltaX**2 + deltaY**2)
+    pitch  = degrees(atan2(deltaZ,distanceXY))
+    logger.debug("Pitch: " + str(pitch))
+    if pitch < 0:
+        final_pitch = -180 - pitch
+    else:
+        final_pitch = 180 - pitch
+
+    #roll
+    roll  = 0
+    
+    correction = -360 + Actual_Container["Rotation Adjust"]
+    if (OCCurrentCycleDegLive -90 + yaw) > 180:
+        final_yaw = yaw + OCCurrentCycleDegLive - 450 + correction
+    elif (OCCurrentCycleDegLive - 90 + yaw) < -180:
+        final_yaw = yaw + OCCurrentCycleDegLive + 270 + correction
+    else:
+        final_yaw = yaw + OCCurrentCycleDegLive - 90 + correction
+
+    print("final_yaw: " + str(final_yaw))
+    # (234): Yaw: 141.28478066993233
+    #(242): Pitch: 0.8336950267047344
+    # Pitch_final: 179.16630497329527
+    #Yaw_final: -128.71521933006767
+    return (final_yaw,pitch,roll)
+    
 
 def get_lat_long_height(X : float, Y : float, Z : float, Container : dict):
+    global northpole_is_om3
     Radius = Container["Body Radius"]
     logger.debug(X)
     logger.debug(Y)
@@ -228,21 +289,28 @@ def get_lat_long_height(X : float, Y : float, Z : float, Container : dict):
     #Latitude
     try :
         Latitude = degrees(asin(Z/Radial_Distance))
+        LatitudeOM3 = degrees(asin(Y/Radial_Distance))
     except :
         Latitude = 0
+        LatitudeOM3 = 0
     
     try :
         Longitude = -1*degrees(atan2(X, Y))
+        LongitudeOM3 = -1*degrees(atan2(X, Z))
     except :
         Longitude = 0
-    
+        LongitudeOM3 = 0
+    if northpole_is_om3:
+        logger.debug("OM3 set as northpole")
+        Latitude = LatitudeOM3
+        Longitude = LongitudeOM3
     return [Latitude, Longitude, Height]
 
 def get_sandcaves_sorted(X : float, Y : float, Z : float, Container:dict):
     global datasource
     Distances_to_POIs = []
     logger.debug("gss_1")
-    #logger.debug(str(Container))
+    #old#logger.debug(str(Container))
     logger.debug(str(datasource))
     logger.debug("Player: "+str(X)+","+str(Y)+","+str(Z) )
     for POI in Container["POI"]:
@@ -254,7 +322,7 @@ def get_sandcaves_sorted(X : float, Y : float, Z : float, Container:dict):
             "Y": abs(Y - Container["POI"][POI]["Y"]),
             "Z": abs(Z - Container["POI"][POI]["Z"])
             }
-            #logger.debug("Vector_POI: " + str(Vector_POI))
+            #old#logger.debug("Vector_POI: " + str(Vector_POI))
 
             Distance_POI = vector_norm(Vector_POI)
             #and calculate for every sand cave next QT marker distance
@@ -286,7 +354,7 @@ def reorder_Destination_queue(X : float, Y : float, Z : float, queue:dict):
     global Destination_queue
     Distances_to_POIs = []
     logger.debug("rdq_1")
-    #logger.debug(str(Container))
+    #old#logger.debug(str(Container))
     logger.debug("Player: "+str(X)+","+str(Y)+","+str(Z) )
     for POI in queue:
         logger.debug("loop Cave: " + str(POI))
@@ -302,7 +370,7 @@ def reorder_Destination_queue(X : float, Y : float, Z : float, queue:dict):
         #and calculate for every sand cave next QT marker distance
         #Cave_to_POIs_Distances_Sorted = get_closest_POI(Container["POI"][POI]["X"], Container["POI"][POI]["Y"], Container["POI"][POI]["Z"], Container, True)
         Nearest_POI_to_singleCaveDistance = POI["nextQTMarkerDistance"]
-        #logger.debug("Nearest QTmarker to Cave:"+str(Nearest_POI_to_singleCave))
+        #old#logger.debug("Nearest QTmarker to Cave:"+str(Nearest_POI_to_singleCave))
         logger.debug("append next")
         Distances_to_POIs.append({"Name" : POI["Name"], "Distance" : Distance_POI, "nextQTMarkerDistance" : Nearest_POI_to_singleCaveDistance, "X": POI["X"], "Y": POI["Y"], "Z": POI["Z"], "Container": POI['Container'], "QTMarker": POI['QTMarker'] })
         logger.debug("append done")
@@ -327,23 +395,23 @@ def get_closest_POI(X : float, Y : float, Z : float, Container : dict, Quantum_m
     Distances_to_POIs = []
     
     for POI in Container["POI"]:
-        #logger.debug("processing: "+str(Container["POI"][POI]))
+        #old#logger.debug("processing: "+str(Container["POI"][POI]))
         Vector_POI = {
             "X": abs(X - Container["POI"][POI]["X"]),
             "Y": abs(Y - Container["POI"][POI]["Y"]),
             "Z": abs(Z - Container["POI"][POI]["Z"])
         }
-        #logger.debug("Vector_POI: " + str(Vector_POI))
+        #old#logger.debug("Vector_POI: " + str(Vector_POI))
 
         Distance_POI = vector_norm(Vector_POI)
         
-        #logger.debug("Quantum_marker: " + str(Quantum_marker))
-        #logger.debug("Quantum_marker POI: " + str(Container["POI"][POI]["QTMarker"]))
+        #old#logger.debug("Quantum_marker: " + str(Quantum_marker))
+        #old#logger.debug("Quantum_marker POI: " + str(Container["POI"][POI]["QTMarker"]))
 
         if Quantum_marker and Container["POI"][POI]["QTMarker"] == "TRUE" or not Quantum_marker:
             Distances_to_POIs.append({"Name" : POI, "Distance" : Distance_POI, "X" : Container["POI"][POI]["X"], "Y" : Container["POI"][POI]["Y"], "Z" : Container["POI"][POI]["Z"]})
-            #logger.debug("Added to closest POI list: "+str(POI)+" with "+str(Distance_POI))
-    #logger.debug("final:"+str(Distances_to_POIs))
+            #old#logger.debug("Added to closest POI list: "+str(POI)+" with "+str(Distance_POI))
+    #old#logger.debug("final:"+str(Distances_to_POIs))
     Target_to_POIs_Distances_Sorted = sorted(Distances_to_POIs, key=lambda k: k['Distance'])
     logger.debug("final sorted:"+str(Target_to_POIs_Distances_Sorted))
     return Target_to_POIs_Distances_Sorted
@@ -607,7 +675,7 @@ def get_sunset_sunrise_predictions(X : float, Y : float, Z : float, Latitude : f
 
 def get_current_container(X : float, Y : float, Z : float):
     global Database
-    #logger.debug(f"get " + str(X))
+    #old#logger.debug(f"get " + str(X))
     Actual_Container = {
         "Name": "None",
         "X": 0,
@@ -627,7 +695,7 @@ def get_current_container(X : float, Y : float, Z : float):
 
 def watch_clipboard(queue):
     logger.debug(f"Watch Clipboard entered.")
-    global save_button_context,save_triggered,Database,Container_list,Space_POI_list,Planetary_POI_list,watch_clipboard_active,Destination,stop_navithread,bearing_button_context,daytime_button_context,nearest_button_context,around_button_context,mother,coords_button_context,calibrate_active,daytime_toggle,sandcavetour_active,sandcavestour_button_context,sandcavetour_init_done,Destination_queue,knownPlayerX,knownPlayerY,knownPlayerZ,knownPlayerContainername,stop_coordinatetimeout,CoordinateTimeoutThread
+    global save_button_context,save_triggered,Database,Container_list,Space_POI_list,Planetary_POI_list,watch_clipboard_active,Destination,stop_navithread,bearing_button_context,daytime_button_context,nearest_button_context,around_button_context,mother,coords_button_context,calibrate_active,daytime_toggle,sandcavetour_active,sandcavestour_button_context,sandcavetour_init_done,Destination_queue,knownPlayerX,knownPlayerY,knownPlayerZ,knownPlayerContainername,stop_coordinatetimeout,CoordinateTimeoutThread,northpole_is_om3,camdir_button_context
     watch_clipboard_active = True
     #mother=threading.main_thread()
 
@@ -652,7 +720,8 @@ def watch_clipboard(queue):
         sys.stdout.flush()
         time_offset = 0
 
-    logger.debug("Time offset: " + str(time_offset))
+    logger.debug("Time offset (eigentlich): " + str(time_offset))
+    time_offset = 0
     Old_clipboard = ""
 
     Old_player_Global_coordinates = {}
@@ -690,7 +759,7 @@ def watch_clipboard(queue):
 
         #Get the new clipboard content
         new_clipboard = pyperclip.paste()
-        #logger.debug("c: " + str(new_clipboard))
+        #old#logger.debug("c: " + str(new_clipboard))
 
 
         #If clipboard content hasn't changed
@@ -782,9 +851,9 @@ def watch_clipboard(queue):
                     #Grab the rotation speed of the container in the Database and convert it in degrees/s
                     Target = Destination
                     logger.debug("Target set:"+str(Target))
-                    #logger.debug("Target = " +str(Target))
+                    #old#logger.debug("Target = " +str(Target))
                     logger.debug("Target Name = " +str(Target["Container"]))
-                    #logger.debug("Database: "+str(Database))
+                    #old#logger.debug("Database: "+str(Database))
                     target_Rotation_speed_in_hours_per_rotation = Database["Containers"][Target["Container"]]["Rotation Speed"]
                     logger.debug("rotspeed: " + str(target_Rotation_speed_in_hours_per_rotation))
                     try:
@@ -1000,22 +1069,23 @@ def watch_clipboard(queue):
                     
                     bearingX = cos(radians(target_Latitude)) * sin(radians(target_Longitude) - radians(player_Longitude))
                     bearingY = cos(radians(player_Latitude)) * sin(radians(target_Latitude)) - sin(radians(player_Latitude)) * cos(radians(target_Latitude)) * cos(radians(target_Longitude) - radians(player_Longitude))
+                    if northpole_is_om3:
+                        logger.debug("om3 as northbpole bearing")
+                        Bearing = 360 - ((degrees(atan2(bearingX, bearingY)) + 360) % 360)
+                    else:
+                        Bearing = (degrees(atan2(bearingX, bearingY)) + 360) % 360
 
-                    Bearing = (degrees(atan2(bearingX, bearingY)) + 360) % 360
-                    Bearing0 = (degrees(atan2(bearingX, bearingY)) +0) % 360
-                    Bearing90 = (degrees(atan2(bearingX, bearingY)) +90) % 360
-                    Bearing180 = (degrees(atan2(bearingX, bearingY)) +180) % 360
-                    Bearing270 = (degrees(atan2(bearingX, bearingY)) +270) % 360
-                    Bearing214 = (degrees(atan2(bearingX, bearingY)) +214) % 360
-                    logger.debug("Bearing0: "+str(Bearing0))
-                    logger.debug("Bearing90: "+str(Bearing90))
-                    logger.debug("Bearing180: "+str(Bearing180))
-                    logger.debug("Bearing270: "+str(Bearing270))
-                    logger.debug("Bearing214: "+str(Bearing214))
-                    Bearing = Bearing214
-                    logger.debug("28_1")
                     
-                    #logger.debug("7:"+str(Database["Containers"][Target["Container"]]))
+
+
+                    logger.debug("28_1")
+                    #----------------------------------------------------------CamDir-------------------------
+                    CamDirYaw, CamDirPitch, CamDirRoll = calc_eulerangels_planet(Time_passed_since_reference_in_seconds, knownPlayerX,knownPlayerY,knownPlayerZ,Target["X"],Target["Y"],Target["Z"],Actual_Container)
+                    logger.debug("Pitch_final: " +str(CamDirPitch))
+                    logger.debug("Yaw_final: " +str(CamDirYaw))
+
+
+                    #old#logger.debug("7:"+str(Database["Containers"][Target["Container"]]))
                     logger.debug("8:"+str(Database["Containers"]["Stanton"]))
                     logger.debug("9:"+str(Time_passed_since_reference_in_seconds))
 
@@ -1118,8 +1188,8 @@ def watch_clipboard(queue):
                                             }
                                         })
                     logger.debug("31")
-                    #logger.debug("31.1:"+str(Target_to_POIs_Distances_Sorted))
-                    #logger.debug("31.2:"+str(Target_to_POIs_Distances_Sorted[0]['Distance']))
+                    #old#logger.debug("31.1:"+str(Target_to_POIs_Distances_Sorted))
+                    #old#logger.debug("31.2:"+str(Target_to_POIs_Distances_Sorted[0]['Distance']))
                     if Target_to_POIs_Distances_Sorted:
                         next_poi_name = Target_to_POIs_Distances_Sorted[0]['Name']
                         next_poi_distance = Target_to_POIs_Distances_Sorted[0]['Distance']
@@ -1127,6 +1197,14 @@ def watch_clipboard(queue):
                         next_poi_name = "n/a"
                         next_poi_distance = 0
                     
+                    #CamDirPitch, CamDirYaw, CamDirRoll
+                    message_camdir = json.dumps({"event": "setTitle",
+                                            "context": camdir_button_context,
+                                            "payload": {
+                                                "title": "CamDir:\n" + f"{round(CamDirPitch,0)}\n{round(CamDirRoll,0)}\n{round(CamDirYaw,0)}",
+                                                "target": 0,
+                                            }
+                                        })   
                     message_oms = json.dumps({"event": "setTitle",
                                             "context": oms_button_context,
                                             "payload": {
@@ -1189,13 +1267,15 @@ def watch_clipboard(queue):
                     logger.debug("send around: " + message_around)
                     mother.ws.send(message_coords)
                     logger.debug("send coords: " + message_coords)
-                    #logger.debug("mother:")
-                    #logger.debug(mother)
+                    mother.ws.send(message_camdir)
+                    logger.debug("send camdir: " + message_camdir)
+                    #old#logger.debug("mother:")
+                    #old#logger.debug(mother)
                     #queue.put(message_bearing)
                     #mother.event_generate("<<check_queue>>")
                     
     
-                    #logger.debug("send data: " + message)
+                    #old#logger.debug("send data: " + message)
                     
                     if calibrate_active:
                         logger.debug("Calculating calibration...")
@@ -1222,12 +1302,12 @@ def watch_clipboard(queue):
                                 
                     if save_triggered == True:
                         save_triggered = False
-                        #logger.debug("Saving Location to file...")
+                        #old#logger.debug("Saving Location to file...")
                         timestamp=datetime.datetime.utcnow()
                         poi_name=str(Actual_Container['Name']) + "_" + str(int(Player_to_POIs_Distances_Sorted[0]['Distance'])) + "km_next_to_" + str(Player_to_POIs_Distances_Sorted[0]['Name']) + "_" + str(timestamp)
-                        #logger.debug(poi_name)
+                        #old#logger.debug(poi_name)
                         save_data = Actual_Container['Name'] + "," + str(round(New_player_local_rotated_coordinates['X'], 3)) + "," + str(round(New_player_local_rotated_coordinates['Y'], 3)) + "," + str(round(New_player_local_rotated_coordinates['Z'], 3)) + "," + poi_name.replace(" ","_").replace(":","_").replace(".","_")
-                        #logger.debug(save_data)
+                        #old#logger.debug(save_data)
                         with open("saved_pois.txt", "a") as sfile:
                                 sfile.write(save_data)
                                 sfile.write("\n")
@@ -1280,8 +1360,8 @@ def preload_poi_data():
                     Planetary_POI_list[container_name].append(poi)
             preloaded = True
             logger.debug(f"Preloaded TRUE")
-            #logger.debug(str(Database))
-            #logger.debug(str(Container_list))
+            #old#logger.debug(str(Database))
+            #old#logger.debug(str(Container_list))
         except:
             logger.debug(f"Database.json not found.")
                 
@@ -1290,13 +1370,13 @@ def preload_poi_data():
             logger.debug("starmap.space as datasource...")
             url = "https://starmap.space/api/v2/oc/index.php?system=Stanton"
             response = requests.get(url)
-            ##logger.debug("Response: " + str(response.status_code))
+            ##old#logger.debug("Response: " + str(response.status_code))
             if response.status_code == 200:  # Erfolgreiche Anfrage
                 logger.debug(str(response.text))
                 #cleanresponse = re.findall('[{.*}]', response.text)
                 data = response.json()  # JSON-Daten aus der Antwort extrahieren
                 # Mit den erhaltenen Daten arbeiten
-                #logger.debug("data:" + str(data))
+                #old#logger.debug("data:" + str(data))
                 logger.debug('00')
                 tdata=str(data).replace("\'","\"").replace("None","0")
                 counter = 0
@@ -1308,7 +1388,7 @@ def preload_poi_data():
                     new_tdata = new_tdata + letter
                 tdata=new_tdata.replace("[","{\"Containers\":{").replace("]","}}").replace("Stanton Star","Stanton")
                 logger.debug('01')
-                #logger.debug(str(tdata))
+                #old#logger.debug(str(tdata))
                 tmpdata = json.loads(tdata) #lets convert to internal layout
                 #tmpdata=data
                 logger.debug('0')
@@ -1349,19 +1429,19 @@ def preload_poi_data():
                 
                 
                 logger.debug('1_')
-                #logger.debug(str(tmpdata))
-                #logger.debug('2')
+                #old#logger.debug(str(tmpdata))
+                #old#logger.debug('2')
                 #data = json.loads(str(tmpdata))
-                #logger.debug('3')
-                #logger.debug(str(data))
-                #logger.debug('4')
+                #old#logger.debug('3')
+                #old#logger.debug(str(data))
+                #old#logger.debug('4')
                 #Aufbau: Database->Containers->abc->Name:abc
                 Database = tmpdata
-                #logger.debug(str(Database["Containers"]))
+                #old#logger.debug(str(Database["Containers"]))
                 for i in Database["Containers"]:
                     logger.debug(i)
                     Container_list.append(Database["Containers"][i]["Name"])
-                #logger.debug(str(Container_list))    
+                #old#logger.debug(str(Container_list))    
                
             else:
                 logger.debug("Fehler beim Abrufen der Daten. Statuscode:", response.status_code)
@@ -1371,14 +1451,14 @@ def preload_poi_data():
             response = requests.get(url)
             if response.status_code == 200:  # Erfolgreiche Anfrage
                 data = response.json()  # JSON-Daten aus der Antwort extrahieren
-                #logger.debug("0")
+                #old#logger.debug("0")
                 tdata=str(data).replace("\'s ","s ").replace("\'s\"","s\"").replace("\'","\"").replace("None","0")
-                #logger.debug("tdata: "+str(tdata))
-                #logger.debug("00")
-                #logger.debug(tdata[3105:3115])
+                #old#logger.debug("tdata: "+str(tdata))
+                #old#logger.debug("00")
+                #old#logger.debug(tdata[3105:3115])
 
                 tmpdata = json.loads(tdata) #lets convert to internal layout
-                #logger.debug("tmpdata: " + str(tmpdata))
+                #old#logger.debug("tmpdata: " + str(tmpdata))
                 
                 
 
@@ -1386,20 +1466,20 @@ def preload_poi_data():
                     logger.debug(str(entry))
                     if entry['System'] == "Stanton":
                         entry['Name'] = entry.pop('PoiName')
-                        #logger.debug(entry['Name'])
+                        #old#logger.debug(entry['Name'])
                         entry['Container'] = entry.pop('Planet')
-                        #logger.debug("1")
+                        #old#logger.debug("1")
                         entry['X'] = entry.pop('XCoord')
-                        #logger.debug("1")
+                        #old#logger.debug("1")
                         entry['Y'] = entry.pop('YCoord')
-                        #logger.debug("1")
+                        #old#logger.debug("1")
                         entry['Z'] = entry.pop('ZCoord')
-                        #logger.debug("1")
+                        #old#logger.debug("1")
                         if entry['QTMarker'] == 1:
                             entry['QTMarker'] = "TRUE"
                         else:
                             entry['QTMarker'] = "FALSE" 
-                        #logger.debug("done entry")
+                        #old#logger.debug("done entry")
                         
                         if entry['Container'] != "" and entry['Container'] in Container_list:
                             Database['Containers'][entry['Container']]['POI'][entry['Name']] = entry
@@ -1408,7 +1488,7 @@ def preload_poi_data():
                     else:
                         logger.debug("entry not added as not Stanton System: " + str(entry))    
                 
-                #logger.debug("Database: "+str(Database['Containers'])) 
+                #old#logger.debug("Database: "+str(Database['Containers'])) 
                 #add OM Markerss
                 #for planet in Database['Containers']:
                 #    logger.debug("adding om marker for: " + str(planet['Name']))
@@ -1427,9 +1507,9 @@ def preload_poi_data():
                 #    logger.debug(str(oms))
                 #    Database['Containers'][planet['Name']]['POI'].append(oms)
                    #Database['Containers'][container_name]["OM Radius"] 
-                #logger.debug("tmpdata_after convert: " + str(tmpdata))
+                #old#logger.debug("tmpdata_after convert: " + str(tmpdata))
                 
-            #logger.debug("Database: "+str(Database))    
+            #old#logger.debug("Database: "+str(Database))    
                 
             preloaded = True
             
@@ -1462,7 +1542,14 @@ def open_verseguideinfo(X:float, Y:float, Z:float, Containername):
     
     
 def reset_buttons():
-    global mother,bearing_button_context,nearest_button_context,daytime_button_context,coords_button_context,oms_button_context
+    global mother,bearing_button_context,nearest_button_context,daytime_button_context,coords_button_context,oms_button_context,camdir_button_context
+    message_camdir = json.dumps({"event": "setTitle",
+                                        "context": camdir_button_context,
+                                        "payload": {
+                                            "title": f"Camdir:\n---\n---\n---",
+                                            "target": 0,
+                                        }
+                                    })
     message_bearing = json.dumps({"event": "setTitle",
                                         "context": bearing_button_context,
                                         "payload": {
@@ -1508,6 +1595,8 @@ def reset_buttons():
     
     mother.ws.send(message_oms)
 
+    mother.ws.send(message_camdir)
+
        
 
 class StartNavi(Action):
@@ -1521,7 +1610,7 @@ class StartNavi(Action):
         stop_coordinatetimeout = False
         CoordinateTimeoutThread.start()
         current_container = Destination["Container"]
-        #logger.debug(str(Database["Containers"][current_container]))
+        #old#logger.debug(str(Database["Containers"][current_container]))
         
         body_radius = Database["Containers"][current_container]["Body Radius"] * 1000
         x = Database["Containers"][current_container]["X"] * 1000 +body_radius/2 + 50
@@ -1566,11 +1655,18 @@ class Calibrate(Action):
             self.set_state(obj.context, 0)
             
                     
-         
+
+class CamDir(Action):
+    UUID = "com.doabigcheese.scnav.camdir"  
+    def on_will_appear(self, obj:events_received_objs.WillAppear):
+        #old#logger.debug(f"willapear_debug: " + str(obj.context))
+        global camdir_button_context
+        camdir_button_context = obj.context
+
 class OMs(Action):
     UUID = "com.doabigcheese.scnav.oms"  
     def on_will_appear(self, obj:events_received_objs.WillAppear):
-        #logger.debug(f"willapear_debug: " + str(obj.context))
+        #old#logger.debug(f"willapear_debug: " + str(obj.context))
         global oms_button_context
         oms_button_context = obj.context
                  
@@ -1578,7 +1674,7 @@ class Bearing(Action):
     UUID = "com.doabigcheese.scnav.bearing"
     
     def on_will_appear(self, obj:events_received_objs.WillAppear):
-        #logger.debug(f"willapear_debug: " + str(obj.context))
+        #old#logger.debug(f"willapear_debug: " + str(obj.context))
         global bearing_button_context
         bearing_button_context = obj.context
     
@@ -1590,7 +1686,7 @@ class Bearing(Action):
 class Nearest(Action):
     UUID = "com.doabigcheese.scnav.nearest"
     def on_will_appear(self, obj:events_received_objs.WillAppear):
-        #logger.debug(f"willapear_debug: " + str(obj.context))
+        #old#logger.debug(f"willapear_debug: " + str(obj.context))
         global nearest_button_context
         nearest_button_context = obj.context
     
@@ -1598,7 +1694,7 @@ class Nearest(Action):
     def on_key_up(self, obj: events_received_objs.KeyUp):
         pass 
         #global nearest_button_context
-        #logger.debug(f"self: " + str(self))
+        #old#logger.debug(f"self: " + str(self))
         
         #self.set_title(nearest_button_context,
         #        events_sent_objs.SetTitlePayload(
@@ -1610,7 +1706,7 @@ class Nearest(Action):
 class Daytime(Action):
     UUID = "com.doabigcheese.scnav.daytime"
     def on_will_appear(self, obj:events_received_objs.WillAppear):
-        #logger.debug(f"willapear_debug: " + str(obj.context))
+        #old#logger.debug(f"willapear_debug: " + str(obj.context))
         global daytime_button_context
         daytime_button_context = obj.context
     
@@ -1628,7 +1724,7 @@ class Daytime(Action):
 class Coords(Action):
     UUID = "com.doabigcheese.scnav.coords"
     def on_will_appear(self, obj:events_received_objs.WillAppear):
-        #logger.debug(f"willapear_debug: " + str(obj.context))
+        #old#logger.debug(f"willapear_debug: " + str(obj.context))
         global coords_button_context
         coords_button_context = obj.context
     
@@ -1639,7 +1735,7 @@ class Coords(Action):
 class Around(Action):
     UUID = "com.doabigcheese.scnav.around"
     def on_will_appear(self, obj:events_received_objs.WillAppear):
-        #logger.debug(f"willapear_debug: " + str(obj.context))
+        #old#logger.debug(f"willapear_debug: " + str(obj.context))
         global around_button_context
         around_button_context = obj.context
     
@@ -1654,20 +1750,20 @@ class UpdateCurrentLocation(Action):
 
     def on_key_up(self, obj: events_received_objs.KeyUp):
         
-        #logger.debug(f"Update pressed.")
+        #old#logger.debug(f"Update pressed.")
         updatecoordinates()
             
 class SaveLocation(Action):
     UUID = "com.doabigcheese.scnav.save"
     def on_will_appear(self, obj:events_received_objs.WillAppear):
-        #logger.debug(f"willapear_debug: " + str(obj.context))
+        #old#logger.debug(f"willapear_debug: " + str(obj.context))
         global save_button_context
         save_button_context = obj.context
 
     def on_key_up(self, obj: events_received_objs.KeyUp):
         global mother
         mother=self
-        #logger.debug(f"Save pressed.")
+        #old#logger.debug(f"Save pressed.")
         save_poi()        
 
 class StartNaviToSavedPOI(Action):
@@ -1740,7 +1836,7 @@ class StartNaviToSavedPOI(Action):
         z = float(obj.payload.settings.get("z"))
         
 
-        #logger.debug(f"start:" + str(container) + " - " + str(x) + " - " + str(y) + " - " + str(z) + ".")
+        #old#logger.debug(f"start:" + str(container) + " - " + str(x) + " - " + str(y) + " - " + str(z) + ".")
         Destination = {
                 'Name': 'Custom POI', 
                 'Container': container,
@@ -1765,7 +1861,7 @@ class StartNaviToSavedPOI(Action):
             watch_clipboard_active = False
             #NaviThread.start()
             self.set_state(obj.context, 0)
-            #logger.debug(f"...and restarted")
+            #old#logger.debug(f"...and restarted")
         
 
             
@@ -1835,7 +1931,7 @@ class StartNaviToKnownPOI(Action):
             if datasource == "local":
                 container = obj.payload.settings.get("container")
                 poi = obj.payload.settings.get("poi")
-                #logger.debug(f"start:" + str(container) + " - " + str(poi))
+                #old#logger.debug(f"start:" + str(container) + " - " + str(poi))
                 
                 Destination = Database["Containers"][container]["POI"][poi]
                 logger.debug("Destination set to: "+ str(Destination))
@@ -1878,7 +1974,7 @@ class StartNaviToKnownPOI(Action):
                 watch_clipboard_active = False
                 #NaviThread.start()
                 self.set_state(obj.context, 0)
-                #logger.debug(f"...and restarted")
+                #old#logger.debug(f"...and restarted")
 
 class Sandcavestour(Action):
     UUID = "com.doabigcheese.scnav.sandcavestour"
@@ -1986,7 +2082,7 @@ class StartNaviToCustomPOI(Action):
         z = float(obj.payload.settings.get("z"))
         
 
-        #logger.debug(f"start:" + str(container) + " - " + str(x) + " - " + str(y) + " - " + str(z) + ".")
+        #old#logger.debug(f"start:" + str(container) + " - " + str(x) + " - " + str(y) + " - " + str(z) + ".")
         Destination = {
                 'Name': 'Custom POI', 
                 'Container': container,
@@ -2012,7 +2108,7 @@ class StartNaviToCustomPOI(Action):
             watch_clipboard_active = False
             #NaviThread.start()
             self.set_state(obj.context, 0)
-            #logger.debug(f"...and restarted")
+            #old#logger.debug(f"...and restarted")
             
 
 
@@ -2036,6 +2132,7 @@ if __name__ == '__main__':
             Calibrate(),
             Sandcavestour(),
             OMs(),
+            CamDir(),
             
         ],
         log_file=settings.LOG_FILE_PATH,
