@@ -24,7 +24,8 @@ It will show you the amount of caves on this moon, and if you should do a quantu
 Longpress (> 2 sec) on this button will delete the current sandcave destination and move on to the next in queue (all are sorted for minimal fly time) \
 shortpress will deactivate Sandcave Tours again \
 Save button will save your current location to a custom list \
-With the custom poi button you can then select one of your saved locations to be set as new destination.
+With the custom poi button you can then select one of your saved locations to be set as new destination. \
+CamDir let you find e.b. Benny Henge quicker, as it gives you a direction (idea and code adapted from Project Jericho, Graupunkt) (r_displayinfo 2 have to be enabled)
 
 
 ![alt text](https://github.com/doabigcheese/com.doabigcheese.scnav.sdplugin/blob/master/Screenshot1.jpg?raw=true)
