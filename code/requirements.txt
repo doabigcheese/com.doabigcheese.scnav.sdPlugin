@@ -13,4 +13,9 @@ pyperclip
 ntplib
 pyppeteer
 beautifulsoup4
+pytesseract
+numpy
+pyautogui
+opencv-python
+pillow
 
