@@ -62,6 +62,26 @@
     },
     {
       "Icon": "assets/actions/start",
+      "Name": "Read Coordinates OCR",
+      "States": [
+        {
+          "Image": "assets/keys/start",
+          "Title": "OCRCoord",
+          "TitleAlignment": "top",
+          "FontSize": "8",
+          "ShowTitle": true
+        }
+      ],
+      "SupportedInMultiActions": true,
+      "Controllers": [
+        "Keypad"
+      ],
+      "Tooltip": "Start reading Coordinates OCR",
+      "PropertyInspectorPath": "property_inspector/ocr_pi.html",
+      "UUID": "com.doabigcheese.scnav.ocr"
+    },
+    {
+      "Icon": "assets/actions/start",
       "Name": "Calibrate",
       "States": [
         {
