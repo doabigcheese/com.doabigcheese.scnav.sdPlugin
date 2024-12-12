@@ -16,6 +16,11 @@
 #   - button state when switching pages?
 #   - cstone poi details on longpress as well? (parse cstone + calculate xyz from om-distances in matching table )
 #   - target OM distances on output button
+#   - OCR Camdir:       3028,3 - 3438,18
+#   - OCR local xyz:    2955,31 - 3438,44
+#   - OCR universe xyz: 3080,45 - 3438,58
+#   - OCR servertime:   3192,147 - 3438,158
+#   - OCR universetime: 3175,172 - 3438,185
 #########################################################################
 import random
 import requests
@@ -24,8 +29,11 @@ import time
 import re
 import webbrowser
 import winsound
+import subprocess
 #import win32com.client
 #from playsound import playsound
+
+
 
 from math import sqrt, degrees, radians, cos, acos, sin, asin, tan ,atan2, copysign, pi
 import pyperclip
@@ -40,6 +48,11 @@ import json
 import asyncio
 from bs4 import BeautifulSoup
 from pyppeteer import launch
+from PIL import Image
+import pytesseract
+import cv2
+import numpy as np
+import pyautogui
 
 northpole_is_om3 = True
 
@@ -91,12 +104,111 @@ knownPlayerZ=0
 knownPlayerContainername=""
 stop_coordinatetimeout = False
 CoordinateTimeoutThread = ""
+ocr_running = False
+stop_threads = False
 
 def check_queue(event):
     logger.debug("check queue entered")
     msg = queue.get()
     logger.debug(msg)
     mother.ws.send(msg)
+
+def process_displayinfo(queue):
+    global stop_threads
+    logger.debug("process_displayinfo entered")
+    while True:    
+        if stop_threads:
+            logger.debug("  Exiting loop.")
+            break
+    #image = 'sc_testbild_ocr.jpg'  # replace with your screenshot path
+        try:
+            
+            image = pyautogui.screenshot()
+            camdir_pitch,camdir_roll,camdir_yaw, camdir_fov, container, localxyz_x,localxyz_y,localxyz_z, universe_xyz_x,universe_xyz_y,universe_xyz_z = read_screenshot(image)
+            output = "LocalCoordinates_OCR:" + str(container) + " " +str(localxyz_x) + " " + str(localxyz_y) + " " + str(localxyz_z)
+            logger.debug("Output clipboard: " + str(output))
+            pyperclip.copy(str(output))
+            
+            time.sleep(15)
+        except Exception as e:
+            logger.debug("Exception_ " + str(e))
+
+def read_screenshot(image_path):
+    # Define the regions of interest (ROI) in the image
+    roi_camdir = [3028, 3, 3438, 18]
+    roi_localxyz = [2955, 31, 3438, 44]
+    roi_universe_xyz = [3080, 45, 3438, 58]
+    roi_servertime = [3192, 147, 3438, 158]
+    roi_universetime = [3175, 172, 3438, 185]
+
+    # Read image from path using OpenCV library
+    #image = cv2.imread(image_path) #png in filesystem
+    image = cv2.cvtColor(np.array(image_path), cv2.COLOR_RGB2BGR) #screenshot
+    #cv2.imwrite('test.png', image) #debug
+
+    # Upscale each ROI to improve OCR accuracy
+    camdir_image_upscaled = cv2.resize(image[roi_camdir[1]:roi_camdir[3], roi_camdir[0]:roi_camdir[2]], None, fx=2, fy=2)
+    localxyz_image_upscaled = cv2.resize(image[roi_localxyz[1]:roi_localxyz[3], roi_localxyz[0]:roi_localxyz[2]], None, fx=2, fy=2)
+    universe_xyz_image_upscaled = cv2.resize(image[roi_universe_xyz[1]:roi_universe_xyz[3], roi_universe_xyz[0]:roi_universe_xyz[2]], None, fx=2, fy=2)
+    #servertime_image_upscaled = cv2.resize(image[roi_servertime[1]:roi_servertime[3], roi_servertime[0]:roi_servertime[2]], None, fx=2, fy=2)
+    #universetime_image_upscaled = cv2.resize(image[roi_universetime[1]:roi_universetime[3], roi_universetime[0]:roi_universetime[2]], None, fx=2, fy=2)
+
+    
+    # Preprocess each ROI to improve OCR accuracy
+    camdir_gray = cv2.cvtColor(camdir_image_upscaled, cv2.COLOR_BGR2GRAY)
+    localxyz_gray = cv2.cvtColor(localxyz_image_upscaled, cv2.COLOR_BGR2GRAY)
+    universe_xyz_gray = cv2.cvtColor(universe_xyz_image_upscaled, cv2.COLOR_BGR2GRAY)
+    #servertime_gray = cv2.cvtColor(servertime_image_upscaled, cv2.COLOR_BGR2GRAY)
+    #universetime_gray = cv2.cvtColor(universetime_image_upscaled, cv2.COLOR_BGR2GRAY)
+   
+    # Perform OCR on each ROI
+    try:
+        camdir_text = pytesseract.image_to_string(camdir_gray, lang='eng', config='--oem 3 --psm 6')
+        localxyz_text = pytesseract.image_to_string(localxyz_gray, lang='eng', config='--oem 3 --psm 6')
+        universe_xyz_text = pytesseract.image_to_string(universe_xyz_gray, lang='eng', config='--oem 3 --psm 6')
+        #servertime_text = pytesseract.image_to_string(servertime_gray, lang='eng', config='--oem 3 --psm 6')
+        #universetime_text = pytesseract.image_to_string(universetime_gray, lang='eng', config='--oem 3 --psm 6')
+
+        # CamDir: -17 -2 75 FOV: 50 Focal: 3.00 FStop: 64.0
+        camdir_array = camdir_text.split() 
+
+        #Zone: OOC Stanton 2c Yela Pos: -626.6130km 135.8162km -1753.85m
+        localxyz_array = localxyz_text.split()
+        logger.debug(localxyz_array)
+        if "m" in localxyz_array[-3] and not "km" in localxyz_array[-3]:
+            logger.debug(localxyz_array[-3])
+            localxyz_array[-3]=float(localxyz_array[-3].replace("m","")) * 0.001 #convert in km
+        elif "km" in localxyz_array[-3]:
+            localxyz_array[-3]=float(localxyz_array[-3].replace("km",""))
+
+        if "m" in localxyz_array[-2] and not "km" in localxyz_array[-2]:
+            localxyz_array[-2]=float(localxyz_array[-2].replace("m","")) * 0.001 #convert in km
+        elif "km" in localxyz_array[-2]:
+            localxyz_array[-2]=float(localxyz_array[-2].replace("km",""))
+        if "m" in localxyz_array[-1] and not "km" in localxyz_array[-1]:
+            localxyz_array[-1]=float(localxyz_array[-1].replace("m","")) * 0.001 #convert in km
+        elif "km" in localxyz_array[-1]:
+            localxyz_array[-1]=float(localxyz_array[-1].replace("km",""))
+        # Pos: -19022757.8983km -2613374.9914km -1753.85m
+        universe_xyz_array = universe_xyz_text.split()
+        if "m" in universe_xyz_array[-3] and not "km" in universe_xyz_array[-3]:
+            universe_xyz_array[-3]=float(universe_xyz_array[-3].replace("m","")) * 0.001 #convert in km
+        elif "km" in universe_xyz_array[-3]:
+            universe_xyz_array[-3]=float(universe_xyz_array[-3].replace("km",""))
+        if "m" in universe_xyz_array[-2] and not "km" in universe_xyz_array[-2]:
+            universe_xyz_array[-2]=float(universe_xyz_array[-2].replace("m","")) * 0.001 #convert in km
+        elif "km" in universe_xyz_array[-2]:
+            universe_xyz_array[-2]=float(universe_xyz_array[-2].replace("km",""))
+        if "m" in universe_xyz_array[-1] and not "km" in universe_xyz_array[-1]:
+            universe_xyz_array[-1]=float(universe_xyz_array[-1].replace("m","")) * 0.001 #convert in km     
+        elif "km" in universe_xyz_array[-1]:
+            universe_xyz_array[-1]=float(universe_xyz_array[-1].replace("km",""))   
+
+        return int(camdir_array[1]),int(camdir_array[2]),int(camdir_array[3]), float(camdir_array[5]), localxyz_array[-5], float(localxyz_array[-3]),float(localxyz_array[-2]),float(localxyz_array[-1]), float(universe_xyz_array[-3]),float(universe_xyz_array[-2]),float(universe_xyz_array[-1])
+
+    except Exception as e:
+        logger.debug("Exception: ",e)
+        pass
 
 def linebreak_title(newtitle):
     i = 9
@@ -267,7 +379,7 @@ def calc_eulerangels_planet(Time_passed : float, X : float, Y : float, Z : float
     else:
         final_yaw = yaw + OCCurrentCycleDegLive - 90 + correction
 
-    print("final_yaw: " + str(final_yaw))
+    logger.debug("final_yaw: " + str(final_yaw))
     # (234): Yaw: 141.28478066993233
     #(242): Pitch: 0.8336950267047344
     # Pitch_final: 179.16630497329527
@@ -759,7 +871,7 @@ def watch_clipboard(queue):
 
         #Get the new clipboard content
         new_clipboard = pyperclip.paste()
-        #old#logger.debug("c: " + str(new_clipboard))
+        #logger.debug(str(new_clipboard))
 
 
         #If clipboard content hasn't changed
@@ -778,37 +890,69 @@ def watch_clipboard(queue):
             New_time = time.time() + time_offset
 
             #If it contains some coordinates
-            if new_clipboard.startswith("Coordinates:"):
+            if new_clipboard.startswith("Coordinates:") or new_clipboard.startswith("LocalCoordinates_OCR:"):
                 #split the clipboard in sections
+                if new_clipboard.startswith("LocalCoordinates_OCR:"):
+                    clipboard_contains_localxyz = True
+                    logger.debug("new local ocr coordinates found")
+                else:
+                    clipboard_contains_localxyz = False
+                #Coordinates: x:12792440814.115870 y:-74248558.612950 z:97041.278879
+                #LocalCoordinates_OCR:Magda 800 600 200
                 new_clipboard_splitted = new_clipboard.replace(":", " ").split(" ")
 
+                if not clipboard_contains_localxyz:
+                    #get the 3 new XYZ coordinates
+                    New_Player_Global_coordinates = {}
+                    New_Player_Global_coordinates['X'] = float(new_clipboard_splitted[3])/1000
+                    New_Player_Global_coordinates['Y'] = float(new_clipboard_splitted[5])/1000
+                    New_Player_Global_coordinates['Z'] = float(new_clipboard_splitted[7])/1000
+                    #search in the Databse to see if the player is ina Container
+                    Actual_Container = get_current_container(New_Player_Global_coordinates["X"], New_Player_Global_coordinates["Y"], New_Player_Global_coordinates["Z"])
+                    knownPlayerContainername=Actual_Container['Name']
+                    logger.debug("Actual Container: " +str(Actual_Container))
+                        
+                    if calibrate_active:
+                        logger.debug("Calibrate active")
+                        ContainerName = Actual_Container['Name']
+                        Destination = Database["Containers"][ContainerName]["POI"]["OM-3"]
+                        logger.debug("...setting Destination to " + str(Destination))
+                    #---------------------------------------------------New player local coordinates----------------------------------------------------
+                    #Time passed since the start of game simulation
+                    Time_passed_since_reference_in_seconds = New_time - Reference_time
+                    
+                    New_player_local_rotated_coordinates = get_local_rotated_coordinates(Time_passed_since_reference_in_seconds, New_Player_Global_coordinates["X"], New_Player_Global_coordinates["Y"], New_Player_Global_coordinates["Z"], Actual_Container)
 
-                #get the 3 new XYZ coordinates
-                New_Player_Global_coordinates = {}
-                New_Player_Global_coordinates['X'] = float(new_clipboard_splitted[3])/1000
-                New_Player_Global_coordinates['Y'] = float(new_clipboard_splitted[5])/1000
-                New_Player_Global_coordinates['Z'] = float(new_clipboard_splitted[7])/1000
-                #search in the Databse to see if the player is ina Container
-                Actual_Container = get_current_container(New_Player_Global_coordinates["X"], New_Player_Global_coordinates["Y"], New_Player_Global_coordinates["Z"])
-                knownPlayerContainername=Actual_Container['Name']
-                logger.debug("Actual Container: " +str(Actual_Container))
-                      
-                if calibrate_active:
-                    logger.debug("Calibrate active")
-                    ContainerName = Actual_Container['Name']
-                    Destination = Database["Containers"][ContainerName]["POI"]["OM-3"]
-                    logger.debug("...setting Destination to " + str(Destination))
-                #---------------------------------------------------New player local coordinates----------------------------------------------------
-                #Time passed since the start of game simulation
-                Time_passed_since_reference_in_seconds = New_time - Reference_time
-                
-                New_player_local_rotated_coordinates = get_local_rotated_coordinates(Time_passed_since_reference_in_seconds, New_Player_Global_coordinates["X"], New_Player_Global_coordinates["Y"], New_Player_Global_coordinates["Z"], Actual_Container)
+                    logger.debug("1")
+                    logger.debug("Sandcavetour_active: " + str(sandcavetour_active))
+                    knownPlayerX=New_player_local_rotated_coordinates["X"]
+                    knownPlayerY=New_player_local_rotated_coordinates["Y"]
+                    knownPlayerZ=New_player_local_rotated_coordinates["Z"]
+                else:
+                    logger.debug(new_clipboard_splitted)
+                    knownPlayerX=float(new_clipboard_splitted[2])
+                    knownPlayerY=float(new_clipboard_splitted[3])
+                    knownPlayerZ=float(new_clipboard_splitted[4])
+                    knownPlayerContainername=new_clipboard_splitted[1]
+                    
+                    Actual_Container = {
+                        "Name": "None",
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0,
+                        "Rotation Speed": 0,
+                        "Rotation Adjust": 0,
+                        "OM Radius": 0,
+                        "Body Radius": 0,
+                        "POI": {}
+                    }
+                    for i in Database["Containers"] :
+                        if knownPlayerContainername == Database["Containers"][i]['Name']:
+                            Actual_Container = Database["Containers"][i]
+                            logger.debug("Actual_container set to " + str(knownPlayerContainername))
+                            logger.debug(Actual_Container)
 
-                logger.debug("1")
-                logger.debug("Sandcavetour_active: " + str(sandcavetour_active))
-                knownPlayerX=New_player_local_rotated_coordinates["X"]
-                knownPlayerY=New_player_local_rotated_coordinates["Y"]
-                knownPlayerZ=New_player_local_rotated_coordinates["Z"]
+
                 if sandcavetour_active == True:
                     logger.debug("Sandcavetour active, current container: " + str(Actual_Container['Name']))
                     if sandcavetour_init_done == False:
@@ -1269,6 +1413,8 @@ def watch_clipboard(queue):
                     logger.debug("send coords: " + message_coords)
                     mother.ws.send(message_camdir)
                     logger.debug("send camdir: " + message_camdir)
+
+                    #subprocess.run(['python', 'process_displayinfo.py',int(CamDirPitch),int(CamDirRoll),int(CamDirYaw)])
                     #old#logger.debug("mother:")
                     #old#logger.debug(mother)
                     #queue.put(message_bearing)
@@ -1976,6 +2122,25 @@ class StartNaviToKnownPOI(Action):
                 self.set_state(obj.context, 0)
                 #old#logger.debug(f"...and restarted")
 
+class ocr(Action):
+    UUID = "com.doabigcheese.scnav.ocr"
+    def on_key_up(self, obj: events_received_objs.KeyUp):
+        global ocr_running,OCRThread,stop_threads
+        if ocr_running:
+            try:
+                stop_threads = True
+                OCRThread.join()
+            except:
+                pass
+            ocr_running = False
+            logger.debug(f"...stopped")
+        else:
+            stop_threads = False
+            OCRThread=threading.Thread(target=process_displayinfo,args=(queue,)) #Prepare a new thread
+            ocr_running=True
+            OCRThread.start()
+
+
 class Sandcavestour(Action):
     UUID = "com.doabigcheese.scnav.sandcavestour"
     
@@ -2133,6 +2298,7 @@ if __name__ == '__main__':
             Sandcavestour(),
             OMs(),
             CamDir(),
+            ocr(),
             
         ],
         log_file=settings.LOG_FILE_PATH,
