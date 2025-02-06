@@ -7,6 +7,8 @@
 #           https://starmap.space/api/v1/oc/index.php?system=Stanton
 #           https://starmap.space/api/v1/pois/index.php?planet=Daymar
 # 
+#       https://starmap.space/api/v3/oc/index.php
+#       https://starmap.space/api/v3/pois/index.php
 #
 # *** debug: http://localhost:23654/
 #todo:
@@ -53,6 +55,7 @@ import pytesseract
 import cv2
 import numpy as np
 import pyautogui
+from tkinter import *
 
 northpole_is_om3 = True
 
@@ -106,32 +109,241 @@ stop_coordinatetimeout = False
 CoordinateTimeoutThread = ""
 ocr_running = False
 stop_threads = False
+ocr_button_context = ""
+halo_running=False
+HALOThread=""
+halo_button_context = ""
 
 def check_queue(event):
     logger.debug("check queue entered")
     msg = queue.get()
     logger.debug(msg)
     mother.ws.send(msg)
+#old    
+def calculate_target_marker(cur_camdir_pitch,cur_camdir_roll,cur_camdir_yaw, camdir_fov):
+    global CamDirYaw, CamDirPitch, CamDirRoll
+    logger.debug("calculate target marker...")
+    ship_orientation = rotation_matrix(cur_camdir_yaw, cur_camdir_pitch, cur_camdir_roll)
+    target_vector = rotation_matrix(CamDirYaw, CamDirPitch, CamDirRoll) @ np.array([0, 0, 1])
+    fov = camdir_fov  # Sichtfeld in Grad
+    resolution = (3440, 1440)
+    screen_coords = world_to_screen(target_vector, fov, resolution, np.linalg.inv(ship_orientation))
+    logger.debug(f"Ziel auf dem Bildschirm: {screen_coords}")
+    logger.debug(f"x waehre: {screen_coords[0]}")
+    DrawThread=threading.Thread(target=create_overlay,args=(int(screen_coords[0]),int(screen_coords[1]))) #Prepare a new thread create_overlay(screen_coords[0],screen_coords[1])
+    DrawThread.start()
+    
+def create_overlay(x,y):
+    root = Tk()
+    root.title("overlay")
+    #x=1800
+    #y=720
+    logger.debug("create_overlay entered...")
+    logger.debug(x)
+    logger.debug(y)
 
+    res_x = 3440
+    res_y = 1440
+    if x < 0 or x > res_x or y < 0 or y > res_y:
+        return
+    else:
+        #new_x = int(x + res_x/2)
+        #new_y = int(res_y/2 - y)
+
+        root.geometry(f'20x20+{x}+{y}')
+        # to remove the titalbar
+        root.overrideredirect(True)
+
+        # to make the window transparent
+        root.attributes("-transparentcolor","red")
+        # set bg to red in order to make it transparent
+        root.config(bg="red")
+
+        # draw a green crosshair instead of button
+        c = Canvas(root, width=20, height=20,bg="red" )
+        c.create_line(10, 0, 10, 20, fill="#00FF00", width=2)
+        c.create_line(0, 10, 20, 10, fill="#00FF00", width=2)
+        c.pack()
+        #make window to be always on top
+        root.wm_attributes("-topmost", 1)
+
+        def exit_after_10_seconds():
+            root.destroy()
+            #sys.exit()
+
+        root.after(10000, exit_after_10_seconds)
+        root.mainloop()
+        return
+#old
+def degrees_to_radians(deg):
+    return deg * np.pi / 180
+#old
+def rotation_matrix(yaw, pitch, roll):
+    """
+    Erzeugt eine Rotationsmatrix basierend auf Yaw, Pitch und Roll (in Grad).
+    """
+    yaw = degrees_to_radians(yaw)
+    pitch = degrees_to_radians(pitch)
+    roll = degrees_to_radians(roll)
+
+    # Rotationsmatrizen für jede Achse
+    R_yaw = np.array([
+        [np.cos(yaw), -np.sin(yaw), 0],
+        [np.sin(yaw), np.cos(yaw), 0],
+        [0, 0, 1]
+    ])
+    R_pitch = np.array([
+        [np.cos(pitch), 0, np.sin(pitch)],
+        [0, 1, 0],
+        [-np.sin(pitch), 0, np.cos(pitch)]
+    ])
+    R_roll = np.array([
+        [1, 0, 0],
+        [0, np.cos(roll), -np.sin(roll)],
+        [0, np.sin(roll), np.cos(roll)]
+    ])
+    # Gesamte Rotationsmatrix
+    return R_yaw @ R_pitch @ R_roll
+#old
+def world_to_screen(target, fov, resolution, ship_orientation):
+    """
+    Transformiert eine Zielposition im Weltkoordinatensystem in Bildschirmkoordinaten.
+    """
+    # Field of View
+    fov_x = degrees_to_radians(fov)
+    fov_y = fov_x * (resolution[1] / resolution[0])
+
+    # Zielposition relativ zum Raumschiff
+    local_target = ship_orientation @ target
+
+    # Perspektivische Projektion
+    x = local_target[0] / local_target[2]
+    y = local_target[1] / local_target[2]
+
+    # Bildschirmkoordinaten berechnen
+    screen_x = (x + np.tan(fov_x / 2)) / (2 * np.tan(fov_x / 2)) * resolution[0]
+    screen_y = (1 - (y + np.tan(fov_y / 2)) / (2 * np.tan(fov_y / 2))) * resolution[1]
+
+    return np.array([screen_x, screen_y])
+
+
+# Funktionen für Rotationsmatrizen
+def rotation_matrix_yaw(yaw):
+    """Rotationsmatrix für die Yaw-Achse (Z-Achse)"""
+    cos_yaw = np.cos(np.radians(yaw))
+    sin_yaw = np.sin(np.radians(yaw))
+    return np.array([
+        [cos_yaw, -sin_yaw, 0],
+        [sin_yaw, cos_yaw, 0],
+        [0, 0, 1]
+    ])
+
+def rotation_matrix_pitch(pitch):
+    """Rotationsmatrix für die Pitch-Achse (X-Achse)"""
+    cos_pitch = np.cos(np.radians(pitch))
+    sin_pitch = np.sin(np.radians(pitch))
+    return np.array([
+        [1, 0, 0],
+        [0, cos_pitch, -sin_pitch],
+        [0, sin_pitch, cos_pitch]
+    ])
+
+def rotation_matrix_roll(roll):
+    """Rotationsmatrix für die Roll-Achse (Y-Achse)"""
+    cos_roll = np.cos(np.radians(roll))
+    sin_roll = np.sin(np.radians(roll))
+    return np.array([
+        [cos_roll, 0, sin_roll],
+        [0, 1, 0],
+        [-sin_roll, 0, cos_roll]
+    ])
+
+
+def project_target_to_screen_with_position(target_coords, spaceship_position, yaw, pitch, roll, fov, screen_width, screen_height):
+    """
+    Projiziert die Zielkoordinaten unter Berücksichtigung der Position des Raumschiffs auf den Bildschirm.
+    :param target_coords: Zielkoordinaten (x, y, z) im Weltkoordinatensystem
+    :param spaceship_position: Position des Raumschiffs (xr, yr, zr) im Weltkoordinatensystem
+    :param yaw: Drehung um die Z-Achse in Grad
+    :param pitch: Drehung um die X-Achse in Grad
+    :param roll: Drehung um die Y-Achse in Grad
+    :param fov: Sichtfeld in Grad (Horizontal)
+    :param screen_width: Bildschirmbreite in Pixel
+    :param screen_height: Bildschirmhöhe in Pixel
+    :return: (screen_x, screen_y) Bildschirmkoordinaten oder None, wenn Ziel außerhalb des Sichtfeldes liegt
+    """
+    # Relativkoordinaten berechnen
+    relative_coords = target_coords - spaceship_position
+    print(relative_coords)
+    # Kombinierte Rotationsmatrix
+    rotation_matrix = rotation_matrix_yaw(yaw) @ rotation_matrix_pitch(pitch) @ rotation_matrix_roll(roll)
+    print(rotation_matrix)
+    # Zielkoordinaten in die Kamerakoordinaten transformieren
+    target_in_camera_coords = rotation_matrix @ relative_coords
+    print("Target in camera coords:")
+    print(target_in_camera_coords)
+    # Extrahiere die transformierten Koordinaten
+    x, y, z = target_in_camera_coords
+
+    # Wenn das Ziel hinter der Kamera liegt, ist es nicht sichtbar
+    #if z <= 0:
+        #return None
+
+    # Berechnung der Projektion auf die Kameraebene (Perspektivprojektion)
+    fov_rad = np.radians(fov)
+    tan_half_fov = np.tan(fov_rad / 2)
+    aspect_ratio = screen_width / screen_height
+
+    # Projiziere x und y auf die Bildschirmkoordinaten
+    screen_x = (x / z) / tan_half_fov * (screen_width / 2)
+    screen_y = (y / z) / tan_half_fov * (screen_height / 2)
+    print(screen_x)
+    print(screen_y)
+    # Bildschirmkoordinaten anpassen
+    screen_x = screen_width / 2 + screen_x
+    screen_y = screen_height / 2 - screen_y  # Y invertieren für Bildschirm-Koordinaten
+
+    # Wenn die Koordinaten außerhalb des Bildschirms liegen, geben wir None zurück
+    #if screen_x < 0 or screen_x > screen_width or screen_y < 0 or screen_y > screen_height:
+        #return None
+    print(screen_x)
+    print(screen_y)
+    return int(screen_x), int(screen_y)
+    
 def process_displayinfo(queue):
-    global stop_threads
+    global stop_threads,Destination,ocr_button_context,halo_running
     logger.debug("process_displayinfo entered")
     while True:    
         if stop_threads:
             logger.debug("  Exiting loop.")
             break
     #image = 'sc_testbild_ocr.jpg'  # replace with your screenshot path
-        try:
-            
+        try:            
             image = pyautogui.screenshot()
-            camdir_pitch,camdir_roll,camdir_yaw, camdir_fov, container, localxyz_x,localxyz_y,localxyz_z, universe_xyz_x,universe_xyz_y,universe_xyz_z = read_screenshot(image)
-            output = "LocalCoordinates_OCR:" + str(container) + " " +str(localxyz_x) + " " + str(localxyz_y) + " " + str(localxyz_z)
-            logger.debug("Output clipboard: " + str(output))
+            cur_camdir_pitch,cur_camdir_roll,cur_camdir_yaw, camdir_fov, container, localxyz_x,localxyz_y,localxyz_z, universe_xyz_x,universe_xyz_y,universe_xyz_z = read_screenshot(image)
+            logger.debug("going on...")
+            if halo_running:
+                output = f"UniverseCoordinates_OCR:{str(universe_xyz_x)} {str(universe_xyz_y)} {str(universe_xyz_z)}"
+                logger.debug("Output clipboard: " + str(output))
+            else:
+                output = "LocalCoordinates_OCR:" + str(container) + " " +str(localxyz_x) + " " + str(localxyz_y) + " " + str(localxyz_z)
+                logger.debug("Output clipboard: " + str(output))
+                spaceship_position = np.array([localxyz_x,localxyz_y,localxyz_z])
+                target_coords = np.array([Destination["X"], Destination["Y"], Destination["Z"]])
+                result = project_target_to_screen_with_position(target_coords, spaceship_position, cur_camdir_roll, cur_camdir_pitch, cur_camdir_yaw, camdir_fov, 3440, 1440)
+                DrawThread=threading.Thread(target=create_overlay,args=(int(result[0]),int(result[1]))) #Prepare a new thread create_overlay(screen_coords[0],screen_coords[1])
+                DrawThread.start()
+                logger.debug(" DrawThread start()")
             pyperclip.copy(str(output))
-            
-            time.sleep(15)
+            #ocr_button_context.set_state(ocr_button_context.context, 1)
+            winsound.PlaySound("SystemAsterisk", winsound.SND_ALIAS) #SystemAsterisk
+            #os.system(f"process_displayinfo.py {camdir_pitch} {camdir_roll} {camdir_yaw} {camdir_fov} {} {} {}")
+            #calculate_target_marker(cur_camdir_pitch,cur_camdir_roll,cur_camdir_yaw, camdir_fov)          
+            time.sleep(5)
         except Exception as e:
-            logger.debug("Exception_ " + str(e))
+            logger.debug("Exception_process_displayinfo " + str(e))
+            #ocr_button_context.set_state(ocr_button_context.context, 2)
+            winsound.PlaySound("SystemHand", winsound.SND_ALIAS) #SystemAsterisk
 
 def read_screenshot(image_path):
     # Define the regions of interest (ROI) in the image
@@ -147,9 +359,9 @@ def read_screenshot(image_path):
     #cv2.imwrite('test.png', image) #debug
 
     # Upscale each ROI to improve OCR accuracy
-    camdir_image_upscaled = cv2.resize(image[roi_camdir[1]:roi_camdir[3], roi_camdir[0]:roi_camdir[2]], None, fx=2, fy=2)
-    localxyz_image_upscaled = cv2.resize(image[roi_localxyz[1]:roi_localxyz[3], roi_localxyz[0]:roi_localxyz[2]], None, fx=2, fy=2)
-    universe_xyz_image_upscaled = cv2.resize(image[roi_universe_xyz[1]:roi_universe_xyz[3], roi_universe_xyz[0]:roi_universe_xyz[2]], None, fx=2, fy=2)
+    camdir_image_upscaled = cv2.resize(image[roi_camdir[1]:roi_camdir[3], roi_camdir[0]:roi_camdir[2]], None, fx=3, fy=3)
+    localxyz_image_upscaled = cv2.resize(image[roi_localxyz[1]:roi_localxyz[3], roi_localxyz[0]:roi_localxyz[2]], None, fx=3, fy=3)
+    universe_xyz_image_upscaled = cv2.resize(image[roi_universe_xyz[1]:roi_universe_xyz[3], roi_universe_xyz[0]:roi_universe_xyz[2]], None, fx=3, fy=3)
     #servertime_image_upscaled = cv2.resize(image[roi_servertime[1]:roi_servertime[3], roi_servertime[0]:roi_servertime[2]], None, fx=2, fy=2)
     #universetime_image_upscaled = cv2.resize(image[roi_universetime[1]:roi_universetime[3], roi_universetime[0]:roi_universetime[2]], None, fx=2, fy=2)
 
@@ -164,51 +376,89 @@ def read_screenshot(image_path):
     # Perform OCR on each ROI
     try:
         camdir_text = pytesseract.image_to_string(camdir_gray, lang='eng', config='--oem 3 --psm 6')
+        logger.debug(camdir_text)
         localxyz_text = pytesseract.image_to_string(localxyz_gray, lang='eng', config='--oem 3 --psm 6')
+        logger.debug(localxyz_text)
         universe_xyz_text = pytesseract.image_to_string(universe_xyz_gray, lang='eng', config='--oem 3 --psm 6')
+        #universe_xyz_text = "0 0 0"
         #servertime_text = pytesseract.image_to_string(servertime_gray, lang='eng', config='--oem 3 --psm 6')
         #universetime_text = pytesseract.image_to_string(universetime_gray, lang='eng', config='--oem 3 --psm 6')
 
         # CamDir: -17 -2 75 FOV: 50 Focal: 3.00 FStop: 64.0
         camdir_array = camdir_text.split() 
-
+        logger.debug(camdir_array)
+        re_number_camdir = re.compile(r"[+-]?([0-9]+)")
+        re_number = re.compile(r"[+-]?([0-9]*[.])?[0-9]+")
+        
+        camdir_array[1] = re_number_camdir.findall(str(camdir_array[1]))[0]
+        camdir_array[2] = re_number_camdir.findall(str(camdir_array[2]))[0]
+        camdir_array[3] = re_number_camdir.findall(str(camdir_array[3]))[0]
+        camdir_array[5] = re_number_camdir.findall(str(camdir_array[5]))[0]
+        logger.debug(camdir_array)
         #Zone: OOC Stanton 2c Yela Pos: -626.6130km 135.8162km -1753.85m
         localxyz_array = localxyz_text.split()
         logger.debug(localxyz_array)
-        if "m" in localxyz_array[-3] and not "km" in localxyz_array[-3]:
-            logger.debug(localxyz_array[-3])
-            localxyz_array[-3]=float(localxyz_array[-3].replace("m","")) * 0.001 #convert in km
-        elif "km" in localxyz_array[-3]:
-            localxyz_array[-3]=float(localxyz_array[-3].replace("km",""))
+        logger.debug(universe_xyz_text)
 
-        if "m" in localxyz_array[-2] and not "km" in localxyz_array[-2]:
-            localxyz_array[-2]=float(localxyz_array[-2].replace("m","")) * 0.001 #convert in km
-        elif "km" in localxyz_array[-2]:
-            localxyz_array[-2]=float(localxyz_array[-2].replace("km",""))
-        if "m" in localxyz_array[-1] and not "km" in localxyz_array[-1]:
-            localxyz_array[-1]=float(localxyz_array[-1].replace("m","")) * 0.001 #convert in km
-        elif "km" in localxyz_array[-1]:
-            localxyz_array[-1]=float(localxyz_array[-1].replace("km",""))
+        
+        try:
+            if "m" in str(localxyz_array[-3]) and not "km" in str(localxyz_array[-3]):
+                logger.debug(localxyz_array[-3])
+                localxyz_array[-3]=float(str(localxyz_array[-3]).replace("m","")) * 0.001 #convert in km
+            elif "km" in localxyz_array[-3]:
+                localxyz_array[-3]=float(str(localxyz_array[-3]).replace("km",""))
+
+            if "m" in str(localxyz_array[-2]) and not "km" in str(localxyz_array[-2]):
+                localxyz_array[-2]=float(str(localxyz_array[-2]).replace("m","")) * 0.001 #convert in km
+            elif "km" in localxyz_array[-2]:
+                localxyz_array[-2]=float(str(localxyz_array[-2]).replace("km",""))
+            if "m" in str(localxyz_array[-1]) and not "km" in str(localxyz_array[-1]):
+                localxyz_array[-1]=float(str(localxyz_array[-1]).replace("m","")) * 0.001 #convert in km
+            elif "km" in localxyz_array[-1]:
+                localxyz_array[-1]=float(str(localxyz_array[-1]).replace("km",""))
+
+            localxyz_array[-3] = re_number.findall(str(localxyz_array[-3]))[0]
+            localxyz_array[-2] = re_number.findall(str(localxyz_array[-2]))[0]
+            localxyz_array[-1] = re_number.findall(str(localxyz_array[-1]))[0]
+            logger.debug(localxyz_array)
+        except Exception as e:
+            logger.debug(f"localxyz: {e}")
+
         # Pos: -19022757.8983km -2613374.9914km -1753.85m
-        universe_xyz_array = universe_xyz_text.split()
-        if "m" in universe_xyz_array[-3] and not "km" in universe_xyz_array[-3]:
-            universe_xyz_array[-3]=float(universe_xyz_array[-3].replace("m","")) * 0.001 #convert in km
-        elif "km" in universe_xyz_array[-3]:
-            universe_xyz_array[-3]=float(universe_xyz_array[-3].replace("km",""))
-        if "m" in universe_xyz_array[-2] and not "km" in universe_xyz_array[-2]:
-            universe_xyz_array[-2]=float(universe_xyz_array[-2].replace("m","")) * 0.001 #convert in km
-        elif "km" in universe_xyz_array[-2]:
-            universe_xyz_array[-2]=float(universe_xyz_array[-2].replace("km",""))
-        if "m" in universe_xyz_array[-1] and not "km" in universe_xyz_array[-1]:
-            universe_xyz_array[-1]=float(universe_xyz_array[-1].replace("m","")) * 0.001 #convert in km     
-        elif "km" in universe_xyz_array[-1]:
-            universe_xyz_array[-1]=float(universe_xyz_array[-1].replace("km",""))   
+        try:
+            universe_xyz_array = universe_xyz_text.split()
+            logger.debug(universe_xyz_array)
+            if "m" in universe_xyz_array[-3] and not "km" in universe_xyz_array[-3]:
+                universe_xyz_array[-3]=str(float(universe_xyz_array[-3].replace("m","")) * 0.001) #convert in km
+            elif "km" in universe_xyz_array[-3]:
+                universe_xyz_array[-3]=str(float(universe_xyz_array[-3].replace("km","")))
+            if "m" in universe_xyz_array[-2] and not "km" in universe_xyz_array[-2]:
+                universe_xyz_array[-2]=str(float(universe_xyz_array[-2].replace("m","")) * 0.001) #convert in km
+            elif "km" in universe_xyz_array[-2]:
+                universe_xyz_array[-2]=str(float(universe_xyz_array[-2].replace("km","")))
+            if "m" in universe_xyz_array[-1] and not "km" in universe_xyz_array[-1]:
+                universe_xyz_array[-1]=str(float(universe_xyz_array[-1].replace("m","")) * 0.001) #convert in km     
+            elif "km" in universe_xyz_array[-1]:
+                universe_xyz_array[-1]=str(float(universe_xyz_array[-1].replace("km","")))
+            logger.debug(universe_xyz_array)
+        except Exception as e:
+            logger.debug(f"universe_xyz: {e}")
+
+        
+        logger.debug(f"camdir: {int(camdir_array[1])},{int(camdir_array[2])},{int(camdir_array[3])},{float(camdir_array[5])}")
+        logger.debug(f"localxyz: {localxyz_array[-5]},{float(localxyz_array[-3])},{float(localxyz_array[-2])},{float(localxyz_array[-1])}")
+        logger.debug(f"universe: {float(universe_xyz_array[-3])},{float(universe_xyz_array[-2])},{float(universe_xyz_array[-1])}")
+
+        return_value = f"{str(int(camdir_array[1]))},{int(camdir_array[2])},{int(camdir_array[3])}, {float(camdir_array[5])}, {localxyz_array[-5]}, {float(localxyz_array[-3])},{float(localxyz_array[-2])},{float(localxyz_array[-1])}, {float(universe_xyz_array[-3])},{float(universe_xyz_array[-2])},{float(universe_xyz_array[-1])}"
+        logger.debug("return value:")
+        logger.debug(return_value)
+
 
         return int(camdir_array[1]),int(camdir_array[2]),int(camdir_array[3]), float(camdir_array[5]), localxyz_array[-5], float(localxyz_array[-3]),float(localxyz_array[-2]),float(localxyz_array[-1]), float(universe_xyz_array[-3]),float(universe_xyz_array[-2]),float(universe_xyz_array[-1])
 
     except Exception as e:
-        logger.debug("Exception: ",e)
-        pass
+        logger.debug(f"Exception read_screenshot: {e}")
+        #pass
 
 def linebreak_title(newtitle):
     i = 9
@@ -241,7 +491,10 @@ def coordinatetimeout():
     else:
         logger.debug("no timeout")
         
-    
+def cancel_quantumdrive():
+    ahk.send_input('{b}') 
+
+
 def updatecoordinates():
     #old#logger.debug(f"Update entered.")
     global mother,oms_button_context,stop_coordinatetimeout,CoordinateTimeoutThread
@@ -807,8 +1060,9 @@ def get_current_container(X : float, Y : float, Z : float):
 
 def watch_clipboard(queue):
     logger.debug(f"Watch Clipboard entered.")
-    global save_button_context,save_triggered,Database,Container_list,Space_POI_list,Planetary_POI_list,watch_clipboard_active,Destination,stop_navithread,bearing_button_context,daytime_button_context,nearest_button_context,around_button_context,mother,coords_button_context,calibrate_active,daytime_toggle,sandcavetour_active,sandcavestour_button_context,sandcavetour_init_done,Destination_queue,knownPlayerX,knownPlayerY,knownPlayerZ,knownPlayerContainername,stop_coordinatetimeout,CoordinateTimeoutThread,northpole_is_om3,camdir_button_context
+    global clipboard_contains_universexyz,halo_running,save_button_context,save_triggered,Database,Container_list,Space_POI_list,Planetary_POI_list,watch_clipboard_active,Destination,stop_navithread,bearing_button_context,daytime_button_context,nearest_button_context,around_button_context,mother,coords_button_context,calibrate_active,daytime_toggle,sandcavetour_active,sandcavestour_button_context,sandcavetour_init_done,Destination_queue,knownPlayerX,knownPlayerY,knownPlayerZ,knownPlayerContainername,stop_coordinatetimeout,CoordinateTimeoutThread,northpole_is_om3,camdir_button_context,CamDirYaw, CamDirPitch, CamDirRoll
     watch_clipboard_active = True
+    old_direction = ""
     #mother=threading.main_thread()
 
     #Test DATA
@@ -871,11 +1125,11 @@ def watch_clipboard(queue):
 
         #Get the new clipboard content
         new_clipboard = pyperclip.paste()
-        #logger.debug(str(new_clipboard))
+        logger.debug(str(new_clipboard))
 
 
         #If clipboard content hasn't changed
-        if new_clipboard == Old_clipboard or new_clipboard == "":
+        if "UniverseCoordinates_OCR" not in new_clipboard: #new_clipboard == Old_clipboard or new_clipboard == "":
 
             #Wait some time
             time.sleep(1/5)
@@ -883,26 +1137,38 @@ def watch_clipboard(queue):
 
         #If clipboard content has changed
         else :
-            stop_coordinatetimeout = True
-            CoordinateTimeoutThread.join()
-            Old_clipboard = new_clipboard
             logger.debug("New clipboard: " + str(new_clipboard))
+            #stop_coordinatetimeout = True
+            #CoordinateTimeoutThread.join()
+            Old_clipboard = new_clipboard
+            logger.debug("...")
             New_time = time.time() + time_offset
 
             #If it contains some coordinates
-            if new_clipboard.startswith("Coordinates:") or new_clipboard.startswith("LocalCoordinates_OCR:"):
+            if new_clipboard.startswith("Coordinates:") or new_clipboard.startswith("LocalCoordinates_OCR:") or new_clipboard.startswith("UniverseCoordinates_OCR:"):
                 #split the clipboard in sections
+                clipboard_contains_localxyz = False
+                clipboard_contains_universexyz = False
                 if new_clipboard.startswith("LocalCoordinates_OCR:"):
                     clipboard_contains_localxyz = True
                     logger.debug("new local ocr coordinates found")
-                else:
-                    clipboard_contains_localxyz = False
+                elif new_clipboard.startswith("UniverseCoordinates_OCR:"):
+                    clipboard_contains_universexyz = True   
+                    logger.debug("...")
+                
+                    
                 #Coordinates: x:12792440814.115870 y:-74248558.612950 z:97041.278879
                 #LocalCoordinates_OCR:Magda 800 600 200
+                #UniverseCoordinates_OCR:-19023230.1716 -2614361.5286 3.68077
+                logger.debug(clipboard_contains_localxyz)
+                logger.debug(clipboard_contains_universexyz)
                 new_clipboard_splitted = new_clipboard.replace(":", " ").split(" ")
+                logger.debug("...")
+                logger.debug(f"clipboard_contains_localxyz {clipboard_contains_localxyz},clipboard_contains_universexyz {clipboard_contains_universexyz}")
 
-                if not clipboard_contains_localxyz:
+                if not clipboard_contains_localxyz and not clipboard_contains_universexyz:
                     #get the 3 new XYZ coordinates
+                    logger.debug("...")
                     New_Player_Global_coordinates = {}
                     New_Player_Global_coordinates['X'] = float(new_clipboard_splitted[3])/1000
                     New_Player_Global_coordinates['Y'] = float(new_clipboard_splitted[5])/1000
@@ -928,13 +1194,18 @@ def watch_clipboard(queue):
                     knownPlayerX=New_player_local_rotated_coordinates["X"]
                     knownPlayerY=New_player_local_rotated_coordinates["Y"]
                     knownPlayerZ=New_player_local_rotated_coordinates["Z"]
-                else:
+                elif clipboard_contains_localxyz:
+                    logger.debug("...")
                     logger.debug(new_clipboard_splitted)
                     knownPlayerX=float(new_clipboard_splitted[2])
+                    New_player_local_rotated_coordinates["X"] = knownPlayerX
                     knownPlayerY=float(new_clipboard_splitted[3])
+                    New_player_local_rotated_coordinates["Y"] = knownPlayerY
                     knownPlayerZ=float(new_clipboard_splitted[4])
+                    New_player_local_rotated_coordinates["Z"] = knownPlayerZ
                     knownPlayerContainername=new_clipboard_splitted[1]
-                    
+                
+
                     Actual_Container = {
                         "Name": "None",
                         "X": 0,
@@ -951,7 +1222,104 @@ def watch_clipboard(queue):
                             Actual_Container = Database["Containers"][i]
                             logger.debug("Actual_container set to " + str(knownPlayerContainername))
                             logger.debug(Actual_Container)
+                else: #universe coordinates
+                    logger.debug("...else")
+                    logger.debug(new_clipboard_splitted)
+                    
+                    New_Player_Global_coordinates = {}
+                    New_Player_Global_coordinates['X'] = float(new_clipboard_splitted[1])
+                    New_Player_Global_coordinates['Y'] = float(new_clipboard_splitted[2])
+                    New_Player_Global_coordinates['Z'] = float(new_clipboard_splitted[3])
+                    logger.debug(New_Player_Global_coordinates)
+                    #Destination = Stanton Sun "X": 136049.87,"Y": 1294427.4, "Z": 2923345.368
+                    Target={}
+                    Delta_Distance_to_POI = {}
+                    New_Distance_to_POI = {}
+                    logger.debug("...")
+                    Target['X']=136049
+                    Target['Y']=1294427
+                    Target['Z']=2923345
+                    logger.debug(Target)
+                    for i in ['X', 'Y', 'Z']:
+                        logger.debug(i)
+                        logger.debug(Target[i])
+                        logger.debug(New_Player_Global_coordinates[i])
+                        New_Distance_to_POI[i] = abs(Target[i] - New_Player_Global_coordinates[i])
+                        logger.debug(New_Distance_to_POI[i])
+                    New_Distance_to_POI_Total = vector_norm(New_Distance_to_POI)
+                    logger.debug("...")
+                    logger.debug(f"Distance to Sun: {str(int(New_Distance_to_POI_Total))}") #Distance to Sun: 3 201 923
+                    
+                    if int(New_Distance_to_POI_Total) > 20407000:
+                        direction=1
+                        
+                        logger.debug("go inwards")
+                        if direction != old_direction and old_direction != "":
+                            direction=3
+                            logger.debug("Moved too far!")
+                            #cancel QT as we moved to far
+                            cancel_quantumdrive()
+                            logger.debug("...")
+                    elif int(New_Distance_to_POI_Total) < 20230000:
+                        direction=2
+                        logger.debug("go outwards")
+                        if direction != old_direction and old_direction != "":
+                            logger.debug("...")
+                            direction=3
+                            logger.debug("Moved too far!")
+                            #cancel QT as we moved to far
+                            cancel_quantumdrive()
+                    
+                    if int(New_Distance_to_POI_Total) > 20230000 and int(New_Distance_to_POI_Total) < 20407000:
+                        #cancel QT as we are in Band4
+                        logger.debug("Band4 arrived!")
+                        cancel_quantumdrive()
+                        logger.debug("...")
 
+                    else:
+                        logger.debug("...")
+                        #Calc Distance
+                        #---------------------------------------------------Delta Distance to POI-----------------------------------------------------------
+                        #get the real old distance between the player and the target
+                        Old_Distance_to_POI_Total = vector_norm(Old_Distance_to_POI)                    
+                        #get the 3 XYZ distance travelled since last update
+                        Delta_Distance_to_POI = {}
+                        for i in ["X", "Y", "Z"]:
+                            Delta_Distance_to_POI[i] = New_Distance_to_POI[i] - Old_Distance_to_POI[i]
+                        #get the real distance travelled since last update
+                        Delta_Distance_to_POI_Total = New_Distance_to_POI_Total - Old_Distance_to_POI_Total
+                        #---------------------------------------------------Estimated time of arrival to POI------------------------------------------------
+                        #get the time between the last update and this update
+                        Delta_time = New_time - Old_time
+                        #get the time it would take to reach destination using the same speed
+                        try :
+                            Band4Distance = 20318500 # + - 88500
+                            Estimated_time_of_arrival = (Delta_time*New_Distance_to_POI_Total)/abs(Delta_Distance_to_POI_Total - Band4Distance)
+                            logger.debug(f"Estimated_time_of_arrival: {str(int(Estimated_time_of_arrival))}")
+                        except ZeroDivisionError:
+                            Estimated_time_of_arrival = 0.00
+                        #prepare history cycle    
+                        for i in ["X", "Y", "Z"]:
+                            Old_player_Global_coordinates[i] = New_Player_Global_coordinates[i]
+
+                        for i in ["X", "Y", "Z"]:
+                            Old_Distance_to_POI[i] = New_Distance_to_POI[i]
+                        Old_time = New_time
+                        old_direction = direction
+                        logger.debug("...")
+                        message_time = json.dumps({"event": "setTitle",
+                                            "context": halo_button_context,
+                                            "payload": {
+                                                "title": f"\n\n\n\nETA: {str(int(Estimated_time_of_arrival))} s",
+                                                "target": 0,
+                                            }
+                                        })
+                        logger.debug("...")
+                        mother.send(message_time)
+                        mother.set_state(halo_button_context, direction)
+                        logger.debug("done halo loop")
+                        #Direction to fly
+                        
 
                 if sandcavetour_active == True:
                     logger.debug("Sandcavetour active, current container: " + str(Actual_Container['Name']))
@@ -989,7 +1357,7 @@ def watch_clipboard(queue):
                             logger.debug("Init done")
                     else:
                         logger.debug("Init already done...")
-                
+                logger.debug("...")
                 if Destination != []: #(sandcavetour_active and sandcavetour_init_done) or not sandcavetour_active:        
                     #---------------------------------------------------New target local coordinates----------------------------------------------------
                     #Grab the rotation speed of the container in the Database and convert it in degrees/s
@@ -1031,7 +1399,7 @@ def watch_clipboard(queue):
                     logger.debug("Target Container: "+str(Target["Container"]))
                     logger.debug("Actual Container: "+str(Actual_Container))
                     logger.debug("Destination:" + str(Destination))
-                    if Actual_Container == Target["Container"]:
+                    if Actual_Container["Name"] == Target["Container"]:
                         logger.debug("Actual Container = Target")
                         for i in ["X", "Y", "Z"]:
                             New_Distance_to_POI[i] = abs(Target[i] - New_player_local_rotated_coordinates[i])
@@ -1477,7 +1845,7 @@ def watch_clipboard(queue):
                     #-------------------------------------------------------------------------------------------------------------------------------------------
                     #winsound.PlaySound("SystemHand", winsound.SND_ALIAS)
                 else:
-                    logger.debug("Destination was empty :(")
+                    logger.debug("Destination was empty, but ok if Halo active.")
                 
 NaviThread=threading.Thread(target=watch_clipboard,args=(queue,))
 
@@ -2124,8 +2492,27 @@ class StartNaviToKnownPOI(Action):
 
 class ocr(Action):
     UUID = "com.doabigcheese.scnav.ocr"
+    def on_key_down(self, obj: events_received_objs.KeyDown):
+        global start_time
+        #check if longpress
+        start_time = time.time()
+
     def on_key_up(self, obj: events_received_objs.KeyUp):
-        global ocr_running,OCRThread,stop_threads
+        global ocr_running,OCRThread,stop_threads,ocr_button_context
+        ocr_button_context = obj.context
+        end_time = time.time()
+        time_lapsed = end_time - start_time
+        if time_lapsed > 2:
+            logger.debug("Longpress detected")
+            if ocr_running:
+                try:
+                    stop_threads = True
+                    OCRThread.join()
+                except:
+                    pass
+                ocr_running = False
+                self.set_state(obj.context, 0)
+                logger.debug(f"...stopped")
         if ocr_running:
             try:
                 stop_threads = True
@@ -2133,12 +2520,53 @@ class ocr(Action):
             except:
                 pass
             ocr_running = False
+            self.set_state(obj.context, 0)
             logger.debug(f"...stopped")
         else:
             stop_threads = False
             OCRThread=threading.Thread(target=process_displayinfo,args=(queue,)) #Prepare a new thread
             ocr_running=True
+            self.set_state(obj.context, 1)
             OCRThread.start()
+
+class halo(Action):
+    UUID = "com.doabigcheese.scnav.halo"
+
+    def on_key_up(self, obj: events_received_objs.KeyUp):
+        global ocr_running,halo_running,OCRThread,stop_threads,mother,halo_button_context,stop_navithread,NaviThread,watch_clipboard_active
+        halo_button_context = obj.context
+        if halo_running == False:
+            logger.debug("if halo")
+            halo_running = True
+            stop_threads = False
+            if watch_clipboard_active == False:
+                
+                mother=self
+                NaviThread.start()
+                
+            
+            OCRThread=threading.Thread(target=process_displayinfo,args=(queue,)) #Prepare a new thread
+            ocr_running=True
+            self.set_state(obj.context, 1)
+            OCRThread.start()
+        else:
+            logger.debug("else halo")
+            halo_running = False
+            try:
+                stop_threads = True
+                OCRThread.join()
+            except:
+                pass
+            ocr_running = False
+            stop_navithread = True
+            try:
+                NaviThread.join()
+            except:
+                logger.debug("Cannot join thread")
+            watch_clipboard_active = False
+            self.set_state(obj.context, 0)
+            NaviThread=threading.Thread(target=watch_clipboard,args=(queue,)) #Prepare a new thread
+
 
 
 class Sandcavestour(Action):
@@ -2299,6 +2727,7 @@ if __name__ == '__main__':
             OMs(),
             CamDir(),
             ocr(),
+            halo(),
             
         ],
         log_file=settings.LOG_FILE_PATH,
