@@ -492,12 +492,26 @@ def coordinatetimeout():
         logger.debug("no timeout")
         
 def cancel_quantumdrive():
-    ahk.send_input('{b}') 
+    #ahk.send_input('{LButton}') 
+    ahk.send('{LButton down}')
+    time.sleep(1)
+    ahk.send('{LButton up}')
+    
 
+def cyclic_showlocation(queue):
+    global halo_running,stop_threads
+    logger.debug("Entered cyclic_showlocation")
+    while halo_running:
+        if stop_threads:
+            logger.debug("Stopping cyclic_showlocation...")
+            break
+        updatecoordinates()
+        time.sleep(5)
 
 def updatecoordinates():
     #old#logger.debug(f"Update entered.")
-    global mother,oms_button_context,stop_coordinatetimeout,CoordinateTimeoutThread
+    global mother,oms_button_context,stop_coordinatetimeout,CoordinateTimeoutThread,halo_running
+    logger.debug("showlocation")
     CoordinateTimeoutThread=threading.Thread(target=coordinatetimeout) #Prepare a new thread
     stop_coordinatetimeout = False
     CoordinateTimeoutThread.start()
@@ -508,14 +522,15 @@ def updatecoordinates():
     ahk.send_input("showlocation")
     time.sleep(0.2)
     ahk.send_input('{Enter}')
-    message_oms = json.dumps({"event": "setTitle",
-                                            "context": oms_button_context,
-                                            "payload": {
-                                                "title": get_om_distances(),
-                                                "target": 0,
-                                            }
-                                        })   
-    mother.ws.send(message_oms)
+    if not halo_running:
+        message_oms = json.dumps({"event": "setTitle",
+                                                "context": oms_button_context,
+                                                "payload": {
+                                                    "title": get_om_distances(),
+                                                    "target": 0,
+                                                }
+                                            })   
+        mother.ws.send(message_oms)
     
     
 def save_poi():
@@ -1125,11 +1140,11 @@ def watch_clipboard(queue):
 
         #Get the new clipboard content
         new_clipboard = pyperclip.paste()
-        logger.debug(str(new_clipboard))
+        #logger.debug(str(new_clipboard))
 
 
         #If clipboard content hasn't changed
-        if "UniverseCoordinates_OCR" not in new_clipboard: #new_clipboard == Old_clipboard or new_clipboard == "":
+        if new_clipboard == Old_clipboard or new_clipboard == "":
 
             #Wait some time
             time.sleep(1/5)
@@ -1166,7 +1181,7 @@ def watch_clipboard(queue):
                 logger.debug("...")
                 logger.debug(f"clipboard_contains_localxyz {clipboard_contains_localxyz},clipboard_contains_universexyz {clipboard_contains_universexyz}")
 
-                if not clipboard_contains_localxyz and not clipboard_contains_universexyz:
+                if not clipboard_contains_localxyz and not clipboard_contains_universexyz and not halo_running:
                     #get the 3 new XYZ coordinates
                     logger.debug("...")
                     New_Player_Global_coordinates = {}
@@ -1227,9 +1242,14 @@ def watch_clipboard(queue):
                     logger.debug(new_clipboard_splitted)
                     
                     New_Player_Global_coordinates = {}
-                    New_Player_Global_coordinates['X'] = float(new_clipboard_splitted[1])
-                    New_Player_Global_coordinates['Y'] = float(new_clipboard_splitted[2])
-                    New_Player_Global_coordinates['Z'] = float(new_clipboard_splitted[3])
+                    if clipboard_contains_universexyz:
+                        New_Player_Global_coordinates['X'] = float(new_clipboard_splitted[1])
+                        New_Player_Global_coordinates['Y'] = float(new_clipboard_splitted[2])
+                        New_Player_Global_coordinates['Z'] = float(new_clipboard_splitted[3])
+                    else:
+                        New_Player_Global_coordinates['X'] = float(new_clipboard_splitted[3])/1000
+                        New_Player_Global_coordinates['Y'] = float(new_clipboard_splitted[5])/1000
+                        New_Player_Global_coordinates['Z'] = float(new_clipboard_splitted[7])/1000
                     logger.debug(New_Player_Global_coordinates)
                     #Destination = Stanton Sun "X": 136049.87,"Y": 1294427.4, "Z": 2923345.368
                     Target={}
@@ -2540,20 +2560,22 @@ class halo(Action):
             halo_running = True
             stop_threads = False
             if watch_clipboard_active == False:
-                
                 mother=self
                 NaviThread.start()
-                
-            
-            OCRThread=threading.Thread(target=process_displayinfo,args=(queue,)) #Prepare a new thread
-            ocr_running=True
+            #OCRThread=threading.Thread(target=process_displayinfo,args=(queue,)) #Prepare a new thread
+            #ocr_running=True
+            HALOThread=threading.Thread(target=cyclic_showlocation,args=(queue,))
+            logger.debug("Starting halo thread...")
+            HALOThread.start()
             self.set_state(obj.context, 1)
-            OCRThread.start()
+            #OCRThread.start()
         else:
             logger.debug("else halo")
             halo_running = False
             try:
+                logger.debug("Stopping halo thread...")
                 stop_threads = True
+                HALOThread.join()
                 OCRThread.join()
             except:
                 pass
