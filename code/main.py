@@ -113,6 +113,8 @@ ocr_button_context = ""
 halo_running=False
 HALOThread=""
 halo_button_context = ""
+ETAthread = ""
+countdown_running = False
 
 def check_queue(event):
     logger.debug("check queue entered")
@@ -496,7 +498,44 @@ def cancel_quantumdrive():
     ahk.send('{LButton down}')
     time.sleep(1)
     ahk.send('{LButton up}')
+    logger.debug("left mouse button pressed - cancel QT")
+
+def countdown_eta(eta):
+    global halo_button_context, halo_running, mother, countdown_running
+    counter = int(eta)
+    while counter > 0:
+        if not countdown_running:
+            logger.debug("break in countdown_eta")
+            break
+        message_time = json.dumps({"event": "setTitle",
+                                            "context": halo_button_context,
+                                            "payload": {
+                                                "title": f"\n\n\n\nETA: {str(int(counter))} s",
+                                                "target": 0,
+                                            }
+                                        })
+        logger.debug(f"updating countdown: {counter}")
+        mother.send(message_time)
+        time.sleep(1)
+        counter -= 1
+
+def update_halo_eta(eta):
+    global halo_button_context, halo_running, mother, ETAthread, countdown_running
+    logger.debug(f"update_halo_eta received value: {eta}")
+
+    try:
+        countdown_running=False
+        ETAthread.join()
+    except:
+        pass
+    ETAthread = threading.Thread(target=countdown_eta,args=(eta,))
+    if eta > 0:
+        countdown_running = True
+        ETAthread.start()
     
+        
+
+
 
 def cyclic_showlocation(queue):
     global halo_running,stop_threads
@@ -504,6 +543,7 @@ def cyclic_showlocation(queue):
     while halo_running:
         if stop_threads:
             logger.debug("Stopping cyclic_showlocation...")
+            update_halo_eta(0)
             break
         updatecoordinates()
         time.sleep(5)
@@ -1264,7 +1304,7 @@ def watch_clipboard(queue):
                         logger.debug(i)
                         logger.debug(Target[i])
                         logger.debug(New_Player_Global_coordinates[i])
-                        New_Distance_to_POI[i] = abs(Target[i] - New_Player_Global_coordinates[i])
+                        New_Distance_to_POI[i] = abs(int(New_Player_Global_coordinates[i]) - Target[i])
                         logger.debug(New_Distance_to_POI[i])
                     New_Distance_to_POI_Total = vector_norm(New_Distance_to_POI)
                     logger.debug("...")
@@ -1327,15 +1367,7 @@ def watch_clipboard(queue):
                         Old_time = New_time
                         old_direction = direction
                         logger.debug("...")
-                        message_time = json.dumps({"event": "setTitle",
-                                            "context": halo_button_context,
-                                            "payload": {
-                                                "title": f"\n\n\n\nETA: {str(int(Estimated_time_of_arrival))} s",
-                                                "target": 0,
-                                            }
-                                        })
-                        logger.debug("...")
-                        mother.send(message_time)
+                        update_halo_eta(int(Estimated_time_of_arrival))
                         mother.set_state(halo_button_context, direction)
                         logger.debug("done halo loop")
                         #Direction to fly
@@ -2556,9 +2588,10 @@ class halo(Action):
         global ocr_running,halo_running,OCRThread,stop_threads,mother,halo_button_context,stop_navithread,NaviThread,watch_clipboard_active
         halo_button_context = obj.context
         if halo_running == False:
-            logger.debug("if halo")
+            logger.debug("if halo") #stop_navithread
             halo_running = True
             stop_threads = False
+            stop_navithread = False
             if watch_clipboard_active == False:
                 mother=self
                 NaviThread.start()
